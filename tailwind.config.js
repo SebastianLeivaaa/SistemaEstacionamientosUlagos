@@ -34,6 +34,10 @@ export default {
         '900': '#144194',
         '950': '#11295a',
     },
+    'indice':{//colores del indice (registro)
+      '50': 'rgba(52, 143, 255, 1)',
+      '100': 'rgba(25, 63, 143, 1)',
+    }
       
       }
     },
