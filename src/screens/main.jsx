@@ -18,9 +18,9 @@ export const Main = () => {
     }
 
     return (
-        <div className="h-screen w-screen flex items-center justify-center">
-            <div className="bg-white flex flex-col items-center p-12 gap-y-8 rounded-md max-md:h-[75%] max-md:w-[75%] max-md:px-4 max-md:py-8">
-                <img src={Ulogo} alt="Logo Ulagos"/>
+        <div className="h-[100vh] w-screen flex items-center justify-center md:scale-[75%] 2xl:scale-100">
+            <div className="bg-white flex flex-col items-center p-12 py-2 gap-y-8 rounded-md max-md:h-[75%] max-md:w-[75%] max-md:px-4 max-md:py-8">
+                <img src={Ulogo} alt="Logo Ulagos" className="scale-75 max-2xl:scale-50 max-md:scale-75"/>
                 <h1 className="text-2xl font-bold text-center max-md:text-base">ESTACIONAMIENTOS ULAGOS</h1>
                 <div className="flex flex-row justify-around w-full">
                     <button onClick={handleLoginClick} className={`${login ? 'bg-blue-ribbon-600 text-white' : 'bg-white text-black'}  px-4 py-2 rounded-md text-lg hover:bg-blue-ribbon-600 hover:text-white max-md:text-base max-md:px-2`} disabled={login}>Iniciar Sesión</button>
