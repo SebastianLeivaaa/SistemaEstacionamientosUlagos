@@ -4,9 +4,12 @@ import { Indice } from "../components/indice";
 import Select from "../components/select"
 
 export const SignIn = () => {
+    //✓
     return (
-        <div className="w-[110%]">
-            <Indice/>
+        <div className="">
+            <Indice
+            fase="1"
+            />
             <h1 className="font-bold p-4">DATOS PERSONALES</h1>
             <div className="w-[100%] flex flex-row justify-between p-2">
                 <Datos
@@ -45,7 +48,6 @@ export const SignIn = () => {
                 holder="Ej:958472045"
                 tipo="number"/>
             </div>
-            
         </div>
     );
 }

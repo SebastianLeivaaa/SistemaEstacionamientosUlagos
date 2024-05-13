@@ -37,7 +37,8 @@ export default {
     'indice':{//colores del indice (registro)
       '50': 'rgba(52, 143, 255, 1)',
       '100': 'rgba(25, 63, 143, 1)',
-    }
+    },
+      'customGreen': '#E0F5A5',//menu guardias
       
       }
     },
