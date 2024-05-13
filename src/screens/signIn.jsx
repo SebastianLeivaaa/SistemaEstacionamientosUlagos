@@ -2,8 +2,7 @@ import React from "react";
 import Datos from "../components/datos"
 import { Indice } from "../components/indice";
 import Select from "../components/select"
-import { SlArrowRight } from "react-icons/sl";
-
+import Rut from "../components/rut"
 export const SignIn = () => {
     //✓
     return (
@@ -28,7 +27,7 @@ export const SignIn = () => {
                     titulo="Apellido Materno"
                     holder="Ingresa tu apellido materno"
                     tipo="text"/>
-                    <Datos
+                    <Rut
                     titulo="RUT"
                     holder="Ej:20545267-1"
                     tipo="text"/>
@@ -73,7 +72,7 @@ export const SignIn = () => {
             </form>
             <div className="w-[100%] flex flex-row justify-between items-center p-2">
                 <div></div>
-                <button className="mr-8 px-10 mt-5 rounded-md py-2 bg-blue-ribbon-600 text-white font-bold text-lg"><SlArrowRight className="text-3xl max-md:text-2xl" />CREE SU CONTRASEÑA</button>
+                <button className="mr-8 px-10 mt-5 rounded-md py-2 bg-blue-ribbon-600 text-white font-bold text-lg"> &gt;CREE SU CONTRASEÑA</button>
             </div>
         </div>
     );
