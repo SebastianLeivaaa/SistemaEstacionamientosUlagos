@@ -1,13 +1,29 @@
 import React from "react";
+import Datos from "../components/datos"
 import { Indice } from "../components/indice";
 
 export const SignIn = () => {
     return (
-        <div className="h-full w-full flex items-center justify-center flex-col">
+        <div className="w-[110%]">
             <Indice/>
-            <form className="flex flex-col items-center gap-y-4 w-full">
-                <h1>HOLAA</h1>
-            </form>
+
+            <h1 className="font-bold">DATOS PERSONALES</h1>
+            <div className="w-[100%] flex flex-row justify-between p-2">
+                <Datos
+                titulo="Nombre"
+                holder="Ingrese su nombre"/>
+                <Datos
+                titulo="Apellido Paterno"
+                holder="Ingresa tu apellido paterno"/>
+            </div>
+            <div className="w-[100%] flex flex-row justify-between p-2">
+                <Datos
+                titulo="Nombre"
+                holder="Ingrese su nombre"/>
+                <Datos
+                titulo="Apellido Paterno"
+                holder="Ingresa tu apellido paterno"/>
+            </div>
         </div>
     );
 }
