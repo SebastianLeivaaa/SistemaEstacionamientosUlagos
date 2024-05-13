@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; 
 import Datos from "../components/datos"
 import { Indice } from "../components/indice";
 
