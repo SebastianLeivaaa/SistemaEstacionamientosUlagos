@@ -20,9 +20,9 @@ export const Datos = (props) => {
       value={props.value}
       maxLength={props.maxLength}
       name={props.name}
-      className="w-[90%] p-1 border-[0.5px] border-blue-ribbon-600"
+      className="hidden-number-input appearance-none w-[90%] p-1 border-[0.5px] border-blue-ribbon-600"
       placeholder={props.holder}
-    />
+     />
   );
 };
 

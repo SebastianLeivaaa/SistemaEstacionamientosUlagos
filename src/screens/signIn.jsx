@@ -309,6 +309,7 @@ export const SignIn = () => {
                         maxLength="4"
                         onChange={handleChange}
                         value={formData.vehicleYear}
+                        
                     />
                     {errors.vehicleYear && (
                         <p className="text-red-500 text-sm">{errors.vehicleYear}</p>
