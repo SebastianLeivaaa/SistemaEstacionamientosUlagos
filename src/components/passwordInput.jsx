@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
-export const PasswordInput = () => {
+export const PasswordInput = (props) => {
     const [showPassword, setShowPassword] = useState(false); //Estado para mostrar y ocultar la clave
 
     //Controlador para cambiar el estado de la clave
@@ -12,6 +12,9 @@ export const PasswordInput = () => {
     return (
         <div className="relative w-[90%] max-md:w-[85%]">
             <input
+                id={props.id}
+                name={props.name}
+                onChange={props.onChange}
                 type={showPassword ? 'text' : 'password'}
                 className="w-full p-2 border-[0.5px] border-blue-ribbon-600" 
                 placeholder="Contraseña"
