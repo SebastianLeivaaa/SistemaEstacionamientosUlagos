@@ -1,6 +1,7 @@
 import express from "express";
 import postgres from "postgres";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -21,6 +22,8 @@ const sql = postgres({
 });
 
 const port = 3090;
+app.use(cors());
+app.use(express.json());
 
 app.listen(port, async () => {
   try {
@@ -32,3 +35,19 @@ app.listen(port, async () => {
     console.error('Error al conectar a la base de datos:', error);
   }
 });
+
+//Consulta para verificar si el usuario existe en la base de datos
+app.post("/api/query-user-exists", async (req, res) => {
+  const { userRut, userEmail, userPhone, userDomain } = req.body;
+  const userFullEmail = `${userEmail}${userDomain}`
+
+  try {
+    const resultRut = await sql`select * from usuario where usua_rut = ${userRut}`;
+    const resultEmail = await sql`select * from usuario where usua_correo = ${userFullEmail}`;
+    const resultPhone = await sql`select * from usuario where usua_telefono = ${userPhone}`
+
+    res.send({infoRut: resultRut, infoEmail: resultEmail, infoPhone: resultPhone});
+  } catch (error) {
+    res.send(error);
+  }
+})
