@@ -12,7 +12,7 @@ import { validateFormatPhone } from "../utils/validateFormatPhone";
 import { validateRut } from "../utils/validateRut";
 import { validateEmailFormat } from "../utils/validateEmailFormat";
 import { useNavigate } from 'react-router-dom';
-
+import { validateYear } from "../utils/validateYear";
 
 export const SignIn = () => {
     const navigate = useNavigate();
@@ -73,6 +73,9 @@ export const SignIn = () => {
         }
         if(!validateEmailFormat(`${formData.userEmail}${formData.userDomain}`)){
             newErrors.userEmail = "Ingrese un correo electrónico válido";
+        }
+        if(!validateYear(formData.vehicleYear)){
+            newErrors.vehicleYear ="Ingrese un año superior a 1970 o inferior a 2024";
         }
         if(formData.vehiclePatente.trim() === ''){
             newErrors.vehiclePatente = 'Por favor ingrese la patente de su vehículo.';
@@ -235,7 +238,7 @@ export const SignIn = () => {
                     <h1 className="pb-3">Télefono</h1>
                     <Phone
                         holder="Ej:958472045"
-                        tipo="text"
+                        tipo="number"
                         id="userPhone"
                         name="userPhone"
                         maxLength="9"
@@ -300,7 +303,7 @@ export const SignIn = () => {
                     <h1 className="pb-3">Año</h1>
                     <Datos
                         holder="Ej:2014"
-                        tipo="text"
+                        tipo="number"
                         id="vehicleYear"
                         name="vehicleYear"
                         maxLength="4"
