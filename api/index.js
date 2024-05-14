@@ -2,12 +2,16 @@ import express from "express";
 import postgres from "postgres";
 import dotenv from "dotenv";
 import cors from "cors";
+import { sendCodeEmail } from "../src/utils/mailer.js";
+import { generatorCode } from "../src/utils/generatorCode.js";
 
 dotenv.config();
 const app = express();
 
 //CONEXION A LA BASE DE DATOS
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+const SENDER_EMAIL_ID = "estacionamientosulagos@gmail.com";
+
 
 const sql = postgres({
   host: PGHOST,
@@ -51,3 +55,22 @@ app.post("/api/query-user-exists", async (req, res) => {
     res.send(error);
   }
 })
+
+//Consulta para enviar un correo electronico a tu cuenta
+app.post("/api/send-email", async (req, res) => {
+  const { userEmail, userDomain } = req.body;
+  const fullUserEmail = `${userEmail}${userDomain}`;
+
+  try {
+    if (SENDER_EMAIL_ID === "EMAIL_ID") {
+      throw new Error(
+        "Please update SENDER_EMAIL_ID with your email id in server.js"
+      );
+    }
+    const code = generatorCode();
+    const info = await sendCodeEmail(code, fullUserEmail);
+    res.send({ info: info, code: code });
+  } catch (error) {
+    res.send(error);
+  }
+});

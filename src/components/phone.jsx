@@ -11,7 +11,7 @@ export const Phone = (props) => {
       const inputValue = event.target.value;
       const maxLength = props.maxLength;
       if (inputValue.length > maxLength) {
-        event.target.value = inputValue.slice(0, maxLength); // Limita la entrada al maxLength
+        event.target.value = inputValue.slice(0, maxLength);
       }
     }
     props.onChange(event);
