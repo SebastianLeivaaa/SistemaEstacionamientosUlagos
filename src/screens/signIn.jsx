@@ -14,8 +14,6 @@ import { validateEmailFormat } from "../utils/validateEmailFormat";
 import { useNavigate } from 'react-router-dom';
 
 
-
-
 export const SignIn = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
