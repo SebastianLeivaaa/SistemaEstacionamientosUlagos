@@ -13,7 +13,7 @@ export const Login = () => {
         event.preventDefault();
 
         try {
-        const response = await fetch('http://localhost:3090/api/sesion', {
+        const response = await fetch('/api/sesion', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',

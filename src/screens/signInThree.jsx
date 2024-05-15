@@ -61,7 +61,7 @@ export const SignInThree = (props) => {
             setIsMessageError(false);
             try {
                 console.log('estoy aca')
-                const response = await fetch('http://localhost:3090/api/register-user', {
+                const response = await fetch('/api/register-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ export const SignInThree = (props) => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await fetch('http://localhost:3090/api/send-email', {
+            const response = await fetch('/api/send-email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
