@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { sendCodeEmail } from "../src/utils/mailer.js";
 import { generatorCode } from "../src/utils/generatorCode.js";
+import jwt from 'jsonwebtoken';
+import { authenticateToken } from "../src/utils/tokens.js"
 
 dotenv.config();
 const app = express();
@@ -28,13 +30,15 @@ const sql = postgres({
 const port = 3090;
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({extended: false}))
 
 app.listen(port, async () => {
   try {
     console.log(`Server listening on port ${port}`);
     // CONSULTA PARA COMPROBAR QUE SE CONECTO CORRECTAMENTE
     const resultadoConsulta = await sql`SELECT * FROM EDIFICIO`;
-    console.log('Consulta exitosa:', resultadoConsulta);
+    const resultadoConsulta2 = await sql`SELECT * FROM Usuario`;
+    console.log('Consulta exitosa:', resultadoConsulta, resultadoConsulta2);
   } catch (error) {
     console.error('Error al conectar a la base de datos:', error);
   }
@@ -74,6 +78,35 @@ app.post("/api/send-email", async (req, res) => {
     res.send(error);
   }
 });
+
+// inicio de sesión
+app.post('/api/sesion', async (req, res) => {
+  const { userEmail, password } = req.body;
+
+  try {
+    const users = await sql`SELECT * FROM usuario WHERE usua_correo = ${userEmail}`;
+
+
+    if (users.length === 0) {
+      return res.status(401).json({ error: 'Correo electrónicoooo o contraseña incorrectos' });
+    }
+
+    const user = users[0];
+    const isPasswordValid = (password === user.usua_clave);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: user.usua_clave })
+      
+    }
+
+    const token = jwt.sign({ userId: user.usua_id }, process.env.SECRET, { expiresIn: '1h' });
+
+    res.json({ token });
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
 
 //INSERTAR USUARIO EN LA BASE DE DATOS
 app.post("/api/register-user", async (req, res) => {
