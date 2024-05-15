@@ -72,11 +72,11 @@ export const SignInTwo = (props) => {
                     <button className="bg-blue-ribbon-600 text-white-50 px-4 py-2 rounded-md text-lg hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-base" disabled>Registrarse</button>
                 </div>
                 <form onSubmit={handleSubmit} className="grid grid-cols-2 p-4 gap-x-6 gap-y-8 bg-white-50 w-[100%] rounded-2xl">
-                    <dIV className="w-full col-span-2">
+                    <div className="w-full col-span-2">
                         <Indice
                             fase="2"
                         />
-                    </dIV>
+                    </div>
                     <h1 className="font-bold flex justify-start px-2 flex-col w-full col-span-2">CREE SU CONTRASEÑA</h1>
                     <div className="gap-y-1 flex flex-col px-2 ">
                         <label htmlFor="password">Contraseña</label>

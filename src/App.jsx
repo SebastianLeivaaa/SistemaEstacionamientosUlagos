@@ -4,6 +4,7 @@ import { Main } from './screens/main'
 import { Menu } from './screens/guard/menu'
 import { SignInTwo } from './screens/signInTwo';
 import { SignInThree } from './screens/signInThree';
+import { SignInFinal } from './screens/signInFinal';
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Main/>}/>
         <Route path="/sign-in-two" element={<SignInTwo/>}/>
         <Route path="/sign-in-three" element={<SignInThree/>}/>
+        <Route path="/sign-in-final" element={<SignInFinal/>}/>
       </Routes>
     </>
   )

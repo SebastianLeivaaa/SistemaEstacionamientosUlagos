@@ -74,3 +74,30 @@ app.post("/api/send-email", async (req, res) => {
     res.send(error);
   }
 });
+
+//INSERTAR USUARIO EN LA BASE DE DATOS
+app.post("/api/register-user", async (req, res) => {
+  const { userName, userLastNamePat, userLastNameMat, userRut, userEmail, userPhone, userType, userDomain, password, vehiclePatente, vehicleMarca, vehicleModelo, vehicleYear, vehicleType, vehicleColor } = req.body;
+
+  const fullUserEmail = `${userEmail}${userDomain}`;
+  try {
+    const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${vehiclePatente}`;
+    if (existingVehicle.length > 0) {
+      const insertUser = await sql`insert into usuario(usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_rut, usua_correo, usua_clave, usua_telefono, usua_tipo) 
+                                  values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
+      const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente)
+                                                      values (${userRut}, ${vehiclePatente})`;
+    } else{
+      const insertUser = await sql`insert into usuario(usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_rut, usua_correo, usua_clave, usua_telefono, usua_tipo) 
+                                  values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
+      const insertVehicle = await sql`insert into vehiculo(vehi_patente, vehi_marca, vehi_modelo, vehi_anio, vehi_tipo, vehi_color) 
+                                      values(${vehiclePatente}, ${vehicleMarca}, ${vehicleModelo}, ${vehicleYear}, ${vehicleType}, ${vehicleColor})`;
+      const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente)
+                                                      values (${userRut}, ${vehiclePatente})`;
+    }
+    res.status(200).send('Registro insertado con éxito');
+  } catch (err) {
+    console.error('Error al insertar el registro:', err);
+    res.status(500).send('Error al insertar el registro');
+  }
+});
