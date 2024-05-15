@@ -30,7 +30,7 @@ export const Login = () => {
         localStorage.setItem('token', token);
         
         // Redireccionar al usuario a la página después del inicio de sesión exitoso
-        window.location.href = '/sign-in-three'; 
+        window.location.href = '/user'; 
         } catch (error) {
         setError(error.message);
         }

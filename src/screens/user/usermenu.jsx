@@ -14,7 +14,7 @@ export const Usermenu = (props) => {
                     <img src={Ulogo} alt="Logo Ulagos" className="w-44 h-auto"/>
                     <div className="flex flex-col items-start">
                         <h1 className="text-xl font-bold text-center max-md:text-base text-congress-blue-900">{props.nombre}test</h1>
-                        <button className="mt-4 w-full bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/> CERRAR SESIÓN</button>
+                        <button className="mt-4 w-full bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/> SOLO PARA TESTEAR</button>
                     </div>
                 </div>
                 <img src={Chinquihue} alt="Logo Ulagos" className="w-full  rounded-lg" />
