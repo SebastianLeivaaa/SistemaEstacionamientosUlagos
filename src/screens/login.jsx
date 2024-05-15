@@ -3,11 +3,14 @@ import { MdEmail } from "react-icons/md";
 import { MdLock } from "react-icons/md";
 import { MdLogin } from "react-icons/md";
 import { PasswordInput } from "../components/passwordInput";
+import { useNavigate } from 'react-router-dom';
+
 
 export const Login = () => {
     const [userEmail, setUserEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -30,7 +33,7 @@ export const Login = () => {
         localStorage.setItem('token', token);
         
         // Redireccionar al usuario a la página después del inicio de sesión exitoso
-        window.location.href = '/user'; 
+        navigate('/user');
         } catch (error) {
         setError(error.message);
         }
