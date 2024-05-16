@@ -28,7 +28,10 @@ const sql = postgres({
 });
 
 const port = 3090;
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // Especifica tu frontend aquí
+  credentials: true // Permite el envío de cookies y credenciales
+}));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
@@ -81,8 +84,8 @@ app.post("/api/send-email", async (req, res) => {
 });
 
 //test
-app.get('/', (req, res) => {
-  res.cookie('miCookie', 'valorCookie', { maxAge: 900000, httpOnly: true });
+app.post('/', (req, res) => {
+  res.cookie('miCookie', 'valorCookie', { maxAge: 900000, httpOnly: true , path: '/' });
   res.send('Cookie seteada correctamente');
 });
 
@@ -102,7 +105,7 @@ app.post('/api/sesion', async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 900, // 15 minutos
+            maxAge: 900, // 5 minutos
             path: '/'
         });
         res.setHeader('Set-Cookie', serialized);
