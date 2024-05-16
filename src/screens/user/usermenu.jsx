@@ -20,12 +20,12 @@ export const Usermenu = (props) => {
                 <img src={Chinquihue} alt="Logo Ulagos" className="w-[100%] flex rounded-lg" />
 
                 <div className="flex flex-wrap justify-between w-[90%] md:flex-row">
-                    <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center"><FaCarAlt className="text-2xl"/>RESERVAR ESTACIONAMIENTO</button>
-                    <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center"><LuHistory className="text-2xl"/>MIS RESERVAS</button>
+                    <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-6"><FaCarAlt className="text-2xl"/>RESERVAR ESTACIONAMIENTO</button>
+                    <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-6"><LuHistory className="text-2xl"/>MIS RESERVAS</button>
                 </div>
                 <div className="flex flex-wrap justify-between w-[90%]">
-                    <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center"><FaMapMarked className="text-2xl"/>MAPA DE ESTACIONAMIENTO</button>
-                    <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center"><FaCarAlt className="text-2xl"/>ACTUALIZAR DATOS DE VEHÍCULO</button>
+                    <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-6"><FaMapMarked className="text-2xl"/>MAPA DE ESTACIONAMIENTO</button>
+                    <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-6"><FaCarAlt className="text-2xl"/>ACTUALIZAR DATOS DE VEHÍCULO</button>
                 </div>
             </div>
         </div>
