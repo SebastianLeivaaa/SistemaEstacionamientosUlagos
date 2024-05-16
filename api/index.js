@@ -81,10 +81,11 @@ app.post("/api/send-email", async (req, res) => {
 });
 
 //test
-app.get('/api/sesion', (req, res) => {
-  res.cookie("my cookie name ", "my cookie");
-  res.send('earsarasf');
-})
+app.get('/', (req, res) => {
+  res.cookie('miCookie', 'valorCookie', { maxAge: 900000, httpOnly: true });
+  res.send('Cookie seteada correctamente');
+});
+
 
 // inicio de sesión
 app.post('/api/sesion', async (req, res) => {
@@ -101,7 +102,7 @@ app.post('/api/sesion', async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 900, // 5 minutos
+            maxAge: 900, // 15 minutos
             path: '/'
         });
         res.setHeader('Set-Cookie', serialized);
