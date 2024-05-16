@@ -4,53 +4,49 @@ import { MdLock } from "react-icons/md";
 import { MdLogin } from "react-icons/md";
 import { PasswordInput } from "../components/passwordInput";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 export const Login = () => {
-    const [userEmail, setUserEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
+    const [credentials, setCredencials] = useState({
+        email: '',
+        password: ''
+    });
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleChange = (e) => {
+        setCredencials({
+            ...credentials,
+            [e.target.name]: e.target.value
+        })
+    };
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        console.log(credentials);
         try {
-        const response = await fetch('/api/sesion', {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ userEmail, password }),
-        });
-
-        if (!response.ok) {
-            const { error } = await response.json();
-            throw new Error(error);
-        }
-
-        const { token } = await response.json();
-        localStorage.setItem('token', token);
-        
-        // Redireccionar al usuario a la página después del inicio de sesión exitoso
-        navigate('/user');
+            const response = await axios.post('http://localhost:3090/api/sesion', credentials);
+            console.log(response);
+            // Manejar el caso de éxito, redirigir, etc.
         } catch (error) {
-        setError(error.message);
+            console.error('Error al iniciar sesión:', error);
+            // Manejar el error, mostrar mensaje, etc.
         }
     };
+    
+    
 
     return (
         <div className="h-full w-full flex flex-col items-center justify-center gap-y-8 mt-8">
-            {error && <p>{error} {userEmail} {password}</p>}
+            {/* {error && <p>{error} {userEmail} {password}</p>} */}
             <form onSubmit={handleSubmit} className="flex flex-col items-center gap-y-8 w-full">
                 <div className="w-full flex flex-row">
-                    <input type="text" value={userEmail} onChange={(e) => setUserEmail(e.target.value)} className="w-[90%] p-2 border-[0.5px] border-blue-ribbon-600 max-md:w-[85%] " placeholder="Correo Electrónico"/>
+                    <input name="email" type="email" onChange={ handleChange} className="w-[90%] p-2 border-[0.5px] border-blue-ribbon-600 max-md:w-[85%] " placeholder="Correo Electrónico"/>
                     <div className="w-[10%] border-[0.5px] border-l-[0px] border-blue-ribbon-600 flex items-center justify-center max-md:w-[15%]">
                         <MdEmail className="text-blue-ribbon-600 text-2xl"/>
                     </div>
                 </div>
                 <div className="w-full flex flex-row">
-                    <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    <PasswordInput  onChange={ handleChange} name="password"/>
                     <div className="w-[10%] border-[0.5px] border-l-[0px] border-blue-ribbon-600 flex items-center justify-center max-md:w-[15%]">
                         <MdLock className="text-blue-ribbon-600 text-2xl"/>
                     </div>

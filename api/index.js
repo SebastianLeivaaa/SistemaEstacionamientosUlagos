@@ -1,14 +1,14 @@
 import express from "express";
-import postgres from "postgres";
-import dotenv from "dotenv";
-import cors from "cors";
-import { sendCodeEmail } from "../src/utils/mailer.js";
-import { generatorCode } from "../src/utils/generatorCode.js";
-import jwt from 'jsonwebtoken';
-import { authenticateToken } from "../src/utils/tokens.js"
+import postgres from "postgres"; 
+import dotenv from "dotenv"; 
+import cors from "cors"; 
+import jwt from 'jsonwebtoken'; 
+import { serialize } from 'cookie';
+import cookieParser from 'cookie-parser'
 
 dotenv.config();
 const app = express();
+
 
 //CONEXION A LA BASE DE DATOS
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
@@ -30,7 +30,8 @@ const sql = postgres({
 const port = 3090;
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({extended: true}));
+app.use(cookieParser());
 
 app.listen(port, async () => {
   try {
@@ -79,32 +80,40 @@ app.post("/api/send-email", async (req, res) => {
   }
 });
 
+//test
+app.get('/api/sesion', (req, res) => {
+  res.cookie("my cookie name ", "my cookie");
+  res.send('earsarasf');
+})
+
 // inicio de sesión
 app.post('/api/sesion', async (req, res) => {
-  const { userEmail, password } = req.body;
-
   try {
-    const users = await sql`SELECT * FROM usuario WHERE usua_correo = ${userEmail}`;
-
-
-    if (users.length === 0) {
-      return res.status(401).json({ error: 'Correo electrónicoooo o contraseña incorrectos' });
-    }
+    const { email, password } = req.body;
+    const users = await sql`SELECT * FROM usuario WHERE usua_correo = ${email}`;
 
     const user = users[0];
-    const isPasswordValid = (password === user.usua_clave);
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: user.usua_clave })
-      
+
+    if (user && email === user.usua_correo && password === user.usua_clave) {
+        const token = jwt.sign({ userId: user.usua_id }, process.env.SECRET, { expiresIn: '5m' });
+
+        const serialized = serialize('myTokenName', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 900, // 5 minutos
+            path: '/'
+        });
+        res.setHeader('Set-Cookie', serialized);
+        console.log('Configuración de la cookie:', serialized);
+
+        return res.json('Login successfully');
     }
-
-    const token = jwt.sign({ userId: user.usua_id }, process.env.SECRET, { expiresIn: '1h' });
-
-    res.json({ token });
-  } catch (error) {
+    res.status(401).json({ error: 'Correo electrónico o contraseña incorrectos' });
+} catch (error) {
     console.error('Error al iniciar sesión:', error);
     res.status(500).json({ error: 'Error en el servidor' });
-  }
+}
 });
 
 
