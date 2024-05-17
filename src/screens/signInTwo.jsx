@@ -40,7 +40,7 @@ export const SignInTwo = () => {
         setIsLoading(true);
         try {
 
-            const response = await fetch('http://localhost:3090/api/send-email', {
+            const response = await fetch('/api/send-email', {
                 
                 method: 'POST',
                 headers: {

@@ -60,8 +60,8 @@ export const SignInThree = () => {
         if(concatenatedCode === code && counter > 0){
             setIsMessageError(false);
             try {
-                console.log('estoy aca')
-                const response = await fetch('http://localhost:3090/api/register-user', {
+                //console.log('estoy aca')
+                const response = await fetch('/api/register-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

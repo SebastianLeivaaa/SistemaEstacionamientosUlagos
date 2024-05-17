@@ -23,7 +23,7 @@ export const Login = () => {
         e.preventDefault();
         try {
             const res = await axios.post(
-                'http://localhost:3090/api/sesion',
+                '/api/sesion',
                 { email: credentials.email, password: credentials.password },
                 { withCredentials: true }
             );

@@ -16,7 +16,7 @@ export const Guardmenu = () => {
     const navigate = useNavigate();
 
     const getProfile = async () => {
-        const response = await axios.get("http://localhost:3090/api/login", {withCredentials: true});
+        const response = await axios.get("/api/login", {withCredentials: true});
         setUser({
             email: response.data.email,
             username: response.data.username,
@@ -27,7 +27,7 @@ export const Guardmenu = () => {
     }, []);
 
     const logOut = async () => {
-        const response = await axios.get("http://localhost:3090/api/logout", {withCredentials: true});
+        const response = await axios.get("/api/logout", {withCredentials: true});
         console.log(response);
         navigate('/');
     }

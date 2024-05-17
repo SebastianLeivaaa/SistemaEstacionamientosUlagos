@@ -97,7 +97,7 @@ export const SignIn = () => {
             setErrors(newErrors);
         } else {
             try{
-                const response = await fetch('http://localhost:3090/api/query-user-exists', {
+                const response = await fetch('/api/query-user-exists', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
