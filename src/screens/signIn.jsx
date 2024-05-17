@@ -1,4 +1,4 @@
-import React, {useState} from "react"; 
+import {useState} from "react"; 
 import Datos from "../components/datos"
 import { Indice } from "../components/indice";
 import SelectUser from "../components/selectUser";
@@ -97,7 +97,7 @@ export const SignIn = () => {
             setErrors(newErrors);
         } else {
             try{
-                const response = await fetch('/api/query-user-exists', {
+                const response = await fetch('http://localhost:3090/api/query-user-exists', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -293,7 +293,7 @@ export const SignIn = () => {
                         name="vehicleModelo"
                         maxLength="30"
                         onChange={handleChange}
-                        value={formData.vehicleModeloehicleModelo}
+                        value={formData.vehicleModelo}
                     />
                     {errors.vehicleModelo && (
                             <p className="text-red-500 text-sm">{errors.vehicleModelo}</p>

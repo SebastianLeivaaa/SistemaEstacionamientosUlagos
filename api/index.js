@@ -5,7 +5,8 @@ import cors from "cors";
 import jwt from 'jsonwebtoken'; 
 import { serialize } from 'cookie';
 import cookieParser from 'cookie-parser';
-
+import {generatorCode} from '../src/utils/generatorCode.js'
+import {sendCodeEmail} from '../src/utils/mailer.js'
 
 
 dotenv.config();

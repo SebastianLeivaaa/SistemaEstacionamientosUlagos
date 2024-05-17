@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Ulogo from "../../assets/img/Ulogo.png";
 import Chinquihue from "../../assets/img/Chinquihue.png";
 import { LuHistory } from "react-icons/lu";

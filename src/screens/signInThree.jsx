@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import {useState, useEffect, useRef} from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Indice } from "../components/indice";
 import Ulogo from "../assets/img/Ulogo.png";
@@ -11,7 +11,7 @@ import { IoIosMail } from "react-icons/io";
 import { formatTime } from "../utils/formatTime";
 
 
-export const SignInThree = (props) => {
+export const SignInThree = () => {
     const location = useLocation();
     const formData = location.state.formData;
     const passwordData = location.state.passwordData;
@@ -42,7 +42,7 @@ export const SignInThree = (props) => {
         if (value === "") {
             const prevIndex = index - 1;
             if (prevIndex >= 0) {
-              inputsRef.current[prevIndex].focus();
+                inputsRef.current[prevIndex].focus();
             }
         } else {
             const nextIndex = index + 1;
@@ -61,7 +61,7 @@ export const SignInThree = (props) => {
             setIsMessageError(false);
             try {
                 console.log('estoy aca')
-                const response = await fetch('/api/register-user', {
+                const response = await fetch('http://localhost:3090/api/register-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ export const SignInThree = (props) => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await fetch('/api/send-email', {
+            const response = await fetch('http://localhost:3090/api/send-email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ export const SignInThree = (props) => {
                 <img src={Ulogo} alt="Logo Ulagos"/>
                 <h1 className="text-2xl font-bold text-center max-md:text-base">ESTACIONAMIENTOS ULAGOS</h1>
                 <div className="flex flex-row justify-around w-full">
-                    <button onClick={() => {navigate('/')}} className="bg-white-50 text-black px-4 py-2 rounded-md text-lg hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-base max-md:px-2" enabled>Iniciar Sesión</button>
+                    <button onClick={() => {navigate('/')}} className="bg-white-50 text-black px-4 py-2 rounded-md text-lg hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-base max-md:px-2">Iniciar Sesión</button>
                     <button className="bg-blue-ribbon-600 text-white-50 px-4 py-2 rounded-md text-lg hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-base" disabled>Registrarse</button>
                 </div>
                 <div className="w-full col-span-2">
