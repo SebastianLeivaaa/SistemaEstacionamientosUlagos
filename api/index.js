@@ -4,7 +4,9 @@ import dotenv from "dotenv";
 import cors from "cors"; 
 import jwt from 'jsonwebtoken'; 
 import { serialize } from 'cookie';
-import cookieParser from 'cookie-parser'
+import cookieParser from 'cookie-parser';
+
+
 
 dotenv.config();
 const app = express();
@@ -29,9 +31,10 @@ const sql = postgres({
 
 const port = 3090;
 app.use(cors({
-  origin: 'http://localhost:5173', // Especifica tu frontend aquí
-  credentials: true // Permite el envío de cookies y credenciales
+  origin: 'http://localhost:5173', // Origen permitido
+  credentials: true // Permitir envío de credenciales
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
@@ -84,34 +87,35 @@ app.post("/api/send-email", async (req, res) => {
 });
 
 //test
-app.post('/', (req, res) => {
-  res.cookie('miCookie', 'valorCookie', { maxAge: 900000, httpOnly: true , path: '/' });
-  res.send('Cookie seteada correctamente');
-});
+// app.get('/', (req, res) => {
+//   res.cookie('miCookie', 'valorCookie', { maxAge: 900000, httpOnly: true , path: '/' });
+//   res.send('Cookie seteada correctamente');
+// });
 
 
-// inicio de sesión
+//inicio de sesión
 app.post('/api/sesion', async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log('Respuesta servidor:', req.body); //quitar luego
     const users = await sql`SELECT * FROM usuario WHERE usua_correo = ${email}`;
 
     const user = users[0];
+    console.log('usuario :', user); //quitar luego
 
     if (user && email === user.usua_correo && password === user.usua_clave) {
-        const token = jwt.sign({ userId: user.usua_id }, process.env.SECRET, { expiresIn: '5m' });
+        const token = jwt.sign({ userEmail: user.usua_correo, userName: user.usua_nombre }, process.env.SECRET, { expiresIn: '1m' });
 
         const serialized = serialize('myTokenName', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 900, // 5 minutos
+            maxAge: 900, // 15 minutos
             path: '/'
         });
         res.setHeader('Set-Cookie', serialized);
-        console.log('Configuración de la cookie:', serialized);
 
-        return res.json('Login successfully');
+        return res.json('Login successfully'); //quitar luego
     }
     res.status(401).json({ error: 'Correo electrónico o contraseña incorrectos' });
 } catch (error) {

@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import { MdEmail } from "react-icons/md";
-import { MdLock } from "react-icons/md";
-import { MdLogin } from "react-icons/md";
+import React, { useState, useEffect } from 'react';
+import { MdEmail, MdLock, MdLogin } from "react-icons/md";
 import { PasswordInput } from "../components/passwordInput";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
 
 export const Login = () => {
     const [credentials, setCredencials] = useState({
         email: '',
         password: ''
     });
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setCredencials({
@@ -20,20 +19,44 @@ export const Login = () => {
         })
     };
 
+    //TEST
+    // useEffect(() => { 
+    //     const checkAuth = async () => {
+    //         try {
+    //             const res = await axios.get('http://localhost:3090', {
+    //                 withCredentials: true,
+    //             });
+    //             if (res.data.isAuthenticated) {
+    //                 navigate('/user');
+    //             }
+    //         } catch (error) {
+    //             console.log('error',error);
+    //         }
+    //     };
+    //     checkAuth();
+    // }, [navigate]);
+
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(credentials);
         try {
-            const response = await axios.post('http://localhost:3090/api/sesion', credentials);
-            console.log(response);
-            // Manejar el caso de éxito, redirigir, etc.
+            const res = await axios.post(
+                'http://localhost:3090/api/sesion',
+                { email: credentials.email, password: credentials.password },
+                { withCredentials: true }
+            );
+            if (res.data.success) {
+                navigate('/user');
+            } else {
+                setError('Credenciales incorrectas');
+                console.log(credentials, res);
+            }
         } catch (error) {
-            console.error('Error al iniciar sesión:', error);
-            // Manejar el error, mostrar mensaje, etc.
+            console.log('el error es:',error);
+            setError('Error al iniciar sesión');
         }
     };
-    
-    
 
     return (
         <div className="h-full w-full flex flex-col items-center justify-center gap-y-8 mt-8">
