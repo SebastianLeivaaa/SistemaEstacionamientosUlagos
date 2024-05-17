@@ -6,13 +6,14 @@ import { SignInTwo } from './screens/signInTwo';
 import { SignInThree } from './screens/signInThree';
 import { Usermenu } from './screens/user/usermenu';
 import { SignInFinal } from './screens/signInFinal';
-
+import { Recover } from "./screens/recover";
 function App() {
 
   return (
     <>
       <Routes>
         <Route path="/" element={<Main/>}/>
+        <Route path="/recover" element={<Recover/>}/>
         <Route path="/sign-in-two" element={<SignInTwo/>}/>
         <Route path="/sign-in-three" element={<SignInThree/>}/>
         <Route path="/sign-in-final" element={<SignInFinal/>}/>
