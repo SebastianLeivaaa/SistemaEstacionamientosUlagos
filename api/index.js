@@ -86,43 +86,54 @@ app.post("/api/send-email", async (req, res) => {
   }
 });
 
-//test
-// app.get('/', (req, res) => {
-//   res.cookie('miCookie', 'valorCookie', { maxAge: 900000, httpOnly: true , path: '/' });
-//   res.send('Cookie seteada correctamente');
-// });
-
-
 //inicio de sesión
 app.post('/api/sesion', async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log('Respuesta servidor:', req.body); //quitar luego
-    const users = await sql`SELECT * FROM usuario WHERE usua_correo = ${email}`;
 
-    const user = users[0];
-    console.log('usuario :', user); //quitar luego
-
-    if (user && email === user.usua_correo && password === user.usua_clave) {
-        const token = jwt.sign({ userEmail: user.usua_correo, userName: user.usua_nombre }, process.env.SECRET, { expiresIn: '1m' });
-
+    // Buscar guardia primero
+    const guards = await sql`SELECT * FROM guardia WHERE guar_correo = ${email}`;
+    if (guards.length > 0) {
+      const guard = guards[0];
+      if (password === guard.guar_clave) {
+        const token = jwt.sign({ userEmail: guard.guar_correo, userName: guard.guar_nombre, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
         const serialized = serialize('myTokenName', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 900, // 15 minutos
-            path: '/'
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 900, // 15 minutos
+          path: '/'
         });
         res.setHeader('Set-Cookie', serialized);
-
-        return res.json('Login successfully'); //quitar luego
+        return res.json('guardia'); // Retorna 'guardia' si el inicio de sesión es exitoso
+      }
     }
+
+    // Buscar usuario
+    const users = await sql`SELECT * FROM usuario WHERE usua_correo = ${email}`;
+    if (users.length > 0) {
+      const user = users[0];
+      if (password === user.usua_clave) {
+        const token = jwt.sign({ userEmail: user.usua_correo, userName: user.usua_nombre, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
+        const serialized = serialize('myTokenName', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
+          maxAge: 900, // 15 minutos
+          path: '/'
+        });
+        res.setHeader('Set-Cookie', serialized);
+        return res.json('usuario'); // Retorna 'usuario' si el inicio de sesión es exitoso
+      }
+    }
+
     res.status(401).json({ error: 'Correo electrónico o contraseña incorrectos' });
-} catch (error) {
+  } catch (error) {
     console.error('Error al iniciar sesión:', error);
     res.status(500).json({ error: 'Error en el servidor' });
-}
+  }
 });
+
 
 
 //INSERTAR USUARIO EN LA BASE DE DATOS
@@ -149,5 +160,45 @@ app.post("/api/register-user", async (req, res) => {
   } catch (err) {
     console.error('Error al insertar el registro:', err);
     res.status(500).send('Error al insertar el registro');
+  }
+});
+
+
+//login
+app.get('/api/login', async (req, res) => {
+  const myTokenName = req.cookies.myTokenName;
+  try{
+    const user = jwt.verify(myTokenName, process.env.SECRET);
+    return res.json({
+      email: user.userEmail,
+      username: user.userName,
+      Isguard: user.Isguard,
+    });
+  }catch(error){
+    console.error('Error al verificar el token:', error);
+    return res.status(401).json({ error: "invalid token"})
+  }
+});
+
+//logout
+app.get('/api/logout', async (req, res) => {
+  const myTokenName = req.cookies.myTokenName;
+  if(!myTokenName){
+    return res.status(401).json({error: 'no token'}) 
+  }
+  try{
+    jwt.verify(myTokenName, process.env.SECRET);
+    const serialized = serialize('myTokenName', null, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 0,
+      path: '/'
+    });
+    res.setHeader('Set-Cookie', serialized);
+    res.status(200).json('logout succesfully')
+
+  }catch(error){
+    return res.status(401).json({ error: "invalid token"})
   }
 });

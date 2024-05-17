@@ -9,7 +9,6 @@ export const Login = () => {
         email: '',
         password: ''
     });
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -19,25 +18,6 @@ export const Login = () => {
         })
     };
 
-    //TEST
-    // useEffect(() => { 
-    //     const checkAuth = async () => {
-    //         try {
-    //             const res = await axios.get('http://localhost:3090', {
-    //                 withCredentials: true,
-    //             });
-    //             if (res.data.isAuthenticated) {
-    //                 navigate('/user');
-    //             }
-    //         } catch (error) {
-    //             console.log('error',error);
-    //         }
-    //     };
-    //     checkAuth();
-    // }, [navigate]);
-
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -46,15 +26,15 @@ export const Login = () => {
                 { email: credentials.email, password: credentials.password },
                 { withCredentials: true }
             );
-            if (res.data.success) {
+            if(res.data==="usuario"){
                 navigate('/user');
-            } else {
-                setError('Credenciales incorrectas');
-                console.log(credentials, res);
+            }else{
+                navigate('/guard');
             }
+            
+            
         } catch (error) {
             console.log('el error es:',error);
-            setError('Error al iniciar sesión');
         }
     };
 

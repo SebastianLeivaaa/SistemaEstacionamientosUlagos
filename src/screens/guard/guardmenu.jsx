@@ -1,20 +1,45 @@
-import React from "react"; 
+import {useEffect, useState} from "react"; 
 import Ulogo from "../../assets/img/Ulogo.png";
 import Chinquihue from "../../assets/img/Chinquihue.png";
 import { LuHistory } from "react-icons/lu";
 import { HiOutlineLogin } from "react-icons/hi";
 import { LuParkingCircle } from "react-icons/lu";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
-export const Menu = (props) => {
+export const Guardmenu = () => {
+    const [user, setUser] = useState({
+        email: "",
+        username: "",
+    })
+    const navigate = useNavigate();
+
+    const getProfile = async () => {
+        const response = await axios.get("http://localhost:3090/api/login", {withCredentials: true});
+        setUser({
+            email: response.data.email,
+            username: response.data.username,
+        });
+    }
+    useEffect(() => {
+        getProfile();
+    }, []);
+
+    const logOut = async () => {
+        const response = await axios.get("http://localhost:3090/api/logout", {withCredentials: true});
+        console.log(response);
+        navigate('/');
+    }
+
     return (
-        <div className="min-h-screen w-screen flex items-center justify-center">
-            <div className="bg-white flex flex-col items-center p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8">
+        <div className="min-h-screen w-screen flex items-center justify-center bg">
+            <div className="flex flex-col items-center p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50">
                 <div className="flex flex-row w-full justify-between">
                     <img src={Ulogo} alt="Logo Ulagos" className="w-44 h-auto"/>
                     <div className="flex flex-col items-start">
-                        <h1 className="text-xl font-bold text-center max-md:text-base text-congress-blue-900">{props.nombre}test</h1>
-                        <button className="mt-4 w-full bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/> CERRAR SESIÓN</button>
+                        <h1 className="text-xl font-bold text-center max-md:text-base text-congress-blue-900">{user.username}</h1>
+                        <button onClick={logOut} className="mt-4 w-full bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/> CERRAR SESIÓN</button>
                     </div>
                 </div>
                 <img src={Chinquihue} alt="Logo Ulagos" className="w-full  rounded-lg" />
@@ -29,7 +54,6 @@ export const Menu = (props) => {
                     <h1>• En caso de tener algún imprevisto con la patente, puede validarse con algún documento.</h1>
                     <h1>• Para liberar estacionamiento, se debe ingresar la patente del vehículo que va a retirarse.</h1>
                 </div>
-
             </div>
         </div>
     );
