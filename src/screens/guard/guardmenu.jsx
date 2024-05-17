@@ -16,11 +16,15 @@ export const Guardmenu = () => {
     const navigate = useNavigate();
 
     const getProfile = async () => {
-        const response = await axios.get("/api/login", {withCredentials: true});
-        setUser({
-            email: response.data.email,
-            username: response.data.username,
-        });
+        try{
+            const response = await axios.get("/api/login", {withCredentials: true});
+            setUser({
+                email: response.data.email,
+                username: response.data.username,
+            });
+        }catch(error){
+            navigate("/");
+        }
     }
     useEffect(() => {
         getProfile();

@@ -9,6 +9,7 @@ import {generatorCode} from '../src/utils/generatorCode.js'
 import {sendCodeEmail} from '../src/utils/mailer.js'
 
 
+
 dotenv.config();
 const app = express();
 
@@ -134,7 +135,6 @@ app.post('/api/sesion', async (req, res) => {
     res.status(500).json({ error: 'Error en el servidor' });
   }
 });
-
 
 
 //INSERTAR USUARIO EN LA BASE DE DATOS
