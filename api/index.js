@@ -88,6 +88,30 @@ app.post("/api/send-email", async (req, res) => {
   }
 });
 
+//Consulta para enviar un correo electronico a tu cuenta para recuperar la contraseña
+app.post("/api/send-email-recover", async (req, res) => {
+  const { userEmail, userDomain } = req.body;
+  const fullUserEmail = `${userEmail}${userDomain}`;
+
+  try {
+    const resultUserExists = await sql`select * from usuario where usua_correo = ${fullUserEmail}`;
+    if (resultUserExists.length > 0) {
+      if (SENDER_EMAIL_ID === "EMAIL_ID") {
+        throw new Error(
+          "Please update SENDER_EMAIL_ID with your email id in server.js"
+        );
+      }
+      const code = generatorCode();
+      const info = await sendCodeEmail(code, fullUserEmail);
+      res.send({ success: true, info: info, code: code });
+    } else {
+      res.status(404).send({ success: false, message: "El correo electrónico no está registrado en la base de datos" });
+    }
+  } catch (error) {
+    res.status(500).send({ success: false, message: "Error en el servidor", error: error.message });
+  }
+});
+
 //inicio de sesión
 app.post('/api/sesion', async (req, res) => {
   try {
@@ -162,6 +186,20 @@ app.post("/api/register-user", async (req, res) => {
     console.error('Error al insertar el registro:', err);
     res.status(500).send('Error al insertar el registro');
   }
+});
+
+//ACTUALIZAR LA NUEVA CLAVE DEL USUARIO
+app.post("/api/update-password", async (req, res) => {
+  const { userEmail, userDomain, password } = req.body;
+  const fullUserEmail = `${userEmail}${userDomain}`;
+
+  try {
+    const updatePassword = await sql`update usuario set usua_clave = ${password} where usua_correo = ${fullUserEmail}`;
+    res.status(200).send('Contraseña actualizada con éxito');
+  } catch (error) {
+    res.status(500).send('Error al actualizar la contraseña');
+  }
+
 });
 
 
