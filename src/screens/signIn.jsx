@@ -31,7 +31,7 @@ export const SignIn = () => {
         vehicleMarca: '',
         vehicleModelo: '',
         vehicleYear: '',
-        vehicleType: '',
+        vehicleType: 'Automovil',
         vehicleColor: ''
     });
 

@@ -86,7 +86,7 @@ export const SignInThree = () => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await fetch('http://localhost:3090/api/send-email', {
+            const response = await fetch('/api/send-email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ export const SignInThree = () => {
                     />
                 </div>
                 <div className="flex flex-col p-4 p gap-x-6 gap-y-4 bg-white-50 w-[100%] rounded-2xl">
-                    <h1 className="text-center text-xl font-bold">Enviamos un mail de confirmación a su correo electrónico</h1>
+                    <h1 className="text-center text-xl font-bold">Enviamos un mail de confirmación a {formData.userEmail}{formData.userDomain}</h1>
                     <div className="flex flex-col text-gray-950">
                         <p className="text-center text-xl font-semibold">Tiempo restante</p>
                         <p className="text-center text-lg font-semibold">{formatTime(counter)}</p>
