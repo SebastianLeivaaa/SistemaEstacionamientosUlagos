@@ -100,7 +100,7 @@ export const RecoverTwo = () =>{
         <img src={Ulogo} alt="Logo Ulagos"/>
         <h1 className="text-2xl font-bold text-center max-md:text-base">RECUPERAR CONTRASEÑA</h1>
         <div className="flex flex-col p-4 p gap-x-6 gap-y-4 bg-white-50 w-[100%] rounded-2xl sm:p-0 sm:text-xs">
-            <h1 className="text-center text-xl font-bold ">Enviamos un mail de verificación a {emailData.userEmail}{emailData.userDomain}</h1>
+            <h1 className="text-center text-xl font-bold ">Enviamos un mail de verificación a {emailData.userEmail} <br />{emailData.userDomain}</h1>
             <div className="flex flex-col text-gray-950">
                 <p className="text-center text-xl font-semibold">Tiempo restante</p>
                 <p className="text-center text-lg font-semibold">{formatTime(counter)}</p>
