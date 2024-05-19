@@ -99,7 +99,7 @@ export const RecoverTwo = () =>{
       <div className="bg-white-50 flex flex-col items-center p-12 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 max-h-[90%] overflow-y-scroll shadow-white-900 shadow-3xl">
         <img src={Ulogo} alt="Logo Ulagos"/>
         <h1 className="text-2xl font-bold text-center max-md:text-base">RECUPERAR CONTRASEÑA</h1>
-        <div className="flex flex-col p-4 p gap-x-6 gap-y-4 bg-white-50 w-[100%] rounded-2xl md:p-0">
+        <div className="flex flex-col p-4 p gap-x-6 gap-y-4 bg-white-50 w-[100%] rounded-2xl md:p-0 text-sm">
             <h1 className="text-center text-xl font-bold ">Enviamos un mail de verificación a {emailData.userEmail}{emailData.userDomain}</h1>
             <div className="flex flex-col text-gray-950">
                 <p className="text-center text-xl font-semibold">Tiempo restante</p>
