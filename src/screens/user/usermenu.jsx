@@ -40,7 +40,6 @@ export const Usermenu = () => {
         }catch(error){
             console.log(error);
         }
-    
     }
     useEffect(() => {
         getProfile();
@@ -53,8 +52,8 @@ export const Usermenu = () => {
     }, []);
 
     const logOut = async () => {
-        const response = await axios.get("/api/logout", {withCredentials: true});
-        console.log(response);
+        const response = await axios.get("api/logout", {withCredentials: true});
+        //console.log(response);
         navigate('/');
     }
 

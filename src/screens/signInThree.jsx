@@ -61,7 +61,7 @@ export const SignInThree = () => {
             setIsMessageError(false);
             try {
                 //console.log('estoy aca')
-                const response = await fetch('/api/register-user', {
+                const response = await fetch('http://localhost:3090/api/register-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
