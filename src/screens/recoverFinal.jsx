@@ -16,8 +16,8 @@ export const RecoverFinal = () => {
                     <section className="w-[100%] flex flex-col gap-y-8 px-24">
                         <div className="flex flex-col gap-y-8 items-center">
                             <FaCheckCircle className="text-[200px] text-blue-500"/>
-                            <h1 className="text-2xl font-bold text-gray-900 ">¡SE HA CAMBIADO TU CONTRASEÑA EXITOSAMENTE!</h1>
-                            <button onClick={() => {navigate('/');}} className="text-white-50 mt-4 rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-6 flex flex-row items-center gap-x-1 w-auto font-bold"><IoHome className="text-xl"/> VOLVER AL INICIO</button>
+                            <h1 className="text-sm sm:text-2xl font-bold text-gray-900">¡SE HA CAMBIADO TU CONTRASEÑA EXITOSAMENTE!</h1>
+                            <button onClick={() => {navigate('/');}} className="text-white-50 mt-4 rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-1 sm:px-6 flex flex-row items-center gap-x-1 w-auto font-bold"><IoHome className="text-xl"/> VOLVER AL INICIO</button>
                         </div>
                     </section>
                 </div>
