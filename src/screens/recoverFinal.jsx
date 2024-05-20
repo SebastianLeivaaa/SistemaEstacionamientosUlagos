@@ -13,7 +13,7 @@ export const RecoverFinal = () => {
                 <img src={Ulogo} alt="Logo Ulagos"/>
                 <h1 className="text-2xl font-bold text-center max-md:text-base">RECUPERAR CONTRASEÑA</h1>
                 <div className="w-full col-span-2">
-                    <section className="w-[100%] flex flex-col gap-y-8 px-24">
+                    <section className="w-[100%] flex flex-col gap-y-8 px-2">
                         <div className="flex flex-col gap-y-8 items-center">
                             <FaCheckCircle className="text-[200px] text-blue-500"/>
                             <h1 className="text-sm sm:text-2xl font-bold text-gray-900">¡SE HA CAMBIADO TU CONTRASEÑA EXITOSAMENTE!</h1>
