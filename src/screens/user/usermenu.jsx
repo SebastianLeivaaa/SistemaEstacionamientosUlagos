@@ -81,8 +81,8 @@ export const Usermenu = () => {
                     </h1>
                 </div>
                 <div className="flex flex-col sm:flex-wrap justify-between w-[90%] gap-y-4">
-                    <button className="w-full bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>RESERVAR ESTACIONAMIENTO</button>
-                    <button className="w-full bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-2"><LuHistory className="text-3xl"/>MIS RESERVAS</button>
+                    <button className="w-full sm:w-[40%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>RESERVAR ESTACIONAMIENTO</button>
+                    <button className="w-full sm:w-[40%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-2"><LuHistory className="text-3xl"/>MIS RESERVAS</button>
                 </div>
                 <div className="flex flex-wrap justify-between w-[90%]">
                     <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-2"><FaMapMarked className="text-3xl"/>MAPA DE ESTACIONAMIENTO</button>
