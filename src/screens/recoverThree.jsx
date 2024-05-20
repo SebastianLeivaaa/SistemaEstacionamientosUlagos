@@ -61,11 +61,11 @@ export const RecoverThree = () => {
             <h1 className="text-2xl font-bold text-center max-md:text-base">RECUPERAR CONTRASEÑA</h1>
             <form onSubmit={handleSubmit} className="flex flex-wrap sm:grid sm:grid-cols-2 p-4 gap-x-6 gap-y-8 bg-white-50 w-[100%] rounded-2xl ">
                 <h1 className="font-bold flex justify-start px-2 flex-col w-full col-span-2">CREE SU NUEVA CONTRASEÑA</h1>
-                <div className="gap-y-1 flex flex-colsm:px-10 w-[100%]">
+                <div className="gap-y-1 flex flex-col px-4 sm:px-10 w-[100%]">
                     <label htmlFor="password">Contraseña</label>
                     <PasswordInput id='password' name='password' onChange={handleChange}/>
                 </div>
-                <div className="gap-y-1 flex flex-col sm:px-10 w-[100%]">
+                <div className="gap-y-1 flex flex-col px-3 sm:px-10 w-[100%]">
                     <label htmlFor="confirmPassword">Confirme contraseña</label>
                     <PasswordInput id='confirmPassword' name='confirmPassword' onChange={handleChange}/>
                 </div>
@@ -81,7 +81,7 @@ export const RecoverThree = () => {
                     {validationPasswordGeneral.test(passwordData.password) && passwordData.password === passwordData.confirmPassword ? (
                         <button  onClick={handleSubmit} className="text-white-50 rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<FaCheck/>)} CREAR CONTRASEÑA</button>
                     ) : (
-                        <button className="text-white-50 rounded-md bg-gray-300 p-1.5 px-3  flex flex-row items-center gap-x-1 font-bold text-s sm:text-base " disabled><FaCheck/> CREAR CONTRASEÑA</button>
+                        <button className="text-white-50 rounded-md bg-gray-300 p-1.5 px-3  flex flex-row items-center gap-x-1 font-bold text-sm sm:text-base " disabled><FaCheck/> CREAR CONTRASEÑA</button>
                     )}
                 </div>
             </form>
