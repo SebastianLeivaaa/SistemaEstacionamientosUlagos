@@ -5,9 +5,6 @@ import { MdEmail } from "react-icons/md";
 import { ClipLoader } from 'react-spinners';
 import { BsSendFill } from "react-icons/bs";
 
-
-
-
 export const Recover = () =>{
   const navigate = useNavigate();
   const [emailData, setEmailData] = useState({

@@ -12,7 +12,7 @@ export const Login = () => {
         userDomain: '@alumnos.ulagos.cl'
     });
     const navigate = useNavigate();
-    
+
     const handleChange = (e) => {
         setCredencials({
             ...credentials,

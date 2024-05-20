@@ -6,7 +6,6 @@ import { PasswordInput } from "../components/passwordInput";
 import { useNavigate, useLocation} from "react-router-dom";
 
 export const RecoverThree = () => {
-
     const location = useLocation();
     const navigate = useNavigate();
     const emailData  = location.state.emailData;

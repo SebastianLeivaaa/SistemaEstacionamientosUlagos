@@ -52,7 +52,7 @@ export const Usermenu = () => {
     }, []);
 
     const logOut = async () => {
-        const response = await axios.get("api/logout", {withCredentials: true});
+        const response = await axios.get("/api/logout", {withCredentials: true});
         //console.log(response);
         navigate('/');
     }

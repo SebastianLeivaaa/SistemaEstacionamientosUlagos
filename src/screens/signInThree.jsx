@@ -50,9 +50,9 @@ export const SignInThree = () => {
                 inputsRef.current[nextIndex].focus();
             }
         }
-      };
+    };
 
-      const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         setIsLoading(true);
         let concatenatedCode = inputValues.join("");
         const combinedData = { ...formData, ...passwordData };
@@ -61,7 +61,7 @@ export const SignInThree = () => {
             setIsMessageError(false);
             try {
                 //console.log('estoy aca')
-                const response = await fetch('http://localhost:3090/api/register-user', {
+                const response = await fetch('/api/register-user', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -80,9 +80,9 @@ export const SignInThree = () => {
             setIsMessageError(true);
         }
         setIsLoading(false);
-      }
+    }
     
-      const handleSubmitEmail = async (e) => {
+    const handleSubmitEmail = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         try {
@@ -93,7 +93,6 @@ export const SignInThree = () => {
                 },
                 body: JSON.stringify(formData),
             });
-      
             if (response.ok) {
                 const responseData = await response.json();
                 setCode(responseData.code)

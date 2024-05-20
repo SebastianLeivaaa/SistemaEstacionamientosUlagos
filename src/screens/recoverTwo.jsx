@@ -9,10 +9,6 @@ import { RxCross2 } from "react-icons/rx";
 import { IoIosMail } from "react-icons/io";
 import { formatTime } from "../utils/formatTime";
 
-
-
-
-
 export const RecoverTwo = () =>{
     const navigate = useNavigate();
     const location = useLocation();
@@ -50,9 +46,9 @@ export const RecoverTwo = () =>{
                 inputsRef.current[nextIndex].focus();
             }
         }
-      };
+    };
     
-      const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         setIsLoading(true);
         let concatenatedCode = inputValues.join("");
         e.preventDefault();
@@ -63,7 +59,7 @@ export const RecoverTwo = () =>{
             setIsMessageError(true);
         }
         setIsLoading(false);
-      }
+    }
 
     const handleSubmitEmail = async (e) => {
         e.preventDefault();
@@ -78,7 +74,7 @@ export const RecoverTwo = () =>{
                 },
                 body: JSON.stringify(emailData),
             });
-      
+
             if (response.ok) {
                 const responseData = await response.json();
                 setCode(responseData.code)
@@ -92,56 +88,54 @@ export const RecoverTwo = () =>{
         setIsLoading(false);
     };
 
-
-
-  return(
-    <div className="h-screen w-screen flex items-center justify-center">
-      <div className="bg-white-50 flex flex-col items-center p-12 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 max-h-[90%] overflow-y-scroll shadow-white-900 shadow-3xl">
-        <img src={Ulogo} alt="Logo Ulagos"/>
-        <h1 className="text-2xl font-bold text-center max-md:text-base">RECUPERAR CONTRASEÑA</h1>
-        <div className="flex flex-col p-4 p gap-x-6 gap-y-4 bg-white-50 w-[100%] rounded-2xl sm:p-0 sm:text-xs">
-            <h1 className="text-center text-xl font-bold ">Enviamos un mail de verificación a {emailData.userEmail} <br />{emailData.userDomain}</h1>
-            <div className="flex flex-col text-gray-950">
-                <p className="text-center text-xl font-semibold">Tiempo restante</p>
-                <p className="text-center text-lg font-semibold">{formatTime(counter)}</p>
-            </div>
-            <div className="text-7xl justify-center flex text-blue-500">
-                <HiOutlineMailOpen/>
-            </div>
-            {counter === 0 ? (
-                <h3 className="text-center text-red-700 flex flex-row gap-x-2 items-center justify-center text-base max-md:text-sm"><IoIosWarning className="text-2xl max-md:text-xl"/> El código de confirmación ha expirado</h3>
-            ) : (
-                <h3 className="text-center text-base">Código de verificación</h3>
-            )}
-            <div className="flex flex-row gap-x-1 sm:gap-x-2 justify-center">
-                {[...Array(6)].map((_, index) => (
-                    <input
-                        ref={(el) => (inputsRef.current[index] = el)}
-                        type="text"
-                        key={index}
-                        maxLength="1"
-                        className="w-10 h-10 sm:w-12 sm:h-12 border-[1px] border-gray-400 text-center text-xl bg-gray-50"
-                        onChange={(e) => handleChange(index, e)}
-                        onInput={(e) => {
-                            e.target.value = e.target.value.toUpperCase();
-                        }}
-                        disabled={counter === 0}
-                    />
-                ))}
-            </div>
-            {isMessageError && (
-                <h3 className="text-center text-red-700 flex flex-row gap-x-1 items-center justify-center"><RxCross2 className="text-2xl"/> El código de verificación no es válido</h3>
-            )}
-            <div className="flex w-[100%] items-center mt-2 justify-center">
-                {counter > 0 ? (
-                    <button onClick={handleSubmit} className="text-white-50 text-lg rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-2 w-auto font-bold max-md:text-base">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<FaCheck/>)} Confirmar código</button>
-                ) : (
-                    <button onClick={handleSubmitEmail} className="text-white-50 text-lg rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-2 w-auto font-bold max-md:text-base">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<IoIosMail className="text-2xl"/>)} Reenviar código</button>
-                )}
+    return(
+        <div className="h-screen w-screen flex items-center justify-center">
+            <div className="bg-white-50 flex flex-col items-center p-12 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 max-h-[90%] overflow-y-scroll shadow-white-900 shadow-3xl">
+                <img src={Ulogo} alt="Logo Ulagos"/>
+                <h1 className="text-2xl font-bold text-center max-md:text-base">RECUPERAR CONTRASEÑA</h1>
+                <div className="flex flex-col p-4 p gap-x-6 gap-y-4 bg-white-50 w-[100%] rounded-2xl sm:p-0 sm:text-xs">
+                    <h1 className="text-center text-xl font-bold ">Enviamos un mail de verificación a {emailData.userEmail} <br />{emailData.userDomain}</h1>
+                    <div className="flex flex-col text-gray-950">
+                        <p className="text-center text-xl font-semibold">Tiempo restante</p>
+                        <p className="text-center text-lg font-semibold">{formatTime(counter)}</p>
+                    </div>
+                    <div className="text-7xl justify-center flex text-blue-500">
+                        <HiOutlineMailOpen/>
+                    </div>
+                    {counter === 0 ? (
+                        <h3 className="text-center text-red-700 flex flex-row gap-x-2 items-center justify-center text-base max-md:text-sm"><IoIosWarning className="text-2xl max-md:text-xl"/> El código de confirmación ha expirado</h3>
+                    ) : (
+                        <h3 className="text-center text-base">Código de verificación</h3>
+                    )}
+                    <div className="flex flex-row gap-x-1 sm:gap-x-2 justify-center">
+                        {[...Array(6)].map((_, index) => (
+                            <input
+                                ref={(el) => (inputsRef.current[index] = el)}
+                                type="text"
+                                key={index}
+                                maxLength="1"
+                                className="w-10 h-10 sm:w-12 sm:h-12 border-[1px] border-gray-400 text-center text-xl bg-gray-50"
+                                onChange={(e) => handleChange(index, e)}
+                                onInput={(e) => {
+                                    e.target.value = e.target.value.toUpperCase();
+                                }}
+                                disabled={counter === 0}
+                            />
+                        ))}
+                    </div>
+                    {isMessageError && (
+                        <h3 className="text-center text-red-700 flex flex-row gap-x-1 items-center justify-center"><RxCross2 className="text-2xl"/> El código de verificación no es válido</h3>
+                    )}
+                    <div className="flex w-[100%] items-center mt-2 justify-center">
+                        {counter > 0 ? (
+                            <button onClick={handleSubmit} className="text-white-50 text-lg rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-2 w-auto font-bold max-md:text-base">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<FaCheck/>)} Confirmar código</button>
+                        ) : (
+                            <button onClick={handleSubmitEmail} className="text-white-50 text-lg rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-2 w-auto font-bold max-md:text-base">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<IoIosMail className="text-2xl"/>)} Reenviar código</button>
+                        )}
+                    </div>
+                </div>
+                <button onClick={handleBack} className="font-bold text-blue-ribbon-600 underline">Volver al login</button>
             </div>
         </div>
-        <button onClick={handleBack} className="font-bold text-blue-ribbon-600 underline">Volver al login</button>
-      </div>
-    </div>
-  );
+    );
 }

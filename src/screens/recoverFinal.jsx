@@ -4,7 +4,6 @@ import { FaCheckCircle } from "react-icons/fa";
 import { IoHome } from "react-icons/io5";
 import Ulogo from "../assets/img/Ulogo.png";
 
-
 export const RecoverFinal = () => {
     const navigate = useNavigate();
     return(

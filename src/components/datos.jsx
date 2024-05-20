@@ -22,7 +22,7 @@ export const Datos = (props) => {
       name={props.name}
       className="hidden-number-input appearance-none w-[90%] p-1 border-[0.5px] border-blue-ribbon-600"
       placeholder={props.holder}
-     />
+    />
   );
 };
 

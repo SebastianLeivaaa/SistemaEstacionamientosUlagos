@@ -78,7 +78,6 @@ export const Guardmenu = () => {
                         ¡{parkingSpaces !== null ? parkingSpaces : 'Cargando...'} ESTACIONAMIENTOS DISPONIBLES!
                     </h1>
                 </div>
-
                 <div className="flex flex-col gap-y-4 md:flex-row justify-around w-full py-4">
                     <button onClick={null} className='bg-blue-ribbon-600 text-white-100 px-4 py-4 rounded-md text-lg flex flex-row items-center justify-center font-bold'><LuParkingCircle className="text-2xl"/>ADMINISTRAR ESTACIONAMIENTO</button>
                     <button onClick={null} className='bg-blue-ribbon-600 text-white-100 px-4 py-4 rounded-md text-lg flex flex-row items-center justify-center font-bold'><LuHistory className="text-2xl"/>HISTORIAL DE RESERVAS</button>
