@@ -120,7 +120,7 @@ export const RecoverTwo = () =>{
                         type="text"
                         key={index}
                         maxLength="1"
-                        className="w-10 h-10 border-[1px] border-gray-400 text-center text-xl bg-gray-50"
+                        className="w-12 h-12 sm:w-10 sm:h-10 border-[1px] border-gray-400 text-center text-xl bg-gray-50"
                         onChange={(e) => handleChange(index, e)}
                         onInput={(e) => {
                             e.target.value = e.target.value.toUpperCase();
