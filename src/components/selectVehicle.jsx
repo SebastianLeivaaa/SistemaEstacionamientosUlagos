@@ -7,6 +7,7 @@ export const SelectVehicle = (props) => {
       name={props.name}
       onChange={props.onChange}
       value={props.value}
+      disabled={props.disabled}
     >
       <option value="Automovil">Automovil</option>
       <option value="Camioneta">Camioneta</option>

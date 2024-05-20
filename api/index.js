@@ -120,7 +120,7 @@ app.post('/api/sesion', async (req, res) => {
     if (guards.length > 0) {
       const guard = guards[0];
       if (password === guard.guar_clave) {
-        const token = jwt.sign({ userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
+        const token = jwt.sign({ userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, userRut: guard.guar_rut, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
@@ -138,7 +138,7 @@ app.post('/api/sesion', async (req, res) => {
     if (users.length > 0) {
       const user = users[0];
       if (password === user.usua_clave) {
-        const token = jwt.sign({ userEmail: user.usua_correo, userName: user.usua_nombre, userLastNamePat: user.usua_apellido_paterno, userLastNameMat: user.usua_apellido_materno, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
+        const token = jwt.sign({ userEmail: user.usua_correo, userName: user.usua_nombre, userLastNamePat: user.usua_apellido_paterno, userLastNameMat: user.usua_apellido_materno, userRut: user.usua_rut, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
@@ -211,6 +211,25 @@ app.get('/api/parkingSpaces', async (req, res) => {
   }
 });
 
+//Consulta para ovbener los vehiculos
+app.post('/api/getVehicles', async (req, res) => {
+  const { userRut } = req.body;
+
+  try {
+    const vehicles = await sql`
+      SELECT v.vehi_patente, v.vehi_marca, v.vehi_modelo, v.vehi_anio, v.vehi_color, v.vehi_tipo
+        FROM registrousuariovehiculo r
+        INNER JOIN vehiculo v ON r.regi_vehi_patente = v.vehi_patente
+        WHERE r.regi_usua_rut = ${userRut}
+    `;
+    res.json(vehicles);
+  } catch (error) {
+    console.error('Error al obtener los vehículos:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+
 
 //login
 app.get('/api/login', async (req, res) => {
@@ -222,6 +241,7 @@ app.get('/api/login', async (req, res) => {
       username: user.userName,
       userLastNamePat: user.userLastNamePat,
       userLastNameMat: user.userLastNameMat,
+      userRut: user.userRut,
       Isguard: user.Isguard,
     });
   }catch(error){

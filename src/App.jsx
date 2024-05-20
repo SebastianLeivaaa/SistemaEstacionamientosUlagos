@@ -10,6 +10,7 @@ import { Recover } from "./screens/recover";
 import { RecoverTwo } from "./screens/recoverTwo";
 import { RecoverThree } from "./screens/recoverThree";
 import { RecoverFinal } from "./screens/recoverFinal";
+import { UpdateVehicle } from "./screens/user/updateVehicle";
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Route path="/sign-in-final" element={<SignInFinal/>}/>
         <Route path="/user" element={<Usermenu/>}/>
         <Route path="/guard" element={<Guardmenu/>}/>
+        <Route path="/update-vehicle" element={<UpdateVehicle/>}/>
       </Routes>
     </>
   )
