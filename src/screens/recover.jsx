@@ -34,7 +34,7 @@ export const Recover = () =>{
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:3090/api/send-email-recover', {
+      const response = await fetch('/api/send-email-recover', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
