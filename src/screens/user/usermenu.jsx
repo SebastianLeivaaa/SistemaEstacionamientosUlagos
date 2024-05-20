@@ -82,11 +82,11 @@ export const Usermenu = () => {
                 </div>
                 <div className="flex flex-col sm:flex-row justify-between w-[90%] gap-y-4">
                     <button className="w-full sm:w-[40%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className=":text-2xl"/>RESERVAR ESTACIONAMIENTO</button>
-                    <button className="w-full sm:w-[40%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-2"><LuHistory className="text-2xl"/>MIS RESERVAS</button>
+                    <button className="w-full sm:w-[40%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-lg flex flex-row items-center justify-center gap-x-2"><LuHistory className="text-2xl"/>MIS RESERVAS</button>
                 </div>
                 <div className="flex flex-wrap justify-between w-[90%]">
-                    <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-2"><FaMapMarked className="text-3xl"/>MAPA DE ESTACIONAMIENTO</button>
-                    <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>ACTUALIZAR DATOS DE VEHÍCULO</button>
+                    <button className="w-full sm:w-[40%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-lg flex flex-row items-center justify-center gap-x-2"><FaMapMarked className="text-3xl"/>MAPA DE ESTACIONAMIENTO</button>
+                    <button className="w-full sm:w-[40%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>ACTUALIZAR DATOS DE VEHÍCULO</button>
                 </div>
             </div>
         </div>
