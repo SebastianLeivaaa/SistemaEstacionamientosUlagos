@@ -32,7 +32,7 @@ export const Guardmenu = () => {
 
     const logOut = async () => {
         const response = await axios.get("/api/logout", {withCredentials: true});
-        console.log(response);
+        //console.log(response);
         navigate('/');
     }
 

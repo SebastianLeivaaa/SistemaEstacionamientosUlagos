@@ -47,7 +47,7 @@ export const Usermenu = () => {
         getParkingSpaces();
         const interval = setInterval(() => {
             getParkingSpaces();
-          }, 10000);
+        }, 10000);
 
         return () => clearInterval(interval);
     }, []);

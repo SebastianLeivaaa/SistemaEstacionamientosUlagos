@@ -113,6 +113,7 @@ app.post("/api/send-email-recover", async (req, res) => {
 app.post('/api/sesion', async (req, res) => {
   try {
     const { email, password } = req.body;
+    //console.log("llego esto: ",email, password)
 
     // Buscar guardia primero
     const guards = await sql`SELECT * FROM guardia WHERE guar_correo = ${email}`;
