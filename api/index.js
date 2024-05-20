@@ -175,8 +175,8 @@ app.post("/api/register-user", async (req, res) => {
                                   values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
       const insertVehicle = await sql`insert into vehiculo(vehi_patente, vehi_marca, vehi_modelo, vehi_anio, vehi_tipo, vehi_color) 
                                       values(${vehiclePatente}, ${vehicleMarca}, ${vehicleModelo}, ${vehicleYear}, ${vehicleType}, ${vehicleColor})`;
-      const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente)
-                                                      values (${userRut}, ${vehiclePatente})`;
+      const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado)
+                                                      values (${userRut}, ${vehiclePatente}, 'activo')`;
     }
     res.status(200).send('Registro insertado con éxito');
   } catch (err) {
