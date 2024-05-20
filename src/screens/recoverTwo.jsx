@@ -113,7 +113,7 @@ export const RecoverTwo = () =>{
             ) : (
                 <h3 className="text-center">Código de verificación</h3>
             )}
-            <div className="flex flex-row gap-x-1 justify-center">
+            <div className="flex flex-row gap-x-2 sm:gap-x-1 justify-center">
                 {[...Array(6)].map((_, index) => (
                     <input
                         ref={(el) => (inputsRef.current[index] = el)}
