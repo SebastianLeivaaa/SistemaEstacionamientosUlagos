@@ -45,9 +45,6 @@ app.listen(port, async () => {
   try {
     console.log(`Server listening on port ${port}`);
     // CONSULTA PARA COMPROBAR QUE SE CONECTO CORRECTAMENTE
-    const resultadoConsulta = await sql`SELECT * FROM EDIFICIO`;
-    const resultadoConsulta2 = await sql`SELECT * FROM Usuario`;
-    console.log('Consulta exitosa:', resultadoConsulta, resultadoConsulta2);
   } catch (error) {
     console.error('Error al conectar a la base de datos:', error);
   }
@@ -122,7 +119,7 @@ app.post('/api/sesion', async (req, res) => {
     if (guards.length > 0) {
       const guard = guards[0];
       if (password === guard.guar_clave) {
-        const token = jwt.sign({ userEmail: guard.guar_correo, userName: guard.guar_nombre, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
+        const token = jwt.sign({ userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
@@ -140,7 +137,7 @@ app.post('/api/sesion', async (req, res) => {
     if (users.length > 0) {
       const user = users[0];
       if (password === user.usua_clave) {
-        const token = jwt.sign({ userEmail: user.usua_correo, userName: user.usua_nombre, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
+        const token = jwt.sign({ userEmail: user.usua_correo, userName: user.usua_nombre, userLastNamePat: user.usua_apellido_paterno, userLastNameMat: user.usua_apellido_materno, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
@@ -178,8 +175,8 @@ app.post("/api/register-user", async (req, res) => {
                                   values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
       const insertVehicle = await sql`insert into vehiculo(vehi_patente, vehi_marca, vehi_modelo, vehi_anio, vehi_tipo, vehi_color) 
                                       values(${vehiclePatente}, ${vehicleMarca}, ${vehicleModelo}, ${vehicleYear}, ${vehicleType}, ${vehicleColor})`;
-      const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente)
-                                                      values (${userRut}, ${vehiclePatente})`;
+      const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado)
+                                                      values (${userRut}, ${vehiclePatente}, 'activo')`;
     }
     res.status(200).send('Registro insertado con éxito');
   } catch (err) {
@@ -202,6 +199,17 @@ app.post("/api/update-password", async (req, res) => {
 
 });
 
+//consulta para obtener los estacionamientos
+app.get('/api/parkingSpaces', async (req, res) => {
+  try {
+    const parkingSpaces = await sql`SELECT COUNT(*) AS total_libres FROM estacionamiento WHERE esta_estado = 'LIBRE'`;
+    res.json({total_libres: parkingSpaces[0].total_libres});
+  } catch (error) {
+    console.error('Error al obtener los estacionamientos:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
 
 //login
 app.get('/api/login', async (req, res) => {
@@ -211,6 +219,8 @@ app.get('/api/login', async (req, res) => {
     return res.json({
       email: user.userEmail,
       username: user.userName,
+      userLastNamePat: user.userLastNamePat,
+      userLastNameMat: user.userLastNameMat,
       Isguard: user.Isguard,
     });
   }catch(error){
