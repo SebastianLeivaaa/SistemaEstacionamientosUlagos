@@ -62,8 +62,8 @@ export const Usermenu = () => {
     return (
         <div className="min-h-screen w-screen flex items-center justify-center bg">
             <div className="flex flex-col items-center p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50">
-                <div className="flex flex-row w-full justify-between">
-                    <img src={Ulogo} alt="Logo Ulagos" className="w-44 h-auto"/>
+                <div className="flex flex-wrap sm:flex-row w-full justify-end">
+                    <img src={Ulogo} alt="Logo Ulagos" className="px-5 w-full sm:w-44 h-auto"/>
                     <div className="flex flex-col items-end justify-end">
                         <h1 className="text-lg font-bold text-center max-md:text-base text-congress-blue-900">{user.username.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
                         <button onClick={logOut} className="mt-4 bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/>CERRAR SESIÓN</button>
