@@ -113,14 +113,14 @@ export const RecoverTwo = () =>{
             ) : (
                 <h3 className="text-center">Código de verificación</h3>
             )}
-            <div className="flex flex-row gap-x-2 justify-center">
+            <div className="flex flex-row gap-x-1 justify-center">
                 {[...Array(6)].map((_, index) => (
                     <input
                         ref={(el) => (inputsRef.current[index] = el)}
                         type="text"
                         key={index}
                         maxLength="1"
-                        className="w-12 h-12 border-[1px] border-gray-400 text-center text-xl bg-gray-50"
+                        className="w-10 h-10 border-[1px] border-gray-400 text-center text-xl bg-gray-50"
                         onChange={(e) => handleChange(index, e)}
                         onInput={(e) => {
                             e.target.value = e.target.value.toUpperCase();
