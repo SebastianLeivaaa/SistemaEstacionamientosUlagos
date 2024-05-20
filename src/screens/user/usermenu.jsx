@@ -57,6 +57,10 @@ export const Usermenu = () => {
         navigate('/');
     }
 
+    const manageVehicle = () => {
+        navigate('/manage-vehicle');
+    }
+
     const textColor = parkingSpaces <= 15 ? 'text-red-500' : 'text-green-600';
 
     return (
@@ -86,7 +90,7 @@ export const Usermenu = () => {
                 </div>
                 <div className="flex flex-wrap justify-between w-[90%]">
                     <button className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-2"><FaMapMarked className="text-3xl"/>MAPA DE ESTACIONAMIENTO</button>
-                    <button onClick={() => {navigate('/update-vehicle')}} className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>ACTUALIZAR DATOS DE VEHÍCULO</button>
+                    <button onClick={manageVehicle} className="w-[42%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>ACTUALIZAR DATOS DE VEHÍCULO</button>
                 </div>
             </div>
         </div>

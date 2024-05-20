@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { VehicleData } from '../../components/vehicleData';
 
 
-export const UpdateVehicle = () => {
+export const ManageVehicle = () => {
 
     const [user, setUser] = useState({
         email: "",
