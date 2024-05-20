@@ -10,7 +10,7 @@ export const PasswordInput = (props) => {
     };
 
     return (
-        <div className="relative w-[90%] max-md:w-[85%]">
+        <div className="relative w-[100%] max-md:w-[100%]">
             <input
                 id={props.id}
                 name={props.name}
