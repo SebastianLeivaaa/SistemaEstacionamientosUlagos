@@ -217,7 +217,7 @@ app.post('/api/getVehicles', async (req, res) => {
 
   try {
     const vehicles = await sql`
-      SELECT v.vehi_patente, v.vehi_marca, v.vehi_modelo, v.vehi_anio, v.vehi_color, v.vehi_tipo
+      SELECT v.vehi_patente, v.vehi_marca, v.vehi_modelo, v.vehi_anio, v.vehi_color, v.vehi_tipo, r.regi_estado, r.regi_usua_rut
         FROM registrousuariovehiculo r
         INNER JOIN vehiculo v ON r.regi_vehi_patente = v.vehi_patente
         WHERE r.regi_usua_rut = ${userRut}
@@ -226,6 +226,38 @@ app.post('/api/getVehicles', async (req, res) => {
   } catch (error) {
     console.error('Error al obtener los vehículos:', error);
     res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+//Consulta para cambiar el estado del vehiculo
+app.put('/api/change-state-vehicle', async (req, res) => {
+  const { patente, estado, userRut } = req.body;
+
+  try {
+    const selectVehicle = await sql`SELECT * FROM registrousuariovehiculo WHERE regi_estado = 'activo' AND regi_usua_rut = ${userRut}`;
+
+    if (selectVehicle.count > 0 && estado === 'activo') {
+      res.status(400).send('Ya existe un vehículo activo para este usuario');
+    } else {
+      const updateVehicle = await sql`UPDATE registrousuariovehiculo SET regi_estado = ${estado} WHERE regi_vehi_patente = ${patente}`;
+      res.status(200).send('Estado del vehículo actualizado con éxito');
+    }
+  } catch (error) {
+    console.error('Error al cambiar el estado del vehículo:', error);
+    res.status(500).send('Error al cambiar el estado del vehículo');
+  }
+});
+
+//Consulta para eliminar un vehiculo
+app.delete('/api/delete-vehicle', async (req, res) => {
+  const { patente, userRut } = req.body;
+
+  try {
+    const deleteVehicle = await sql`DELETE FROM registrousuariovehiculo WHERE regi_vehi_patente = ${patente} AND regi_usua_rut = ${userRut}`;
+    res.status(200).send('Vehículo eliminado con éxito');
+  } catch (error) {
+    console.error('Error al eliminar el vehículo:', error);
+    res.status(500).send('Error al eliminar el vehículo');
   }
 });
 

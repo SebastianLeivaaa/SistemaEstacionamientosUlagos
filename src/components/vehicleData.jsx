@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
-import { MdEdit } from "react-icons/md";
 import { FaTrashAlt } from "react-icons/fa";
-import { Datos } from './datos';
+import { FaCheck } from "react-icons/fa";
+import { FaX } from "react-icons/fa6";
+import axios from "axios";
+import { TiWarning } from "react-icons/ti";
+
+
 
 export const VehicleData = ( props ) => {
 
-    const [edit, setEdit] = useState(true);
+    const [buttonDisable, setButtonDisable] = useState(false);
+    const [buttonEnable, setButtonEnable] = useState(false);
+    const [buttonDelete, setButtonDelete] = useState(false);
+    const [message, setMessage] = useState(false);
+
     const [vehicleData, setVehicleData] = useState({
         patente: props.patente,
         marca: props.marca,
         modelo: props.modelo,
         anio: props.anio,
         color: props.color,
-        tipo: props.tipo
+        tipo: props.tipo,
+        estado: props.estado,
+        rut: props.rut
     });
 
     const handleChange = (e) => {
@@ -23,45 +33,125 @@ export const VehicleData = ( props ) => {
         });
     }
 
+    const handleDisable = () => {
+        setButtonDisable(!buttonDisable);
+    }
+
+    const handleEnable = () => {
+        setButtonEnable(!buttonEnable);
+        setMessage(false)
+    }
+
+    const handleDelete = () => {
+        setButtonDelete(!buttonDelete)
+    }
+    
+    const deleteVehicle = async () => {
+        try {
+            const response = await axios.delete("http://localhost:3090/api/delete-vehicle", {
+                data: {
+                    patente: vehicleData.patente,
+                    userRut: vehicleData.rut
+                }
+            });
+
+            // Verificar el código de estado de la respuesta
+            if (response.status === 200) {
+                // Si la respuesta es exitosa, eliminar el vehículo del frontend
+                setVehicleData(null);
+            }
+        } catch (error) {
+            // Manejar el error de la solicitud
+            console.error(error);
+        }
+    }
+
+    const changeStateVehicle = async () => {
+        try {
+            const response = await axios.put("http://localhost:3090/api/change-state-vehicle", {
+                patente: vehicleData.patente,
+                estado: vehicleData.estado === 'activo' ? 'inactivo' : 'activo',
+                userRut: vehicleData.rut
+            });
+    
+            // Verificar el código de estado de la respuesta
+            if (response.status === 200) {
+                // Si la respuesta es exitosa, actualizar el estado del vehículo en el frontend
+                setVehicleData({
+                    ...vehicleData,
+                    estado: vehicleData.estado === 'activo' ? 'inactivo' : 'activo'
+                });
+                setButtonDisable(false);
+                setButtonEnable(false);
+            }
+        } catch (error) {
+            // Manejar el error de la solicitud
+            if (error.response && error.response.status === 400) {
+                setMessage(true);
+            } else {
+                console.error(error);
+            }
+        }
+    }
+    
+
     return(
-        <div className='grid grid-cols-2 gap-x-16 gap-y-8'>
+        <>
+            {buttonDisable ? (
+                <div className={`${vehicleData.estado === 'activo' ? 'bg-hint-of-green-100 text-gray-800 border-hint-of-green-500 shadow-hint-of-green-950' : 'bg-gray-200 border-gray-500 shadow-gray-950'} flex flex-col border-[1px] shadow-3xl gap-x-16 w-full p-8 rounded-2xl items-center justify-center gap-y-8`}>
+                    <div className='col-span-2 justify-center'>
+                        <h1 className='text-xl text-center'>¿Estas seguro que quieres deshabilitar este vehículo para realizar reservas?</h1>
+                    </div>
+                    <div className='col-span-2 flex items-center gap-x-8 px-2 justify-center w-full'>
+                        <button onClick={changeStateVehicle} className='text-white-50 rounded-md p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold bg-green-700 hover:bg-green-800'><FaCheck/> Si</button>
+                        <button onClick={handleDisable} className='text-white-50 rounded-md bg-red-500 hover:bg-red-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold'><FaX/> No</button>
+                    </div>
+                </div>
+            ) : buttonEnable ? (
+                <div className={`${vehicleData.estado === 'activo' ? 'bg-hint-of-green-100 text-gray-800 border-hint-of-green-500 shadow-hint-of-green-950' : 'bg-gray-200 border-gray-500 shadow-gray-950'} flex flex-col border-[1px] shadow-3xl gap-x-16 w-full p-8 rounded-2xl items-center justify-center gap-y-8`}>
+                    <div className='col-span-2 flex flex-col justify-center gap-y-4'>
+                        <h1 className='text-xl text-center'>¿Estas seguro que quieres habilitar este vehículo para realizar reservas?</h1>
+                        {message && <p className='text-red-500 justify-center text-lg flex flex-row items-center gap-x-2'><TiWarning className='text-2xl'/> Ya tienes un vehículo activo</p>}
+                    </div>
+                    <div className='col-span-2 flex items-center gap-x-8 px-2 justify-center w-full'>
+                        <button onClick={changeStateVehicle} className='text-white-50 rounded-md p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold bg-green-700 hover:bg-green-800'><FaCheck/> Si</button>
+                        <button onClick={handleEnable} className='text-white-50 rounded-md bg-red-500 hover:bg-red-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold'><FaX/> No</button>
+                    </div>
+                </div>
+            ) : buttonDelete ? (
+                <div className={`${vehicleData.estado === 'activo' ? 'bg-hint-of-green-100 text-gray-800 border-hint-of-green-500 shadow-hint-of-green-950' : 'bg-gray-200 border-gray-500 shadow-gray-950'} flex flex-col border-[1px] shadow-3xl gap-x-16 w-full p-8 rounded-2xl items-center justify-center gap-y-8`}>
+                    <div className='col-span-2 flex flex-col justify-center gap-y-4'>
+                        <h1 className='text-xl text-center'>¿Estas seguro que quieres eliminar este vehículo para realizar reservas?</h1>
+                    </div>
+                    <div className='col-span-2 flex items-center gap-x-8 px-2 justify-center w-full'>
+                        <button onClick={deleteVehicle} className='text-white-50 rounded-md p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold bg-green-700 hover:bg-green-800'><FaCheck/> Si</button>
+                        <button onClick={handleDelete} className='text-white-50 rounded-md bg-red-500 hover:bg-red-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold'><FaX/> No</button>
+                    </div>
+                </div>
+            ) : (
+                <div className={`${vehicleData.estado === 'activo' ? 'bg-hint-of-green-100 text-gray-800 border-hint-of-green-500 shadow-hint-of-green-950' : 'bg-gray-200 border-gray-500 shadow-gray-950'} grid border-[1px] grid-cols-2 shadow-3xl gap-x-8 w-full gap-y-8 p-8 rounded-2xl items-center`}>
             <div className='col-span-2'>
-                <h1 className='text-2xl'>Vehículo {props.index}</h1>
+                <h1 className='text-xl'>VEHÍCULO {vehicleData.estado.toUpperCase()}</h1>
             </div>
-            <div className='flex flex-col gap-y-2'>
-                <label className='text-xl'>Patente</label>
-                <input id='patente' name='patente' maxLength="6" type='text' onChange={handleChange} placeholder='Ej:GGXX20' value={vehicleData.patente} className='w-full p-2 border-[0.5px] border-blue-ribbon-600' disabled={edit}></input>
-            </div>
-            <div className='flex flex-col gap-y-2'>
-                <label className='text-xl'>Marca</label>
-                <input id='marca' name='marca' type='text' maxLength='30' onChange={handleChange} placeholder='Ej:Chevrolet' value={vehicleData.marca} className='w-full p-2 border-[0.5px] border-blue-ribbon-600' disabled={edit}></input>
-            </div>
-            <div className='flex flex-col gap-y-2'>
-                <label className='text-xl'>Modelo</label>
-                <input id='modelo' name='modelo' type='text' maxLength='30' onChange={handleChange} placeholder='Ej:Sail' value={vehicleData.modelo} className='w-full p-2 border-[0.5px] border-blue-ribbon-600' disabled={edit}></input>
-            </div>
-            <div className='flex flex-col gap-y-2'>
-                <label className='text-xl'>Año</label>
-                <input id='anio' name='anio' type='number' maxLength='4' onChange={handleChange} placeholder='Ej:2014' value={vehicleData.anio} className='hidden-number-input appearance-none w-full p-2 border-[0.5px] border-blue-ribbon-600' disabled={edit}></input>
-            </div>
-            <div className='flex flex-col gap-y-2'>
-                <label className='text-xl'>Color</label>
-                <input id='color' name='color' type='text' maxLength='20' onChange={handleChange} placeholder='Ej:Azul' value={vehicleData.color} className='w-full p-2 border-[0.5px] border-blue-ribbon-600' disabled={edit}></input>
-            </div>
-            <div className='flex flex-col gap-y-2'>
-                <label className='text-xl'>Tipo vehículo</label>
-                <select onChange={handleChange} placeholder='Automovil' value={vehicleData.tipo} className='w-full p-2 border-[0.5px] border-blue-ribbon-600' disabled={edit}>
-                    <option value="Automovil">Automovil</option>
-                    <option value="Camioneta">Camioneta</option>
-                    <option value="Furgón">Furgón</option>
-                    <option value="Jeep">Jeep</option>
-                    <option value="Motocicleta">Motocicleta</option>
-                </select>
-            </div>
-            <div className='col-span-2 flex items-end gap-x-8 px-8 justify-end w-full'>
-                <button onClick={() => {setEdit(!edit)}} className='text-white-50 rounded-md bg-blue-ribbon-600 hover:bg-blue-ribbon-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold'> <MdEdit/> Editar </button>
-                <button className='text-white-50 rounded-md bg-red-500 hover:bg-blue-ribbon-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold'><FaTrashAlt/> Eliminar</button>
+            <h1 className='text-lg'>Patente</h1>
+            <h1 className='text-lg'>{vehicleData.patente}</h1>
+            <h1 className='text-lg'>Marca</h1>
+            <h1 className='text-lg'>{vehicleData.marca}</h1>
+            <h1 className='text-lg'>Modelo</h1>
+            <h1 className='text-lg'>{vehicleData.modelo}</h1>
+            <h1 className='text-lg'>Año</h1>
+            <h1 className='text-lg'>{vehicleData.anio}</h1>
+            <h1 className='text-lg'>Color</h1>
+            <h1 className='text-lg'>{vehicleData.color}</h1>
+            <h1 className='text-lg'>Tipo vehículo</h1>
+            <h1 className='text-lg'>{vehicleData.tipo}</h1>
+
+            <div className='col-span-2 flex items-center gap-x-8 px-8 justify-center w-full'>
+                <button onClick={vehicleData.estado === 'activo' ? handleDisable : handleEnable} className={`text-white-50 rounded-md p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold ${vehicleData.estado === 'activo' ? 'bg-gray-500 hover:bg-gray-700' : 'bg-green-700 hover:bg-green-800'}`}>{vehicleData.estado === 'activo' ? <FaX/> : <FaCheck/>} {vehicleData.estado === 'activo' ? 'Deshabilitar' : 'Habilitar'}</button>
+                <button onClick={handleDelete} className='text-white-50 rounded-md bg-red-500 hover:bg-red-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold'><FaTrashAlt/> Eliminar</button>
             </div>
         </div>
+            )}
+        </>
     );
 }

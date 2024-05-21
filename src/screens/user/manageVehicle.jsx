@@ -4,6 +4,8 @@ import { HiOutlineLogin } from "react-icons/hi";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { VehicleData } from '../../components/vehicleData';
+import { IoIosArrowDropleft } from "react-icons/io";
+import { IoIosArrowDropright } from "react-icons/io";
 
 
 export const ManageVehicle = () => {
@@ -17,17 +19,30 @@ export const ManageVehicle = () => {
     })
     const [vehicles, setVehicles] = useState([]);
 
+    const [startIndex, setStartIndex] = useState(0);
+    const itemsPerView = 3;
+
+    const handlePrevClick = () => {
+        setStartIndex((prevIndex) => Math.max(prevIndex - itemsPerView, 0));
+    };
+
+    const handleNextClick = () => {
+        setStartIndex((prevIndex) => Math.min(prevIndex + itemsPerView, vehicles.length - itemsPerView));
+    };
+
+    const visibleVehicles = vehicles.slice(startIndex, startIndex + itemsPerView);
+
     const navigate = useNavigate();
 
     const logOut = async () => {
-        const response = await axios.get("/api/logout", {withCredentials: true});
+        const response = await axios.get("http://localhost:3090/api/logout", {withCredentials: true});
         //console.log(response);
         navigate('/');
     }
 
     const getProfile = async () => {
         try{
-            const response = await axios.get("/api/login", {withCredentials: true});
+            const response = await axios.get("http://localhost:3090/api/login", {withCredentials: true});
             setUser({
                 email: response.data.email,
                 userName: response.data.username,
@@ -43,7 +58,7 @@ export const ManageVehicle = () => {
 
     const getVehicles = async (userRut) => {
         try {
-          const response = await axios.post('/api/getVehicles', { userRut }, { withCredentials: true });
+          const response = await axios.post('http://localhost:3090/api/getVehicles', { userRut }, { withCredentials: true });
           setVehicles(response.data);
         } catch (error) {
           console.log(error);
@@ -62,8 +77,8 @@ export const ManageVehicle = () => {
     }, []);
 
     return(
-        <div className="min-h-screen w-screen flex items-center justify-center bg">
-            <div className="flex flex-col min-w-[50%] p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50">
+        <div className="min-h-screen w-screen flex items-center justify-center">
+            <div className="flex flex-col min-w-[50%] max-w-[75%] p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50 relative">
                 <div className="flex flex-wrap sm:flex-row w-full justify-between">
                     <img src={Ulogo} alt="Logo Ulagos" className="px-5 w-full sm:w-44 h-auto"/>
                     <div className="flex flex-col items-end justify-end">
@@ -72,13 +87,36 @@ export const ManageVehicle = () => {
                     </div>
                 </div>
                 <h1 className='font-bold text-2xl mt-10'>DATOS VEHÍCULO</h1>
-                {vehicles.length > 0 ? (
-                    vehicles.map((vehicle, index) => (
-                        <VehicleData patente={vehicle.vehi_patente} marca={vehicle.vehi_marca} modelo={vehicle.vehi_modelo} anio={vehicle.vehi_anio} color={vehicle.vehi_color} tipo={vehicle.vehi_tipo} index={index + 1}/>
-                    ))
-                ) : (
-                    <p>No se encontraron vehículos.</p>
-                )}
+                <div className='flex flex-row items-center gap-x-12'>
+                <button onClick={handlePrevClick} disabled={startIndex === 0}>
+                    <IoIosArrowDropleft className='text-2xl'/>
+                </button>
+                <div className="items-center gap-x-12 overflow-hidden">
+                    <div className='carousel-track ease-in-out transition-transform flex flex-row gap-x-12' style={{ transform: `translateX(-${(startIndex / itemsPerView) * 100}%)` }}>
+                        {visibleVehicles.length > 0 ? (
+                            visibleVehicles.map((vehicle, index) => (
+                                <VehicleData
+                                    key={index}
+                                    patente={vehicle.vehi_patente}
+                                    marca={vehicle.vehi_marca}
+                                    modelo={vehicle.vehi_modelo}
+                                    anio={vehicle.vehi_anio}
+                                    color={vehicle.vehi_color}
+                                    tipo={vehicle.vehi_tipo}
+                                    estado={vehicle.regi_estado}
+                                    rut={vehicle.regi_usua_rut}
+                                    index={index + 1 + startIndex}
+                                />
+                        )   )
+                        ) : (
+                            <p>No se encontraron vehículos.</p>
+                        )}
+                    </div>
+                </div>
+                <button onClick={handleNextClick} disabled={startIndex + itemsPerView >= vehicles.length}>
+                    <IoIosArrowDropright className='text-2xl'/>
+                </button>
+                </div>
             </div>
         </div>
     )
