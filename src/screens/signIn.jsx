@@ -2,7 +2,6 @@ import {useState} from "react";
 import Datos from "../components/datos"
 import { Indice } from "../components/indice";
 import SelectUser from "../components/selectUser";
-import SelectVehicle from "../components/selectVehicle";
 import SelectDomain from "../components/selectDomain";
 import Rut from "../components/rut";
 import Phone from "../components/phone";
@@ -13,6 +12,7 @@ import { validateRut } from "../utils/validateRut";
 import { validateEmailFormat } from "../utils/validateEmailFormat";
 import { useNavigate } from 'react-router-dom';
 import { validateYear } from "../utils/validateYear";
+import SelectVehicle from "../components/selectVehicle";
 
 export const SignIn = () => {
     const navigate = useNavigate();
@@ -28,11 +28,11 @@ export const SignIn = () => {
         userType: 'Estudiante',
         userDomain: '@alumnos.ulagos.cl',
         vehiclePatente: '',
-        vehicleMarca: '',
-        vehicleModelo: '',
-        vehicleYear: '',
-        vehicleType: 'Automovil',
-        vehicleColor: ''
+        vehicleMarca: null,
+        vehicleModelo: null,
+        vehicleYear: null,
+        vehicleType: null,
+        vehicleColor: null
     });
 
     const handleChange = (e) => {
@@ -74,24 +74,24 @@ export const SignIn = () => {
         if(!validateEmailFormat(`${formData.userEmail}${formData.userDomain}`)){
             newErrors.userEmail = "Ingrese un correo electrónico válido";
         }
-        if(!validateYear(formData.vehicleYear)){
-            newErrors.vehicleYear ="Ingrese un año superior a 1970 o inferior a 2024";
-        }
         if(formData.vehiclePatente.trim() === ''){
             newErrors.vehiclePatente = 'Por favor ingrese la patente de su vehículo.';
         }
-        if(formData.vehicleMarca.trim() === ''){
-            newErrors.vehicleMarca = 'Por favor ingrese la marca de su vehículo.';
-        }
-        if(formData.vehicleModelo.trim() === ''){
-            newErrors.vehicleModelo = 'Por favor ingrese el modelo de su vehículo.';
-        }
-        if(formData.vehicleYear.trim() === ''){
-            newErrors.vehicleYear = 'Por favor ingrese el año de su vehículo.';
-        }
-        if(formData.vehicleColor.trim() === ''){
-            newErrors.vehicleColor = 'Por favor ingrese el color de su vehículo.';
-        }
+        // if(!validateYear(formData.vehicleYear)){
+        //     newErrors.vehicleYear ="Ingrese un año superior a 1970 o inferior a 2024";
+        // }
+        // if(formData.vehicleMarca.trim() === ''){
+        //     newErrors.vehicleMarca = 'Por favor ingrese la marca de su vehículo.';
+        // }
+        // if(formData.vehicleModelo.trim() === ''){
+        //     newErrors.vehicleModelo = 'Por favor ingrese el modelo de su vehículo.';
+        // }
+        // if(formData.vehicleYear.trim() === ''){
+        //     newErrors.vehicleYear = 'Por favor ingrese el año de su vehículo.';
+        // }
+        // if(formData.vehicleColor.trim() === ''){
+        //     newErrors.vehicleColor = 'Por favor ingrese el color de su vehículo.';
+        // }
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -267,7 +267,7 @@ export const SignIn = () => {
                             <p className="text-red-500 text-sm">{errors.vehiclePatente}</p>
                     )}
                 </div>
-                <div className="w-full flex flex-col ml-4">
+                {/* <div className="w-full flex flex-col ml-4">
                     <h1 className="pb-3">Marca</h1>
                     <Datos
                         holder="Ej:Chevrolet"
@@ -338,11 +338,11 @@ export const SignIn = () => {
                         maxLength="20"
                         onChange={handleChange}
                         value={formData.vehicleColor}
-                    />
+                    /> 
                     {errors.vehicleColor && (
                         <p className="text-red-500 text-sm">{errors.vehicleColor}</p>
                     )}
-                </div>
+                </div>*/}
             </div>
             
             <div className="flex w-[100%] rounded-md mt-10 items-end justify-end p-2">
