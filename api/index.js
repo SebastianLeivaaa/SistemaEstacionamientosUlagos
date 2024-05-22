@@ -261,6 +261,47 @@ app.delete('/api/delete-vehicle', async (req, res) => {
   }
 });
 
+//Consulta para agregar un nuevo vehiculo
+app.post('/api/add-new-vehicle', async (req, res) => {
+  const { patente, userRut } = req.body;
+
+  if (!patente || !userRut) {
+    return res.status(400).json({ error: 'Patente y UserRut son requeridos' });
+  }
+
+  try {
+    // Agregar vehículo a la tabla 'vehiculo'
+    const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${patente}`;
+    const existingRegister = await sql`SELECT * FROM registrousuariovehiculo WHERE regi_vehi_patente = ${patente} AND regi_usua_rut = ${userRut}`
+
+    if(existingVehicle.length > 0){
+      if(existingRegister.length > 0){
+        res.status(500).json({ error: 'Ya tiene un registro asociado a la patente ingresada' });
+      } else {
+        const addRegister = await sql`
+          INSERT INTO registrousuariovehiculo (regi_vehi_patente, regi_usua_rut, regi_estado) 
+          VALUES (${patente}, ${userRut}, 'inactivo')
+        `;
+        res.status(200).json({ message: 'Vehículo agregado exitosamente' });
+      }
+    }else{
+      const addVehicle = await sql`
+        INSERT INTO vehiculo (VEHI_PATENTE) 
+        VALUES (${patente})
+      `;
+      const addRegister = await sql`
+          INSERT INTO registrousuariovehiculo (regi_vehi_patente, regi_usua_rut, regi_estado) 
+          VALUES (${patente}, ${userRut}, 'inactivo')
+        `;
+      res.status(200).json({ message: 'Vehículo agregado exitosamente' });
+    }
+  } catch (error) {
+    console.error('Error al agregar el vehículo:', error);
+    res.status(500).json({ error: 'Error al agregar el vehículo' });
+  }
+});
+
+
 
 
 //login
