@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import { serialize } from 'cookie';
 import cookieParser from 'cookie-parser';
 import {generatorCode} from '../src/utils/generatorCode.js'
-import {sendCodeEmail} from '../src/utils/mailer.js'
+import {sendCodeEmail, sendRegisterNewVehicle} from '../src/utils/mailer.js'
 
 
 
@@ -176,6 +176,9 @@ app.post("/api/register-user", async (req, res) => {
                                   values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
       const insertVehicle = await sql`insert into vehiculo(vehi_patente, vehi_marca, vehi_modelo, vehi_anio, vehi_tipo, vehi_color) 
                                       values(${vehiclePatente}, ${vehicleMarca}, ${vehicleModelo}, ${vehicleYear}, ${vehicleType}, ${vehicleColor})`;
+      
+      sendRegisterNewVehicle(vehiclePatente, SENDER_EMAIL_ID);
+
       const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado)
                                                       values (${userRut}, ${vehiclePatente}, 'activo')`;
     }
@@ -289,6 +292,9 @@ app.post('/api/add-new-vehicle', async (req, res) => {
         INSERT INTO vehiculo (VEHI_PATENTE) 
         VALUES (${patente})
       `;
+
+      sendRegisterNewVehicle(patente, SENDER_EMAIL_ID);
+
       const addRegister = await sql`
           INSERT INTO registrousuariovehiculo (regi_vehi_patente, regi_usua_rut, regi_estado) 
           VALUES (${patente}, ${userRut}, 'inactivo')
