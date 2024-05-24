@@ -11,6 +11,7 @@ import { RecoverTwo } from "./screens/recoverTwo";
 import { RecoverThree } from "./screens/recoverThree";
 import { RecoverFinal } from "./screens/recoverFinal";
 import { ManageVehicle } from "./screens/user/manageVehicle";
+import { Reservations } from "./screens/user/reservations";
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="/user" element={<Usermenu/>}/>
         <Route path="/guard" element={<Guardmenu/>}/>
         <Route path="/manage-vehicle" element={<ManageVehicle/>}/>
+        <Route path="/reservations" element={<Reservations/>}/>
       </Routes>
     </>
   )
