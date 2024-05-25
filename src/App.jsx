@@ -12,6 +12,7 @@ import { RecoverThree } from "./screens/recoverThree";
 import { RecoverFinal } from "./screens/recoverFinal";
 import { ManageVehicle } from "./screens/user/manageVehicle";
 import { Reservations } from "./screens/user/reservations";
+import { ReservationHistory } from "./screens/guard/reservationHistory";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/guard" element={<Guardmenu/>}/>
         <Route path="/manage-vehicle" element={<ManageVehicle/>}/>
         <Route path="/reservations" element={<Reservations/>}/>
+        <Route path="/reservation-history" element={<ReservationHistory/>}/>
       </Routes>
     </>
   )

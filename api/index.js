@@ -371,7 +371,7 @@ app.get('/api/login', async (req, res) => {
     const user = jwt.verify(myTokenName, process.env.SECRET);
     return res.json({
       email: user.userEmail,
-      username: user.userName,
+      userName: user.userName,
       userLastNamePat: user.userLastNamePat,
       userLastNameMat: user.userLastNameMat,
       userRut: user.userRut,
