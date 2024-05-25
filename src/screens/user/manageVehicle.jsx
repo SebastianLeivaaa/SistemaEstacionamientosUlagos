@@ -31,7 +31,7 @@ export const ManageVehicle = () => {
     const navigate = useNavigate();
 
     const logOut = async () => {
-        const response = await axios.get("/api/logout", { withCredentials: true });
+        const response = await axios.get("http://localhost:3090/api/logout", { withCredentials: true });
         navigate('/');
     };
 
@@ -56,7 +56,7 @@ export const ManageVehicle = () => {
         };
 
         try {
-            const response = await axios.post("/api/add-new-vehicle", newVehicleData, { withCredentials: true });
+            const response = await axios.post("http://localhost:3090/api/add-new-vehicle", newVehicleData, { withCredentials: true });
             console.log("Vehicle added successfully:", response.data);
             await getVehicles(user.userRut);
             setFormData({ vehiclePatente: '' });
@@ -70,7 +70,7 @@ export const ManageVehicle = () => {
 
     const getProfile = async () => {
         try {
-            const response = await axios.get("/api/login", { withCredentials: true });
+            const response = await axios.get("http://localhost:3090/api/login", { withCredentials: true });
             setUser({
                 email: response.data.email,
                 userName: response.data.username,
@@ -86,7 +86,7 @@ export const ManageVehicle = () => {
 
     const getVehicles = async (userRut) => {
         try {
-            const response = await axios.post('/api/get-vehicles', { userRut }, { withCredentials: true });
+            const response = await axios.post('http://localhost:3090/api/get-vehicles', { userRut }, { withCredentials: true });
             // Ordenar vehículos para que los activos estén primero
             const sortedVehicles = response.data.sort((a, b) => a.regi_estado.localeCompare(b.regi_estado));
             setVehicles(sortedVehicles);
@@ -113,8 +113,8 @@ export const ManageVehicle = () => {
     return (
         <div className="w-screen min-h-screen flex items-center justify-center py-16">
             <div className="flex flex-col h-[800px] w-[50%] overflow-y-scroll p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50 relative">
-                <div className="flex flex-wrap sm:flex-row w-full justify-between">
-                    <img src={Ulogo} alt="Logo Ulagos" className="px-5 w-full sm:w-60 h-auto" />
+                <div className="flex flex-wrap justify-end xl:flex-wrap lg:flex-wrap md:flex-wrap sm:flex-wrap xl:justify-between lg:justify-end md:justify-end sm:justify-end w-full">
+                    <img src={Ulogo} alt="Logo Ulagos" className="px-5 w-full xl:w-1/2 lg:w-full md:w-full sm:w-full" />
                     <div className="flex flex-col items-end justify-end">
                         <h1 className="text-lg font-bold text-center max-md:text-base text-congress-blue-900">{user.userName.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
                         <button onClick={logOut} className="mt-4 bg-white font-bold text-red-600 text-lg flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl" />CERRAR SESIÓN</button>
@@ -140,8 +140,8 @@ export const ManageVehicle = () => {
                     )}
                 </div>
                 <div className='flex flex-row items-center gap-x-12 mt-8'>
-                    <div className="items-center gap-x-12 w-full justify-center flex">
-                        <div className='flex flex-col px-8 gap-y-12 w-[60%] max-md:w-[100%] max-md:p-0 items-center justify-center'>
+                    <div className="items-s gap-x-12 w-full justify-center flex">
+                        <div className='flex flex-col gap-y-12 xl:w-[60%] lg:w-[90%] max-md:w-full max-md:p-3 items-center justify-center'>
                             {vehicles.length > 0 ? (
                                 vehicles.map((vehicle, index) => (
                                     <VehicleData
