@@ -86,7 +86,7 @@ export const ManageVehicle = () => {
 
     const getVehicles = async (userRut) => {
         try {
-            const response = await axios.post('/api/getVehicles', { userRut }, { withCredentials: true });
+            const response = await axios.post('/api/get-vehicles', { userRut }, { withCredentials: true });
             // Ordenar vehículos para que los activos estén primero
             const sortedVehicles = response.data.sort((a, b) => a.regi_estado.localeCompare(b.regi_estado));
             setVehicles(sortedVehicles);
@@ -111,10 +111,10 @@ export const ManageVehicle = () => {
     }, []);
 
     return (
-        <div className="min-h-screen w-screen flex items-center justify-center">
-            <div className="flex flex-col min-w-[75%] max-w-[75%] p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50 relative">
+        <div className="w-screen min-h-screen flex items-center justify-center py-16">
+            <div className="flex flex-col h-[800px] w-[50%] overflow-y-scroll p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50 relative">
                 <div className="flex flex-wrap sm:flex-row w-full justify-between">
-                    <img src={Ulogo} alt="Logo Ulagos" className="px-5 w-full sm:w-44 h-auto" />
+                    <img src={Ulogo} alt="Logo Ulagos" className="px-5 w-full sm:w-60 h-auto" />
                     <div className="flex flex-col items-end justify-end">
                         <h1 className="text-lg font-bold text-center max-md:text-base text-congress-blue-900">{user.userName.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
                         <button onClick={logOut} className="mt-4 bg-white font-bold text-red-600 text-lg flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl" />CERRAR SESIÓN</button>
@@ -129,7 +129,7 @@ export const ManageVehicle = () => {
                             <div className='flex flex-row items-center gap-x-4 p-2 max-md:flex-col max-md:gap-y-4 max-md:items-start'>
                                 <label className='w-fit font-semibold'>Ingrese la patente: </label>
                                 <input onChange={handleChange} value={formData.vehiclePatente} type='text' id='vehiclePatente' name='vehiclePatente' maxLength='6' placeholder='EJ:GGXX20' className="p-1 border-[0.5px] border-blue-ribbon-600"></input>
-                                <button type='submit' className='flex flex-row gap-x-1 items-center bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold p-2 text-white-50'>{isLoading ? (<ClipLoader color="#FFFFFF" size={24} />) : (<IoIosSave className='text-2xl' />)} Guardar</button>
+                                <button type='submit' className='flex flex-row gap-x-1 items-center bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold p-2 text-white-50'>{isLoading ? (<ClipLoader color="#0d6efd" size={24} />) : (<IoIosSave className='text-2xl' />)} Guardar</button>
                             </div>
                             {message && (
                                 <h1 className={`p-2 rounded flex flex-row gap-x-2 justify-center items-center ${message.type === 'success' ? 'text-camarone-700' : 'text-red-800'}`}>
@@ -141,7 +141,7 @@ export const ManageVehicle = () => {
                 </div>
                 <div className='flex flex-row items-center gap-x-12 mt-8'>
                     <div className="items-center gap-x-12 w-full justify-center flex">
-                        <div className='flex flex-col gap-y-12 w-[45%] max-md:w-[100%] items-center justify-center'>
+                        <div className='flex flex-col px-8 gap-y-12 w-[60%] max-md:w-[100%] max-md:p-0 items-center justify-center'>
                             {vehicles.length > 0 ? (
                                 vehicles.map((vehicle, index) => (
                                     <VehicleData
@@ -154,6 +154,7 @@ export const ManageVehicle = () => {
                                         tipo={vehicle.vehi_tipo}
                                         estado={vehicle.regi_estado}
                                         rut={vehicle.regi_usua_rut}
+                                        firstVehicle={index === 0}
                                         index={index}
                                         onDelete={removeVehicleFromState}
                                     />

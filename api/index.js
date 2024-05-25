@@ -50,6 +50,20 @@ app.listen(port, async () => {
   }
 });
 
+//Consulta para ir eliminando las reservas que expiran
+const deleteExpiredReservas = async () => {
+
+  try {
+    await sql`DELETE FROM reserva
+                WHERE rese_estado = 'EN ESPERA'
+                AND (rese_fecha + rese_hora_inicio <= NOW() - INTERVAL '30 minutes');`;
+  } catch (err) {
+    console.error('Error deleting expired reservations:', err);
+  }
+};
+
+setInterval(deleteExpiredReservas, 60 * 1000);
+
 //Consulta para verificar si el usuario existe en la base de datos
 app.post("/api/query-user-exists", async (req, res) => {
   const { userRut, userEmail, userPhone, userDomain } = req.body;
@@ -212,7 +226,7 @@ app.get('/api/parkingSpaces', async (req, res) => {
 });
 
 //Consulta para ovbener los vehiculos
-app.post('/api/getVehicles', async (req, res) => {
+app.post('/api/get-vehicles', async (req, res) => {
   const { userRut } = req.body;
 
   try {
@@ -301,8 +315,54 @@ app.post('/api/add-new-vehicle', async (req, res) => {
   }
 });
 
+//Consulta para obtener el historial de las reservas por usuario
+app.post('/api/get-record-reservation', async (req, res) => {
+  const { userRut } = req.body;
 
+  try {
+    const recordReservation = await sql`
+      SELECT r.rese_vehi_patente, r.rese_hora_llegada, r.rese_hora_salida, r.rese_fecha, e.esta_numero 
+        FROM reserva r
+        INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+        WHERE rese_usua_rut = ${userRut} AND rese_estado != 'EN ESPERA'
+    `;
+    res.json(recordReservation);
+  } catch (error) {
+    console.error('Error al obtener los vehículos:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
 
+//Consulta para obtener la reserva vigente del usuario
+app.post('/api/get-current-reservation', async (req, res) => {
+  const { userRut } = req.body;
+
+  try {
+    const currentReservation = await sql`
+      SELECT r.rese_vehi_patente, r.rese_fecha, e.esta_numero, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_inicio
+        FROM reserva r
+        INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+        WHERE rese_usua_rut = ${userRut} AND rese_estado = 'EN ESPERA'
+    `;
+    res.json(currentReservation);
+  } catch (error) {
+    console.error('Error al obtener los vehículos:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+//Consulta para eliminar una reserva
+app.post('/api/delete-reservation', async (req, res) => {
+  const { userRut } = req.body;
+
+  try {
+    const deleteReservation = await sql`DELETE FROM reserva WHERE rese_usua_rut = ${userRut} AND rese_estado = 'EN ESPERA'`;
+    res.status(200).send('Reserva eliminada con éxito');
+  } catch (error) {
+    console.error('Error al eliminar la reserva:', error);
+    res.status(500).send('Error al eliminar la reserva');
+  }
+});
 
 //login
 app.get('/api/login', async (req, res) => {

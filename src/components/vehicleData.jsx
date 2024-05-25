@@ -16,7 +16,7 @@ export const VehicleData = ( props ) => {
     const [buttonDisable, setButtonDisable] = useState(false);
     const [buttonEnable, setButtonEnable] = useState(false);
     const [buttonDelete, setButtonDelete] = useState(false);
-    const [showVehicle, setShowVehicle] = useState(false);
+    const [showVehicle, setShowVehicle] = useState(props.firstVehicle);
     const [message, setMessage] = useState(false);
 
     const [vehicleData, setVehicleData] = useState({
@@ -29,14 +29,6 @@ export const VehicleData = ( props ) => {
         estado: props.estado,
         rut: props.rut
     });
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setVehicleData({
-            ...vehicleData,
-            [name]: value
-        });
-    }
 
     const handleDisable = () => {
         setButtonDisable(!buttonDisable);
@@ -107,7 +99,7 @@ export const VehicleData = ( props ) => {
     return(
         <>
             {buttonDisable ? (
-                <div className={`${vehicleData.estado === 'activo' ? 'bg-surf-crest-200 border-surf-crest-500 text-camarone-900 shadow-surf-crest-950' : 'bg-cosmos-200 border-cosmos-500 text-persian-plum-900 shadow-cosmos-900'} flex min-h-full flex-col border-[1px] shadow-3xl gap-x-16 w-full p-32 max-md:p-16 rounded-2xl items-center justify-center gap-y-8 `}>
+                <div className={`${vehicleData.estado === 'activo' ? 'bg-surf-crest-200 border-surf-crest-500 text-camarone-900 shadow-surf-crest-950' : 'bg-cosmos-200 border-cosmos-500 text-persian-plum-900 shadow-cosmos-900'} flex min-h-full flex-col border-[1px] shadow-3xl gap-x-16 w-full p-28 max-md:p-16 rounded-2xl items-center justify-center gap-y-8 `}>
                     <div className='col-span-2 justify-center'>
                         <h1 className='text-xl text-center max-md:text-base'>¿Estas seguro que quieres DESHABILITAR este vehículo para realizar reservas?</h1>
                     </div>
@@ -117,7 +109,7 @@ export const VehicleData = ( props ) => {
                     </div>
                 </div>
             ) : buttonEnable ? (
-                <div className={`${vehicleData.estado === 'activo' ? 'bg-surf-crest-200 border-surf-crest-500 text-camarone-900 shadow-surf-crest-950' : 'bg-cosmos-200 border-cosmos-500 text-persian-plum-900 shadow-cosmos-900'} flex flex-col border-[1px] shadow-3xl gap-x-16 w-full p-32 max-md:p-16 rounded-2xl items-center justify-center gap-y-8`}>
+                <div className={`${vehicleData.estado === 'activo' ? 'bg-surf-crest-200 border-surf-crest-500 text-camarone-900 shadow-surf-crest-950' : 'bg-cosmos-200 border-cosmos-500 text-persian-plum-900 shadow-cosmos-900'} flex flex-col border-[1px] shadow-3xl gap-x-16 w-full p-28 max-md:p-16 rounded-2xl items-center justify-center gap-y-8`}>
                     <div className='col-span-2 flex flex-col justify-center gap-y-4'>
                         <h1 className='text-xl text-center max-md:text-base'>¿Estas seguro que quieres HABILITAR este vehículo para realizar reservas?</h1>
                         {message && <p className='text-red-500 justify-center text-lg flex flex-row items-center gap-x-2'><TiWarning className='text-2xl'/> Ya tienes un vehículo activo</p>}
@@ -128,7 +120,7 @@ export const VehicleData = ( props ) => {
                     </div>
                 </div>
             ) : buttonDelete ? (
-                <div className={`${vehicleData.estado === 'activo' ? 'bg-surf-crest-200 border-surf-crest-500 text-camarone-900 shadow-surf-crest-950' : 'bg-cosmos-200 border-cosmos-500 text-persian-plum-900 shadow-cosmos-900'} flex flex-col border-[1px] shadow-3xl gap-x-16 w-full p-32 max-md:p-16 rounded-2xl items-center justify-center gap-y-8`}>
+                <div className={`${vehicleData.estado === 'activo' ? 'bg-surf-crest-200 border-surf-crest-500 text-camarone-900 shadow-surf-crest-950' : 'bg-cosmos-200 border-cosmos-500 text-persian-plum-900 shadow-cosmos-900'} flex flex-col border-[1px] shadow-3xl gap-x-16 w-full p-28 max-md:p-16 rounded-2xl items-center justify-center gap-y-8`}>
                     <div className='col-span-2 flex flex-col justify-center gap-y-4'>
                         <h1 className='text-xl text-center max-md:text-base'>¿Estas seguro que quieres ELIMINAR este vehículo para realizar reservas?</h1>
                     </div>
@@ -138,13 +130,13 @@ export const VehicleData = ( props ) => {
                     </div>
                 </div>
             ) : (
-                <div className={`${vehicleData.estado === 'activo' ? 'shadow-surf-crest-950' : ' shadow-cosmos-900'} flex flex-col shadow-3xl gap-x-8 w-full rounded-2xl items-center`}>
-                    <button onClick={handleShowVehicle} className={`${vehicleData.estado === 'activo' ? 'bg-surf-crest-200 border-surf-crest-500 text-camarone-900' : 'bg-cosmos-200 border-cosmos-500 text-persian-plum-900' } border-[1px] w-full p-8 max-md:p-4 rounded-t-2xl flex flex-row justify-between items-center'`}>
+                <div className={`${vehicleData.estado === 'activo' ? 'shadow-surf-crest-950' : ' shadow-cosmos-900'} flex flex-col shadow-3xl w-full rounded-2xl items-center`}>
+                    <button onClick={handleShowVehicle} className={`${vehicleData.estado === 'activo' ? 'bg-surf-crest-200 border-surf-crest-500 text-camarone-900' : 'bg-cosmos-200 border-cosmos-500 text-persian-plum-900' } border-[1px] w-full p-4 max-md:p-4 rounded-t-2xl flex flex-row justify-between items-center'`}>
                         <span className='flex flex-row gap-x-4 max-md:gap-x-2 items-center'>
                             <FaCar className='text-3xl max-md:text-lg'/>
-                            <h1 className='text-xl max-md:text-base'>{vehicleData.patente}</h1>
+                            <h1 className='text-lg max-md:text-base'>{vehicleData.patente}</h1>
                         </span>
-                        <h1 className='flex flex-row gap-x-1 text-xl max-md:text-base items-center'>{vehicleData.estado.toUpperCase()} {showVehicle ? <TiArrowSortedUp className='text-3xl'/> : <TiArrowSortedDown className='text-3xl'/>}</h1>
+                        <h1 className='flex flex-row gap-x-1 text-lg max-md:text-base items-center'>{vehicleData.estado.toUpperCase()} {showVehicle ? <TiArrowSortedUp className='text-3xl'/> : <TiArrowSortedDown className='text-3xl'/>}</h1>
                     </button>
                     {showVehicle && (
                         <div className='grid grid-cols-2 w-full p-8 max-md:p-4 rounded-b-2xl border-[1px] border-alabaster-600  bg-alabaster-50 text-outer-space-900 font-semibold'>
