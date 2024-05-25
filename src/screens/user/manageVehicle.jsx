@@ -31,7 +31,7 @@ export const ManageVehicle = () => {
     const navigate = useNavigate();
 
     const logOut = async () => {
-        const response = await axios.get("http://localhost:3090/api/logout", { withCredentials: true });
+        const response = await axios.get("/api/logout", { withCredentials: true });
         navigate('/');
     };
 
@@ -56,7 +56,7 @@ export const ManageVehicle = () => {
         };
 
         try {
-            const response = await axios.post("http://localhost:3090/api/add-new-vehicle", newVehicleData, { withCredentials: true });
+            const response = await axios.post("/api/add-new-vehicle", newVehicleData, { withCredentials: true });
             console.log("Vehicle added successfully:", response.data);
             await getVehicles(user.userRut);
             setFormData({ vehiclePatente: '' });
@@ -70,7 +70,7 @@ export const ManageVehicle = () => {
 
     const getProfile = async () => {
         try {
-            const response = await axios.get("http://localhost:3090/api/login", { withCredentials: true });
+            const response = await axios.get("/api/login", { withCredentials: true });
             setUser({
                 email: response.data.email,
                 userName: response.data.userName,
@@ -86,7 +86,7 @@ export const ManageVehicle = () => {
 
     const getVehicles = async (userRut) => {
         try {
-            const response = await axios.post('http://localhost:3090/api/get-vehicles', { userRut }, { withCredentials: true });
+            const response = await axios.post('/api/get-vehicles', { userRut }, { withCredentials: true });
             // Ordenar vehículos para que los activos estén primero
             const sortedVehicles = response.data.sort((a, b) => a.regi_estado.localeCompare(b.regi_estado));
             setVehicles(sortedVehicles);
