@@ -179,19 +179,19 @@ app.post("/api/register-user", async (req, res) => {
 
   const fullUserEmail = `${userEmail}${userDomain}`;
   try {
-    const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${vehiclePatente}`;
+    const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${vehiclePatente.toUpperCase()}`;
     if (existingVehicle.length > 0) {
       const insertUser = await sql`insert into usuario(usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_rut, usua_correo, usua_clave, usua_telefono, usua_tipo) 
                                   values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
       const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado)
-                                                      values (${userRut}, ${vehiclePatente}, 'activo')`;
+                                                      values (${userRut}, ${vehiclePatente.toUpperCase()}, 'activo')`;
     } else{
       const insertUser = await sql`insert into usuario(usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_rut, usua_correo, usua_clave, usua_telefono, usua_tipo) 
                                   values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
       const insertVehicle = await sql`insert into vehiculo(vehi_patente, vehi_marca, vehi_modelo, vehi_anio, vehi_tipo, vehi_color) 
-                                      values(${vehiclePatente}, ${vehicleMarca}, ${vehicleModelo}, ${vehicleYear}, ${vehicleType}, ${vehicleColor})`;
+                                      values(${vehiclePatente.toUpperCase()}, ${vehicleMarca}, ${vehicleModelo}, ${vehicleYear}, ${vehicleType}, ${vehicleColor})`;
       const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado)
-                                                      values (${userRut}, ${vehiclePatente}, 'activo')`;
+                                                      values (${userRut}, ${vehiclePatente.toUpperCase()}, 'activo')`;
     }
     res.status(200).send('Registro insertado con éxito');
   } catch (err) {
@@ -253,7 +253,7 @@ app.put('/api/change-state-vehicle', async (req, res) => {
     if (selectVehicle.count > 0 && estado === 'activo') {
       res.status(400).send('Ya existe un vehículo activo para este usuario');
     } else {
-      const updateVehicle = await sql`UPDATE registrousuariovehiculo SET regi_estado = ${estado} WHERE regi_vehi_patente = ${patente}`;
+      const updateVehicle = await sql`UPDATE registrousuariovehiculo SET regi_estado = ${estado} WHERE regi_vehi_patente = ${patente.toUpperCase()}`;
       res.status(200).send('Estado del vehículo actualizado con éxito');
     }
   } catch (error) {
@@ -267,7 +267,7 @@ app.delete('/api/delete-vehicle', async (req, res) => {
   const { patente, userRut } = req.body;
 
   try {
-    const deleteVehicle = await sql`DELETE FROM registrousuariovehiculo WHERE regi_vehi_patente = ${patente} AND regi_usua_rut = ${userRut}`;
+    const deleteVehicle = await sql`DELETE FROM registrousuariovehiculo WHERE regi_vehi_patente = ${patente.toUpperCase()} AND regi_usua_rut = ${userRut}`;
     res.status(200).send('Vehículo eliminado con éxito');
   } catch (error) {
     console.error('Error al eliminar el vehículo:', error);
@@ -279,14 +279,14 @@ app.delete('/api/delete-vehicle', async (req, res) => {
 app.post('/api/add-new-vehicle', async (req, res) => {
   const { patente, userRut } = req.body;
 
-  if (!patente || !userRut) {
-    return res.status(400).json({ error: 'Patente y UserRut son requeridos' });
+  if (!patente) {
+    return res.status(400).json({ error: 'Ingrese una patente por favor' });
   }
 
   try {
     // Agregar vehículo a la tabla 'vehiculo'
-    const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${patente}`;
-    const existingRegister = await sql`SELECT * FROM registrousuariovehiculo WHERE regi_vehi_patente = ${patente} AND regi_usua_rut = ${userRut}`
+    const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${patente.toUpperCase()}`;
+    const existingRegister = await sql`SELECT * FROM registrousuariovehiculo WHERE regi_vehi_patente = ${patente.toUpperCase()} AND regi_usua_rut = ${userRut}`
 
     if(existingVehicle.length > 0){
       if(existingRegister.length > 0){
@@ -294,18 +294,18 @@ app.post('/api/add-new-vehicle', async (req, res) => {
       } else {
         const addRegister = await sql`
           INSERT INTO registrousuariovehiculo (regi_vehi_patente, regi_usua_rut, regi_estado) 
-          VALUES (${patente}, ${userRut}, 'inactivo')
+          VALUES (${patente.toUpperCase()}, ${userRut}, 'inactivo')
         `;
         res.status(200).json({ message: 'Vehículo agregado exitosamente' });
       }
     }else{
       const addVehicle = await sql`
         INSERT INTO vehiculo (VEHI_PATENTE) 
-        VALUES (${patente})
+        VALUES (${patente.toUpperCase()})
       `;
       const addRegister = await sql`
           INSERT INTO registrousuariovehiculo (regi_vehi_patente, regi_usua_rut, regi_estado) 
-          VALUES (${patente}, ${userRut}, 'inactivo')
+          VALUES (${patente.toUpperCase()}, ${userRut}, 'inactivo')
         `;
       res.status(200).json({ message: 'Vehículo agregado exitosamente' });
     }
@@ -363,6 +363,47 @@ app.post('/api/delete-reservation', async (req, res) => {
     res.status(500).send('Error al eliminar la reserva');
   }
 });
+
+//Consulta para obtener el historial de las reservas por patente
+app.post('/api/get-record-reservation-by-patente', async (req, res) => {
+  const { vehiclePatente, date } = req.body;
+  try {
+
+    let existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${vehiclePatente.toUpperCase()}`;
+    console.log(date);
+    if(existingVehicle.length === 0){
+      res.status(500).json({ message: 'El vehículo no se encuentra registrado en la base de datos' });
+    } else{
+      let query = sql`
+          SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno
+            FROM reserva r
+            INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+            INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
+            WHERE rese_vehi_patente = ${vehiclePatente.toUpperCase()} AND rese_estado = 'CONFIRMADA'
+      `;
+
+      if (date) {
+        query = sql`${query} AND rese_fecha = ${date}`;
+      }
+
+      const recordReservation = await query;
+
+      if(recordReservation.length === 0){
+        if(date){
+          res.status(500).json({ message: 'No se encontraron registros asociados a la patente ingresada y la fecha seleccionada' });
+        }else{
+          res.status(500).json({ message: 'No se encontraron registros asociados a la patente ingresada' });
+        }
+      }else{
+        res.json(recordReservation);
+      }
+    }
+  } catch (error) {
+    console.error('Error al obtener los vehículos:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+;
 
 //login
 app.get('/api/login', async (req, res) => {

@@ -128,7 +128,7 @@ export const ManageVehicle = () => {
                             <h1 className='flex items-center justify-center text-xl font-semibold'>Ingrese su nuevo vehiculo</h1>
                             <div className='flex flex-row items-center gap-x-4 p-2 max-md:flex-col max-md:gap-y-4 max-md:items-start'>
                                 <label className='w-fit font-semibold'>Ingrese la patente: </label>
-                                <input onChange={handleChange} value={formData.vehiclePatente} type='text' id='vehiclePatente' name='vehiclePatente' maxLength='6' placeholder='EJ:GGXX20' className="p-1 border-[0.5px] border-blue-ribbon-600"></input>
+                                <input onChange={handleChange} value={formData.vehiclePatente} type='text' id='vehiclePatente' name='vehiclePatente' minLength='6' maxLength='6' placeholder='EJ:GGXX20' className="p-1 border-[0.5px] border-blue-ribbon-600"></input>
                                 <button type='submit' className='flex flex-row gap-x-1 items-center bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold p-2 text-white-50'>{isLoading ? (<ClipLoader color="#0d6efd" size={24} />) : (<IoIosSave className='text-2xl' />)} Guardar</button>
                             </div>
                             {message && (
