@@ -23,7 +23,7 @@ const [currentReservation, setCurrentReservation] = useState([]);
 
 const getRecordReservation = async (userRut) => {
   try {
-      const response = await axios.post('http://localhost:3090/api/get-record-reservation', { userRut }, { withCredentials: true });
+      const response = await axios.post('/api/get-record-reservation', { userRut }, { withCredentials: true });
       setRecordReservation(response.data);
   } catch (error) {
       console.log(error);
@@ -32,7 +32,7 @@ const getRecordReservation = async (userRut) => {
 
 const getCurrentReservation = async (userRut) => {
   try {
-      const response = await axios.post('http://localhost:3090/api/get-current-reservation', { userRut }, { withCredentials: true });
+      const response = await axios.post('/api/get-current-reservation', { userRut }, { withCredentials: true });
       setCurrentReservation(response.data);
   } catch (error) {
       console.log(error);
@@ -50,7 +50,7 @@ const handleRecordClick = () => {
 
 const getProfile = async () => {
   try{
-      const response = await axios.get("http://localhost:3090/api/login", {withCredentials: true});
+      const response = await axios.get("/api/login", {withCredentials: true});
       setUser({
           email: response.data.email,
           username: response.data.username,
