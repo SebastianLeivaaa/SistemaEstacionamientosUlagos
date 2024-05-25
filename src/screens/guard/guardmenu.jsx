@@ -1,8 +1,9 @@
-import {useEffect, useState} from "react"; 
+import React, {useEffect, useState} from "react"; 
 import Ulogo from "../../assets/img/Ulogo.png";
 import Chinquihue from "../../assets/img/Chinquihue.png";
 import { LuHistory } from "react-icons/lu";
 import { HiOutlineLogin } from "react-icons/hi";
+import { FaCheck } from "react-icons/fa";
 import { LuParkingCircle } from "react-icons/lu";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -11,7 +12,7 @@ import axios from 'axios';
 export const Guardmenu = () => {
     const [user, setUser] = useState({
         email: "",
-        username: "",
+        userName: "",
         userLastNamePat: "",
         userLastNameMat: "",
     })
@@ -23,7 +24,7 @@ export const Guardmenu = () => {
             const response = await axios.get("/api/login", {withCredentials: true});
             setUser({
                 email: response.data.email,
-                username: response.data.username,
+                userName: response.data.userName,
                 userLastNamePat: response.data.userLastNamePat,
                 userLastNameMat: response.data.userLastNameMat,
             });
@@ -55,6 +56,10 @@ export const Guardmenu = () => {
         navigate('/');
     }
 
+    const reservationHistory = () => {
+        navigate('/reservation-history');
+    }
+
     const textColor = parkingSpaces <= 15 ? 'text-red-500' : 'text-green-600';
 
     return (
@@ -63,7 +68,7 @@ export const Guardmenu = () => {
                 <div className="flex flex-row w-full justify-between">
                     <img src={Ulogo} alt="Logo Ulagos" className="w-44 h-auto"/>
                     <div className="flex flex-col items-start">
-                        <h1 className="text-xl font-bold text-center max-md:text-base text-congress-blue-900">{user.username.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
+                        <h1 className="text-xl font-bold text-center max-md:text-base text-congress-blue-900">{user.userName.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
                         <button onClick={logOut} className="mt-4 w-full bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/> CERRAR SESIÓN</button>
                     </div>
                 </div>
@@ -78,10 +83,10 @@ export const Guardmenu = () => {
                         ¡{parkingSpaces !== null ? parkingSpaces : 'Cargando...'} ESTACIONAMIENTOS DISPONIBLES!
                     </h1>
                 </div>
-                <div className="flex flex-col gap-y-4 md:flex-row justify-around w-full py-4">
-                    <button onClick={null} className='bg-blue-ribbon-600 text-white-100 px-4 py-4 rounded-md text-lg flex flex-row items-center justify-center font-bold'><LuParkingCircle className="text-2xl"/>ADMINISTRAR ESTACIONAMIENTO</button>
-                    <button onClick={null} className='bg-blue-ribbon-600 text-white-100 px-4 py-4 rounded-md text-lg flex flex-row items-center justify-center font-bold'><LuHistory className="text-2xl"/>HISTORIAL DE RESERVAS</button>
-                    <button onClick={null} className='bg-blue-ribbon-600 text-white-100 px-4 py-4 rounded-md text-lg font-bold'>✓ CONFIRMAR RESERVA</button>
+                <div className="flex flex-col gap-y-4 gap-x-6 md:flex-row justify-around w-full py-4">
+                    <button onClick={null} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><LuParkingCircle className="text-3xl"/>ADMINISTRAR ESTACIONAMIENTO</button>
+                    <button onClick={reservationHistory} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><LuHistory className="text-3xl"/>HISTORIAL DE RESERVAS</button>
+                    <button onClick={null} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><FaCheck className='text-2xl'/> CONFIRMAR RESERVA</button>
                 </div>
                 <div className="h-full w-full bg-customGreen flex flex-col justify-center px-4 py-4 rounded-lg font-semibold">
                     <h1>• Todo conductor debe mostrar su cédula de identidad o licencia de conducir para validar su nombre y RUT.</h1>

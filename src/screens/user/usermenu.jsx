@@ -12,7 +12,7 @@ import { TiWarning } from "react-icons/ti";
 export const Usermenu = () => {
     const [user, setUser] = useState({
         email: "",
-        username: "",
+        userName: "",
         userLastNamePat: "",
         userLastNameMat: "",
     })
@@ -24,7 +24,7 @@ export const Usermenu = () => {
             const response = await axios.get("/api/login", {withCredentials: true});
             setUser({
                 email: response.data.email,
-                username: response.data.username,
+                userName: response.data.userName,
                 userLastNamePat: response.data.userLastNamePat,
                 userLastNameMat: response.data.userLastNameMat,
             });
@@ -72,7 +72,7 @@ export const Usermenu = () => {
                 <div className="flex flex-wrap lg:flex-row w-full justify-end sm:justify-between lg:justify-between">
                     <img src={Ulogo} alt="Logo Ulagos" className="px-5 w-full sm:w-60 h-auto"/>
                     <div className="flex flex-col items-end justify-end mt-4">
-                        <h1 className="text-lg font-bold text-center max-md:text-base text-congress-blue-900">{user.username.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
+                        <h1 className="text-lg font-bold text-center max-md:text-base text-congress-blue-900">{user.userName.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
                         <button onClick={logOut} className="mt-4 bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/>CERRAR SESIÓN</button>
                     </div>
                 </div>

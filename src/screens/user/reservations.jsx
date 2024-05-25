@@ -11,7 +11,7 @@ import { LuCalendarClock } from "react-icons/lu";
 export const Reservations = () =>{
   const [user, setUser] = useState({
     email: "",
-    username: "",
+    userName: "",
     userLastNamePat: "",
     userLastNameMat: "",
     userRut: "",
@@ -53,7 +53,7 @@ const getProfile = async () => {
       const response = await axios.get("/api/login", {withCredentials: true});
       setUser({
           email: response.data.email,
-          username: response.data.username,
+          userName: response.data.userName,
           userLastNamePat: response.data.userLastNamePat,
           userLastNameMat: response.data.userLastNameMat,
           userRut: response.data.userRut,
@@ -88,7 +88,7 @@ const logOut = async () => {
       <div className="flex flex-wrap justify-end xl:flex-wrap lg:flex-wrap md:flex-wrap sm:flex-wrap xl:justify-between lg:justify-end md:justify-end sm:justify-end w-full ">
                     <img src={Ulogo} alt="Logo Ulagos" className="px-5 w-full xl:w-1/2 lg:w-full md:w-full sm:w-full"/>
                     <div className="flex flex-col items-end justify-end mt-4">
-                        <h1 className="text-lg font-bold text-center max-md:text-base text-congress-blue-900">{user.username.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
+                        <h1 className="text-lg font-bold text-center max-md:text-base text-congress-blue-900">{user.userName.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
                         <button onClick={logOut} className="mt-4 bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/>CERRAR SESIÓN</button>
                     </div>
                 </div>

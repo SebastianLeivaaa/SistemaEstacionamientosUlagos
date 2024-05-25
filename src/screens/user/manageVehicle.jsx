@@ -73,7 +73,7 @@ export const ManageVehicle = () => {
             const response = await axios.get("/api/login", { withCredentials: true });
             setUser({
                 email: response.data.email,
-                userName: response.data.username,
+                userName: response.data.userName,
                 userLastNamePat: response.data.userLastNamePat,
                 userLastNameMat: response.data.userLastNameMat,
                 userRut: response.data.userRut,
