@@ -11,8 +11,8 @@ import { validateFormatPhone } from "../utils/validateFormatPhone";
 import { validateRut } from "../utils/validateRut";
 import { validateEmailFormat } from "../utils/validateEmailFormat";
 import { useNavigate } from 'react-router-dom';
-import { validateYear } from "../utils/validateYear";
-import SelectVehicle from "../components/selectVehicle";
+//import { validateYear } from "../utils/validateYear";
+//import SelectVehicle from "../components/selectVehicle";
 
 export const SignIn = () => {
     const navigate = useNavigate();
@@ -220,7 +220,7 @@ export const SignIn = () => {
                         <Datos
                             holder="Usuario"
                             tipo="text"
-                            id="userEñail"
+                            id="userEmail"
                             name="userEmail"
                             maxLength="50"
                             onChange={handleChange}

@@ -364,6 +364,27 @@ app.post('/api/delete-reservation', async (req, res) => {
   }
 });
 
+//Consulta para liberar una reserva por patente
+app.post('/api/release-reservation', async (req, res) => {
+  const { vehiclePatente } = req.body;
+
+  try {
+    // Verificar si la patente existe'
+    const [existingReservation] = await sql`SELECT * FROM reserva WHERE rese_vehi_patente = ${vehiclePatente}`;
+    if (!existingReservation) {
+      return res.status(404).send('No se encontró la patente proporcionada');
+    }
+    //se libera el estacionamiento y se elimina la reserva
+    await sql`UPDATE estacionamiento SET esta_estado = 'LIBRE' WHERE esta_id = ${existingReservation.rese_esta_id}`;
+    await sql`DELETE FROM reserva WHERE rese_vehi_patente = ${vehiclePatente}`;
+
+    res.status(200).send(existingReservation.rese_esta_id.slice(-2));
+  } catch (error) {
+    console.error('Error al eliminar la reserva:', error);
+    res.status(500).send('Error al eliminar la reserva');
+  }
+});
+
 //Consulta para obtener el historial de las reservas por patente
 app.post('/api/get-record-reservation-by-patente', async (req, res) => {
   const { vehiclePatente, date } = req.body;

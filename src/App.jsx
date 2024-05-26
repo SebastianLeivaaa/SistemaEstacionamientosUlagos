@@ -13,6 +13,9 @@ import { RecoverFinal } from "./screens/recoverFinal";
 import { ManageVehicle } from "./screens/user/manageVehicle";
 import { Reservations } from "./screens/user/reservations";
 import { ReservationHistory } from "./screens/guard/reservationHistory";
+import { GuardManage } from "./screens/guard/guardmanage"
+import { Release } from "./screens/guard/release"
+
 
 function App() {
 
@@ -29,6 +32,8 @@ function App() {
         <Route path="/sign-in-final" element={<SignInFinal/>}/>
         <Route path="/user" element={<Usermenu/>}/>
         <Route path="/guard" element={<Guardmenu/>}/>
+        <Route path="/guardmanage" element={<GuardManage/>}/>
+        <Route path="/release" element={<Release/>}/>
         <Route path="/manage-vehicle" element={<ManageVehicle/>}/>
         <Route path="/reservations" element={<Reservations/>}/>
         <Route path="/reservation-history" element={<ReservationHistory/>}/>
