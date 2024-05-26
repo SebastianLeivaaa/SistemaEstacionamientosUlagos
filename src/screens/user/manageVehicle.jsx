@@ -56,11 +56,15 @@ export const ManageVehicle = () => {
         };
 
         try {
-            const response = await axios.post("/api/add-new-vehicle", newVehicleData, { withCredentials: true });
-            console.log("Vehicle added successfully:", response.data);
-            await getVehicles(user.userRut);
-            setFormData({ vehiclePatente: '' });
-            setMessage({ type: 'success', text: response.data.message });
+            if(formData.vehiclePatente.length === 6){
+                const response = await axios.post("/api/add-new-vehicle", newVehicleData, { withCredentials: true });
+                await getVehicles(user.userRut);
+                setFormData({ vehiclePatente: '' });
+                setMessage({ type: 'success', text: response.data.message });
+            }else{
+                setMessage({ type: 'error', text: 'La patente debe tener 6 caracteres' });
+            }
+
         } catch (error) {
             console.error("Error adding vehicle:", error);
             setMessage({ type: 'error', text: error.response?.data?.error || 'Error al agregar el vehículo' });
