@@ -13,6 +13,9 @@ import { RecoverFinal } from "./screens/recoverFinal";
 import { ManageVehicle } from "./screens/user/manageVehicle";
 import { Reservations } from "./screens/user/reservations";
 import { ReservationHistory } from "./screens/guard/reservationHistory";
+import { RecordReservationByPatente } from "./screens/guard/recordReservationByPatente";
+import { RecordReservationByRut } from "./screens/guard/recordReservationByRut";
+import { RecordReservationByDate } from "./screens/guard/recordReservationByDate";
 
 function App() {
 
@@ -32,6 +35,9 @@ function App() {
         <Route path="/manage-vehicle" element={<ManageVehicle/>}/>
         <Route path="/reservations" element={<Reservations/>}/>
         <Route path="/reservation-history" element={<ReservationHistory/>}/>
+        <Route path="/record-reservation-by-patente" element={<RecordReservationByPatente/>}/>
+        <Route path="/record-reservation-by-rut" element={<RecordReservationByRut/>}/>
+        <Route path="/record-reservation-by-date" element={<RecordReservationByDate/>}/>
       </Routes>
     </>
   )

@@ -6,12 +6,17 @@ const capitalizeFirstLetter = (string) => {
 };
 
 export const formatDate = (isoDate) => {
+    console.log(isoDate);
     const date = parseISO(isoDate);
-    const formattedDate = format(date, "EEEE dd 'de' MMMM 'del' yyyy", { locale: es });
+
+    const adjustedDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+
+    console.log(adjustedDate);
+    const formattedDate = format(adjustedDate, "EEEE dd 'de' MMMM 'del' yyyy", { locale: es });
 
     const parts = formattedDate.split(' ');
-    parts[0] = capitalizeFirstLetter(parts[0]); 
-    parts[3] = capitalizeFirstLetter(parts[3]); 
+    parts[0] = capitalizeFirstLetter(parts[0]);
+    parts[3] = capitalizeFirstLetter(parts[3]);
 
     return parts.join(' ');
 };

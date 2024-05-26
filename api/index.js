@@ -279,10 +279,6 @@ app.delete('/api/delete-vehicle', async (req, res) => {
 app.post('/api/add-new-vehicle', async (req, res) => {
   const { patente, userRut } = req.body;
 
-  if (!patente) {
-    return res.status(400).json({ error: 'Ingrese una patente por favor' });
-  }
-
   try {
     // Agregar vehículo a la tabla 'vehiculo'
     const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${patente.toUpperCase()}`;
@@ -370,21 +366,28 @@ app.post('/api/get-record-reservation-by-patente', async (req, res) => {
   try {
 
     let existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${vehiclePatente.toUpperCase()}`;
-    console.log(date);
     if(existingVehicle.length === 0){
       res.status(500).json({ message: 'El vehículo no se encuentra registrado en la base de datos' });
     } else{
       let query = sql`
-          SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno
+          SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
             FROM reserva r
             INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
             INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
             WHERE rese_vehi_patente = ${vehiclePatente.toUpperCase()} AND rese_estado = 'CONFIRMADA'
+            ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC
       `;
 
       if (date) {
-        query = sql`${query} AND rese_fecha = ${date}`;
+        query = sql`
+        SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
+          FROM reserva r
+          INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+          INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
+          WHERE rese_vehi_patente = ${vehiclePatente.toUpperCase()} AND rese_estado = 'CONFIRMADA' AND rese_fecha = ${date}
+          ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC`;
       }
+
 
       const recordReservation = await query;
 
@@ -399,11 +402,86 @@ app.post('/api/get-record-reservation-by-patente', async (req, res) => {
       }
     }
   } catch (error) {
-    console.error('Error al obtener los vehículos:', error);
+    console.error('Error al obtener el historial:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 });
-;
+
+//Consulta para obtener el historial de las reservas por rut
+app.post('/api/get-record-reservation-by-rut', async (req, res) => {
+  const { rut, date } = req.body;
+  try {
+
+    let existingUser = await sql`SELECT * FROM usuario WHERE usua_rut = ${rut}`;
+    if(existingUser.length === 0){
+      res.status(500).json({ message: 'El usuario no se encuentra registrado en la base de datos' });
+    } else{
+      let query = sql`
+          SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
+            FROM reserva r
+            INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+            INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
+            WHERE rese_usua_rut = ${rut} AND rese_estado = 'CONFIRMADA'
+            ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC
+      `;
+
+      if (date) {
+        query = sql`
+        SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
+          FROM reserva r
+          INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+          INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
+          WHERE rese_usua_rut = ${rut} AND rese_estado = 'CONFIRMADA' AND rese_fecha = ${date}
+          ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC`;
+      }
+
+
+      const recordReservation = await query;
+
+      if(recordReservation.length === 0){
+        if(date){
+          res.status(500).json({ message: 'No se encontraron registros asociados al RUT ingresado y la fecha seleccionada' });
+        }else{
+          res.status(500).json({ message: 'No se encontraron registros asociados al RUT ingresado' });
+        }
+      }else{
+        res.json(recordReservation);
+      }
+    }
+  } catch (error) {
+    console.error('Error al obtener el historial:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+//Consulta para obtener el historial de las reservas por fecha
+app.post('/api/get-record-reservation-by-date', async (req, res) => {
+  const { date } = req.body;
+  try {
+
+      let query = sql`
+          SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
+            FROM reserva r
+            INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+            INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
+            WHERE rese_fecha = ${date} AND rese_estado = 'CONFIRMADA'
+            ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC
+      `;
+
+
+      const recordReservation = await query;
+
+      if(recordReservation.length === 0){
+        res.status(500).json({ message: 'No se encontraron registros asociados a la fecha seleccionada' });
+      }else{
+        res.json(recordReservation);
+      }
+    
+  } catch (error) {
+    console.error('Error al obtener el historial:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
 
 //login
 app.get('/api/login', async (req, res) => {
