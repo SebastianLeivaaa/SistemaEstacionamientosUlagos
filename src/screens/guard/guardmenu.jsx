@@ -59,6 +59,10 @@ export const Guardmenu = () => {
     const reservationHistory = () => {
         navigate('/reservation-history');
     }
+    const guardManage = () => {
+        navigate('/guardmanage');
+    }
+
 
     const textColor = parkingSpaces <= 15 ? 'text-red-500' : 'text-green-600';
 
@@ -84,7 +88,7 @@ export const Guardmenu = () => {
                     </h1>
                 </div>
                 <div className="flex flex-col gap-y-4 gap-x-6 md:flex-row justify-around w-full py-4">
-                    <button onClick={null} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><LuParkingCircle className="text-3xl"/>ADMINISTRAR ESTACIONAMIENTO</button>
+                    <button onClick={guardManage} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><LuParkingCircle className="text-3xl"/>ADMINISTRAR ESTACIONAMIENTO</button>
                     <button onClick={reservationHistory} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><LuHistory className="text-3xl"/>HISTORIAL DE RESERVAS</button>
                     <button onClick={null} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><FaCheck className='text-2xl'/> CONFIRMAR RESERVA</button>
                 </div>
