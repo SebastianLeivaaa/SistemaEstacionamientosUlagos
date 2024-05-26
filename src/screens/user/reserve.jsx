@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import Ulogo from "../../assets/img/Ulogo.png";
 import { HiOutlineLogin } from "react-icons/hi";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
+import Ulogo from "../../assets/img/Ulogo.png";
+import { ParkingMap } from "../../components/ParkingMap"; 
 
 export const Reserve = () =>{
   const [user, setUser] = useState({
@@ -66,8 +67,9 @@ const logOut = async () => {
         <h1 className="font-bold text-xl">SELECCIONE UN ESTACIONAMIENTO:</h1>
         </div>
         <div className="px-96 py-40 border-bold border-red-700 border">
-          Hola
-          </div>
+          <ParkingMap
+          />
+        </div>
       </div> 
     </div>
   );
