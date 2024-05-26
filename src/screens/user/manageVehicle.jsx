@@ -11,6 +11,7 @@ import { TiArrowSortedUp } from "react-icons/ti";
 import { FaCheck } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
 import { ClipLoader } from 'react-spinners';
+import { FaArrowLeft } from "react-icons/fa";
 
 export const ManageVehicle = () => {
     const [user, setUser] = useState({
@@ -31,7 +32,7 @@ export const ManageVehicle = () => {
     const navigate = useNavigate();
 
     const logOut = async () => {
-        const response = await axios.get("/api/logout", { withCredentials: true });
+        const response = await axios.get("http://localhost:3090/api/logout", { withCredentials: true });
         navigate('/');
     };
 
@@ -57,7 +58,7 @@ export const ManageVehicle = () => {
 
         try {
             if(formData.vehiclePatente.length === 6){
-                const response = await axios.post("/api/add-new-vehicle", newVehicleData, { withCredentials: true });
+                const response = await axios.post("http://localhost:3090/api/add-new-vehicle", newVehicleData, { withCredentials: true });
                 await getVehicles(user.userRut);
                 setFormData({ vehiclePatente: '' });
                 setMessage({ type: 'success', text: response.data.message });
@@ -74,7 +75,7 @@ export const ManageVehicle = () => {
 
     const getProfile = async () => {
         try {
-            const response = await axios.get("/api/login", { withCredentials: true });
+            const response = await axios.get("http://localhost:3090/api/login", { withCredentials: true });
             setUser({
                 email: response.data.email,
                 userName: response.data.userName,
@@ -90,7 +91,7 @@ export const ManageVehicle = () => {
 
     const getVehicles = async (userRut) => {
         try {
-            const response = await axios.post('/api/get-vehicles', { userRut }, { withCredentials: true });
+            const response = await axios.post('http://localhost:3090/api/get-vehicles', { userRut }, { withCredentials: true });
             // Ordenar vehículos para que los activos estén primero
             const sortedVehicles = response.data.sort((a, b) => a.regi_estado.localeCompare(b.regi_estado));
             setVehicles(sortedVehicles);
@@ -124,9 +125,18 @@ export const ManageVehicle = () => {
                         <button onClick={logOut} className="mt-4 bg-white font-bold text-red-600 text-lg flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl" />CERRAR SESIÓN</button>
                     </div>
                 </div>
-                <div className='flex flex-col items-center gap-y-8'>
+                <div className='flex flex-col'>
+                    <div className='w-1/3'>
+                    <button className="text-blue-ribbon-600" onClick={() => navigate('/user')}> <FaArrowLeft className="w-10 h-10" /></button>
+                    </div>
+                    <div class="flex flex-col items-center gap-y-8">
                     <h1 className='font-bold text-2xl mt-10'>TUS VEHÍCULOS</h1>
+
                     <button onClick={handleNewVehicle} className='flex flex-row p-3 bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold w-fit text-white-50 items-center gap-x-1'><IoMdAdd className='text-2xl' /> Agregar nuevo vehiculo {newVehicle ? <TiArrowSortedUp className='text-2xl' /> : <TiArrowSortedDown className='text-2xl' />}</button>
+
+                    </div>
+
+                    
                     {newVehicle && (
                         <form onSubmit={handleSubmit} className='flex flex-col gap-y-8'>
                             <h1 className='flex items-center justify-center text-xl font-semibold'>Ingrese su nuevo vehiculo</h1>
