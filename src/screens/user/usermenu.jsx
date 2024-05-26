@@ -63,7 +63,9 @@ export const Usermenu = () => {
     const reservations = () =>{
         navigate('/reservations');
     }
-
+    const reserve = () =>{
+        navigate('/user-reserve');
+    }
     const textColor = parkingSpaces <= 15 ? 'text-red-500' : 'text-green-600';
 
     return (
@@ -88,7 +90,7 @@ export const Usermenu = () => {
                     </h1>
                 </div>
                 <div className="flex flex-col sm:flex-row justify-between w-[90%] gap-y-5">
-                    <button className="w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>RESERVAR ESTACIONAMIENTO</button>
+                    <button onClick={reserve} className="w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>RESERVAR ESTACIONAMIENTO</button>
                     <button onClick={reservations} className="w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2"><LuHistory className="text-3xl"/>MIS RESERVAS</button>                
                 </div>
                 <div className="flex flex-col sm:flex-row justify-between w-[90%] gap-y-4">
