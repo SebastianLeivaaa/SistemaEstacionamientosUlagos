@@ -47,7 +47,7 @@ export const GuardManage = () => {
         <div className="min-h-screen border-blue-ribbon-600 flex items-center justify-center">
             <div className="bg-white-50 p-8 rounded-lg shadow-md w-full max-w-4xl">
                 <div className="flex justify-between items-center mb-6">
-                    <button className="text-blue-ribbon-600"> <FaArrowLeft className="w-6 h-6" /></button>
+                    <button className="text-blue-ribbon-600" onClick={() => navigate('/guard')}> <FaArrowLeft className="w-6 h-6" /></button>
                     <img src={Ulogo} alt="Universidad De Los Lagos" className="h-20" /> 
                     <div></div>
                 </div>
