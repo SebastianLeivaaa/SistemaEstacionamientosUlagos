@@ -7,6 +7,7 @@ import { HiOutlineLogin } from "react-icons/hi";
 import { CurrentReservation } from "../../components/currentRevervation";
 import { RecordReservationData } from "../../components/recordReservationData";
 import { LuCalendarClock } from "react-icons/lu";
+import { FaArrowLeft } from "react-icons/fa";
 
 export const Reservations = () =>{
   const [user, setUser] = useState({
@@ -92,8 +93,11 @@ const logOut = async () => {
             <button onClick={logOut} className="mt-4 bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/>CERRAR SESIÓN</button>
           </div>
         </div>
-        <div className="w-full flex justify-center mt-8">
-          <h1 className="font-bold text-2xl">MIS RESERVAS</h1>
+        <div className="grid grid-cols-3 w-full justify mt-8">
+            <button className="text-blue-ribbon-600" onClick={() => navigate('/user')}> <FaArrowLeft className="w-10 h-10" /></button>
+          <div className="col-span-1 flex justify-center ">  
+            <h1 className="font-bold lg:text-2xl">MIS RESERVAS</h1>
+          </div> 
         </div>
         <div className="flex flex-row justify-around w-full">
           <button onClick={handleCurrentClick} className={`${current ? 'bg-blue-ribbon-600 text-white-50' : 'bg-white-50 text-black'}  px-8 py-2 rounded-md text-base font-semibold hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-sm max-md:px-2`} disabled={current}>VIGENTES</button>

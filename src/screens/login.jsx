@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import { MdEmail, MdLock, MdLogin } from "react-icons/md";
 import { PasswordInput } from "../components/passwordInput";
 import { useNavigate } from 'react-router-dom';
@@ -24,7 +24,7 @@ export const Login = () => {
         e.preventDefault();
         try {
             const res = await axios.post(
-                '/api/sesion',
+                'http://localhost:3090/api/sesion',
                 { email: credentials.email + credentials.userDomain , password: credentials.password },
                 { withCredentials: true }
             );

@@ -18,7 +18,11 @@ import { RecordReservationByRut } from "./screens/guard/recordReservationByRut";
 import { RecordReservationByDate } from "./screens/guard/recordReservationByDate";
 import { GuardManage } from "./screens/guard/guardmanage"
 import { Release } from "./screens/guard/release"
+<<<<<<< HEAD
 import { ConfirmReservation } from "./screens/guard/confirmReservation";
+=======
+import { Reserve } from "./screens/user/reserve"
+>>>>>>> 2eaffe61cc5e5fbd598da8d78fe5b837bdc72c12
 
 function App() {
 
@@ -43,7 +47,11 @@ function App() {
         <Route path="/record-reservation-by-patente" element={<RecordReservationByPatente/>}/>
         <Route path="/record-reservation-by-rut" element={<RecordReservationByRut/>}/>
         <Route path="/record-reservation-by-date" element={<RecordReservationByDate/>}/>
+<<<<<<< HEAD
         <Route path="/confirm-reservation" element={<ConfirmReservation/>}/>
+=======
+        <Route path="/user-reserve" element={<Reserve/>}/>
+>>>>>>> 2eaffe61cc5e5fbd598da8d78fe5b837bdc72c12
       </Routes>
     </>
   )
