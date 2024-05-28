@@ -141,7 +141,7 @@ export const SignInThree = () => {
                                 type="text"
                                 key={index}
                                 maxLength="1"
-                                className="w-12 h-12 border-[1px] border-gray-400 text-center text-xl bg-gray-50"
+                                className="w-11 h-11 border-[1px] border-gray-400 text-center text-xl bg-gray-50"
                                 onChange={(e) => handleChange(index, e)}
                                 onInput={(e) => {
                                     e.target.value = e.target.value.toUpperCase();

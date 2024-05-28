@@ -71,7 +71,7 @@ export const SignInTwo = () => {
                     <button onClick={() => {navigate('/')}} className="bg-white-50 text-black px-4 py-2 rounded-md text-lg hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-base max-md:px-2" >Iniciar Sesión</button>
                     <button className="bg-blue-ribbon-600 text-white-50 px-4 py-2 rounded-md text-lg hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-base" disabled>Registrarse</button>
                 </div>
-                <form onSubmit={handleSubmit} className="grid grid-cols-2 p-4 gap-x-6 gap-y-8 bg-white-50 w-[100%] rounded-2xl">
+                <form onSubmit={handleSubmit} className="flex flex-col p-4 gap-x-6 gap-y-8 bg-white-50 w-[100%] rounded-2xl">
                     <div className="w-full col-span-2">
                         <Indice
                             fase="2"
