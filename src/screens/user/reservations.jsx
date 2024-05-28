@@ -24,7 +24,7 @@ const [currentReservation, setCurrentReservation] = useState([]);
 
 const getRecordReservation = async (userRut) => {
   try {
-      const response = await axios.post('/api/get-record-reservation', { userRut }, { withCredentials: true });
+      const response = await axios.post('http://localhost:3090/api/get-record-reservation', { userRut }, { withCredentials: true });
       setRecordReservation(response.data);
   } catch (error) {
       console.log(error);
@@ -33,7 +33,7 @@ const getRecordReservation = async (userRut) => {
 
 const getCurrentReservation = async (userRut) => {
   try {
-      const response = await axios.post('/api/get-current-reservation', { userRut }, { withCredentials: true });
+      const response = await axios.post('http://localhost:3090/api/get-current-reservation', { userRut }, { withCredentials: true });
       setCurrentReservation(response.data);
   } catch (error) {
       console.log(error);
@@ -51,7 +51,7 @@ const handleRecordClick = () => {
 
 const getProfile = async () => {
   try{
-      const response = await axios.get("/api/login", {withCredentials: true});
+      const response = await axios.get("http://localhost:3090/api/login", {withCredentials: true});
       setUser({
           email: response.data.email,
           userName: response.data.userName,
@@ -78,7 +78,7 @@ useEffect(() => {
 }, []);
 
 const logOut = async () => {
-  const response = await axios.get("/api/logout", {withCredentials: true});
+  const response = await axios.get("http://localhost:3090/api/logout", {withCredentials: true});
   //console.log(response);
   navigate('/');
 }
@@ -93,7 +93,7 @@ const logOut = async () => {
             <button onClick={logOut} className="mt-4 bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/>CERRAR SESIÓN</button>
           </div>
         </div>
-        <div className="grid grid-cols-3 w-full justify mt-8">
+        <div className="flex flex-col w-full">
             <button className="text-blue-ribbon-600" onClick={() => navigate('/user')}> <FaArrowLeft className="w-10 h-10" /></button>
           <div className="col-span-1 flex justify-center ">  
             <h1 className="font-bold lg:text-2xl">MIS RESERVAS</h1>
