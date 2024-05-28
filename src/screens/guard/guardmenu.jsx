@@ -63,6 +63,10 @@ export const Guardmenu = () => {
         navigate('/guardmanage');
     }
 
+    const confirmReservation = () => {
+        navigate('/confirm-reservation');
+    }
+
 
     const textColor = parkingSpaces <= 15 ? 'text-red-500' : 'text-green-600';
 
@@ -90,7 +94,7 @@ export const Guardmenu = () => {
                 <div className="flex flex-col gap-y-4 gap-x-6 md:flex-row justify-around w-full py-4">
                     <button onClick={guardManage} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><LuParkingCircle className="text-3xl"/>ADMINISTRAR ESTACIONAMIENTO</button>
                     <button onClick={reservationHistory} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><LuHistory className="text-3xl"/>HISTORIAL DE RESERVAS</button>
-                    <button onClick={null} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><FaCheck className='text-2xl'/> CONFIRMAR RESERVA</button>
+                    <button onClick={confirmReservation} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><FaCheck className='text-2xl'/> CONFIRMAR RESERVA</button>
                 </div>
                 <div className="h-full w-full bg-customGreen flex flex-col justify-center px-4 py-4 rounded-lg font-semibold">
                     <h1>• Todo conductor debe mostrar su cédula de identidad o licencia de conducir para validar su nombre y RUT.</h1>
