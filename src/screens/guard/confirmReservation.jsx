@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Ulogo from "../../assets/img/Ulogo.png";
 import { HiOutlineLogin } from "react-icons/hi";
 import axios from "axios";
-import { QrReader } from "../../components/qrReader";
 import { ConfirmReservationByRut } from "../../components/confirmReservationByRut";
+import { ConfirmReservationByQr } from "../../components/confirmReservationByQr";
 
 export const ConfirmReservation = () => {
 
@@ -63,7 +63,7 @@ export const ConfirmReservation = () => {
                     <h1 className='font-bold text-2xl mt-10'>CONFIRMAR RESERVA</h1>
                     <h2 className='text-xl'>Confirmar por</h2>
                 </div>
-                <div className="flex flex-row justify-around w-full">
+                <div className="flex flex-row justify-evenly w-full">
                     <button onClick={handleRutClick} className={`${current === 'rut' ? 'bg-blue-ribbon-600 text-white-50' : 'bg-white-50 text-black'}  px-8 py-2 rounded-md text-base font-semibold hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-sm max-md:px-2`} disabled={current === 'rut'}>
                         RUT
                     </button>
@@ -71,11 +71,11 @@ export const ConfirmReservation = () => {
                         CÓDIGO QR
                     </button>
                 </div>
-                <div className='w-full px-24 py-8 flex flex-col gap-y-12 max-md:w-[100%] max-md:py-0 max-md:px-4 items-center justify-center'>
+                <div className='w-full px-16 py-8 flex flex-col gap-y-12 max-lg:w-[100%] max-md:py-0 max-lg:px-4 items-center justify-center'>
                     {current === 'rut' ? (
                         <ConfirmReservationByRut/>
                     ) : (
-                        <QrReader />
+                        <ConfirmReservationByQr />
                     )}
                 </div>
             </div>

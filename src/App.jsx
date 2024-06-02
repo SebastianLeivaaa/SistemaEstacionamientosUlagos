@@ -20,6 +20,7 @@ import { GuardManage } from "./screens/guard/guardmanage"
 import { Release } from "./screens/guard/release"
 import { ConfirmReservation } from "./screens/guard/confirmReservation";
 import { Reserve } from "./screens/user/reserve"
+import { ConfirmReservationFinal } from "./components/confirmReservationFinal";
 
 function App() {
 
@@ -45,6 +46,7 @@ function App() {
         <Route path="/record-reservation-by-rut" element={<RecordReservationByRut/>}/>
         <Route path="/record-reservation-by-date" element={<RecordReservationByDate/>}/>
         <Route path="/confirm-reservation" element={<ConfirmReservation/>}/>
+        <Route path="/confirm-reservation-final" element={<ConfirmReservationFinal/>}/>
         <Route path="/user-reserve" element={<Reserve/>}/>
       </Routes>
     </>

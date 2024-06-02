@@ -70,7 +70,7 @@ app.post("/api/query-user-exists", async (req, res) => {
   const userFullEmail = `${userEmail}${userDomain}`
 
   try {
-    const resultRut = await sql`select * from usuario where usua_rut = ${userRut}`;
+    const resultRut = await sql`select * from usuario where usua_rut = ${userRut.toUpperCase()}`;
     const resultEmail = await sql`select * from usuario where usua_correo = ${userFullEmail}`;
     const resultPhone = await sql`select * from usuario where usua_telefono = ${userPhone}`
 
@@ -182,16 +182,16 @@ app.post("/api/register-user", async (req, res) => {
     const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${vehiclePatente.toUpperCase()}`;
     if (existingVehicle.length > 0) {
       const insertUser = await sql`insert into usuario(usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_rut, usua_correo, usua_clave, usua_telefono, usua_tipo) 
-                                  values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
+                                  values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut.toUpperCase()}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
       const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado)
-                                                      values (${userRut}, ${vehiclePatente.toUpperCase()}, 'activo')`;
+                                                      values (${userRut.toUpperCase()}, ${vehiclePatente.toUpperCase()}, 'activo')`;
     } else{
       const insertUser = await sql`insert into usuario(usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_rut, usua_correo, usua_clave, usua_telefono, usua_tipo) 
-                                  values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
+                                  values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut.toUpperCase()}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
       const insertVehicle = await sql`insert into vehiculo(vehi_patente, vehi_marca, vehi_modelo, vehi_anio, vehi_tipo, vehi_color) 
                                       values(${vehiclePatente.toUpperCase()}, ${vehicleMarca}, ${vehicleModelo}, ${vehicleYear}, ${vehicleType}, ${vehicleColor})`;
       const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado)
-                                                      values (${userRut}, ${vehiclePatente.toUpperCase()}, 'activo')`;
+                                                      values (${userRut.toUpperCase()}, ${vehiclePatente.toUpperCase()}, 'activo')`;
     }
     res.status(200).send('Registro insertado con éxito');
   } catch (err) {
@@ -234,7 +234,7 @@ app.post('/api/get-vehicles', async (req, res) => {
       SELECT v.vehi_patente, v.vehi_marca, v.vehi_modelo, v.vehi_anio, v.vehi_color, v.vehi_tipo, r.regi_estado, r.regi_usua_rut
         FROM registrousuariovehiculo r
         INNER JOIN vehiculo v ON r.regi_vehi_patente = v.vehi_patente
-        WHERE r.regi_usua_rut = ${userRut}
+        WHERE r.regi_usua_rut = ${userRut.toUpperCase()}
     `;
     res.json(vehicles);
   } catch (error) {
@@ -248,7 +248,7 @@ app.put('/api/change-state-vehicle', async (req, res) => {
   const { patente, estado, userRut } = req.body;
 
   try {
-    const selectVehicle = await sql`SELECT * FROM registrousuariovehiculo WHERE regi_estado = 'activo' AND regi_usua_rut = ${userRut}`;
+    const selectVehicle = await sql`SELECT * FROM registrousuariovehiculo WHERE regi_estado = 'activo' AND regi_usua_rut = ${userRut.toUpperCase()}`;
 
     if (selectVehicle.count > 0 && estado === 'activo') {
       res.status(400).send('Ya existe un vehículo activo para este usuario');
@@ -267,7 +267,7 @@ app.delete('/api/delete-vehicle', async (req, res) => {
   const { patente, userRut } = req.body;
 
   try {
-    const deleteVehicle = await sql`DELETE FROM registrousuariovehiculo WHERE regi_vehi_patente = ${patente.toUpperCase()} AND regi_usua_rut = ${userRut}`;
+    const deleteVehicle = await sql`DELETE FROM registrousuariovehiculo WHERE regi_vehi_patente = ${patente.toUpperCase()} AND regi_usua_rut = ${userRut.toUpperCase()}`;
     res.status(200).send('Vehículo eliminado con éxito');
   } catch (error) {
     console.error('Error al eliminar el vehículo:', error);
@@ -282,7 +282,7 @@ app.post('/api/add-new-vehicle', async (req, res) => {
   try {
     // Agregar vehículo a la tabla 'vehiculo'
     const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${patente.toUpperCase()}`;
-    const existingRegister = await sql`SELECT * FROM registrousuariovehiculo WHERE regi_vehi_patente = ${patente.toUpperCase()} AND regi_usua_rut = ${userRut}`
+    const existingRegister = await sql`SELECT * FROM registrousuariovehiculo WHERE regi_vehi_patente = ${patente.toUpperCase()} AND regi_usua_rut = ${userRut.toUpperCase()}`
 
     if(existingVehicle.length > 0){
       if(existingRegister.length > 0){
@@ -290,7 +290,7 @@ app.post('/api/add-new-vehicle', async (req, res) => {
       } else {
         const addRegister = await sql`
           INSERT INTO registrousuariovehiculo (regi_vehi_patente, regi_usua_rut, regi_estado) 
-          VALUES (${patente.toUpperCase()}, ${userRut}, 'inactivo')
+          VALUES (${patente.toUpperCase()}, ${userRut.toUpperCase()}, 'inactivo')
         `;
         res.status(200).json({ message: 'Vehículo agregado exitosamente' });
       }
@@ -301,7 +301,7 @@ app.post('/api/add-new-vehicle', async (req, res) => {
       `;
       const addRegister = await sql`
           INSERT INTO registrousuariovehiculo (regi_vehi_patente, regi_usua_rut, regi_estado) 
-          VALUES (${patente.toUpperCase()}, ${userRut}, 'inactivo')
+          VALUES (${patente.toUpperCase()}, ${userRut.toUpperCase()}, 'inactivo')
         `;
       res.status(200).json({ message: 'Vehículo agregado exitosamente' });
     }
@@ -320,7 +320,7 @@ app.post('/api/get-record-reservation', async (req, res) => {
       SELECT r.rese_vehi_patente, r.rese_hora_llegada, r.rese_hora_salida, r.rese_fecha, e.esta_numero 
         FROM reserva r
         INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
-        WHERE rese_usua_rut = ${userRut} AND rese_estado != 'EN ESPERA'
+        WHERE rese_usua_rut = ${userRut.toUpperCase()} AND rese_estado != 'EN ESPERA'
     `;
     res.json(recordReservation);
   } catch (error) {
@@ -338,7 +338,7 @@ app.post('/api/get-current-reservation', async (req, res) => {
       SELECT r.rese_vehi_patente, r.rese_fecha, e.esta_numero, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_inicio
         FROM reserva r
         INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
-        WHERE rese_usua_rut = ${userRut} AND rese_estado = 'EN ESPERA'
+        WHERE rese_usua_rut = ${userRut.toUpperCase()} AND rese_estado = 'EN ESPERA'
     `;
     res.json(currentReservation);
   } catch (error) {
@@ -352,7 +352,7 @@ app.post('/api/delete-reservation', async (req, res) => {
   const { userRut } = req.body;
 
   try {
-    const deleteReservation = await sql`DELETE FROM reserva WHERE rese_usua_rut = ${userRut} AND rese_estado = 'EN ESPERA'`;
+    const deleteReservation = await sql`DELETE FROM reserva WHERE rese_usua_rut = ${userRut.toUpperCase()} AND rese_estado = 'EN ESPERA'`;
     res.status(200).send('Reserva eliminada con éxito');
   } catch (error) {
     console.error('Error al eliminar la reserva:', error);
@@ -500,6 +500,77 @@ app.post('/api/get-record-reservation-by-date', async (req, res) => {
     
   } catch (error) {
     console.error('Error al obtener el historial:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+//Consulta para obtener la reserva activa del usuario mediante el rut
+app.post('/api/get-active-reservation-by-rut', async (req, res) => {
+  const { rut, codVerificador } = req.body;
+  const rutUser = `${rut}-${codVerificador}`
+
+  try {
+    const activeReservation = await sql`
+      SELECT r.rese_id, r.rese_usua_rut, r.rese_vehi_patente, e.esta_numero, e.esta_id, r.rese_fecha, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_max
+        FROM reserva r
+        INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+        INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
+        WHERE rese_usua_rut = ${rutUser.toUpperCase()} AND rese_estado = 'EN ESPERA'
+    `;
+    if(activeReservation.length === 0){
+      res.status(500).json({ message: 'No se encontró una reserva activa asociado a este rut' });
+    }else{
+      res.json(activeReservation);
+    }
+  } catch (error) {
+    console.error('Error al obtener la reserva activa:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+//Consulta para obtener la reserva activa del usuario mediante codigo qr
+app.post('/api/get-active-reservation-by-qr', async (req, res) => {
+  const { rutUser } = req.body;
+  try {
+    const activeReservation = await sql`
+      SELECT r.rese_id, r.rese_usua_rut, r.rese_vehi_patente, e.esta_numero, e.esta_id, r.rese_fecha, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_max
+        FROM reserva r
+        INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+        INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
+        WHERE rese_usua_rut = ${rutUser.toUpperCase()} AND rese_estado = 'EN ESPERA'
+    `;
+    if(activeReservation.length === 0){
+      res.status(500).json({ message: 'No se encontró una reserva activa asociado a este rut' });
+    }else{
+      res.json(activeReservation);
+    }
+  } catch (error) {
+    console.error('Error al obtener la reserva activa:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+//Consulta para confirmar la reserva del usuario
+app.post('/api/confirm-reservation', async (req, res) => {
+  const { record, userRut } = req.body;
+
+  try {
+    const timeFormat = await sql`SET TIME ZONE 'America/Santiago'`
+
+    const updateReservation = await sql`
+      UPDATE reserva
+        SET rese_estado = 'CONFIRMADA', rese_guar_rut = ${userRut.toUpperCase()}, rese_hora_llegada = TO_CHAR(NOW(), 'HH24:MI:SS')::time
+        WHERE rese_id = ${record.rese_id}
+    `;
+
+    const updateParking = await sql`
+      UPDATE estacionamiento
+        SET esta_estado = 'OCUPADO'
+        WHERE esta_id = ${record.esta_id}  
+    `
+
+    res.status(200).send('Reserva confirmada con éxito');
+  }catch (error) {
+    console.error('Error al confirmar la reserva:', error);
     res.status(500).json({ error: 'Error en el servidor' });
   }
 });

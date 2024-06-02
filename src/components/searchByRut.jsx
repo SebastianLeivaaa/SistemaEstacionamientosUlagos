@@ -50,7 +50,6 @@ export const SearchByRut = () => {
         }else{
             try {
                 const response = await axios.post("/api/get-record-reservation-by-rut", formData, { withCredentials: true });
-                console.log(response.data)
                 navigate('/record-reservation-by-rut', { state: { recordReservation: response.data } } )
             }catch(error){
                 setMessage({ text: error.response?.data?.message || 'Error al buscar el historial' });

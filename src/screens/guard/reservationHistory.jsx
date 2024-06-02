@@ -70,7 +70,7 @@ export const ReservationHistory = () => {
                     <h1 className='font-bold text-2xl mt-10'>HISTORIAL DE RESERVAS</h1>
                     <h2 className='text-xl'>Buscar por</h2>
                 </div>
-                <div className="flex flex-row justify-around w-full">
+                <div className="flex flex-row justify-evenly w-full">
                     <button onClick={handlePatenteClick} className={`${current === 'patente' ? 'bg-blue-ribbon-600 text-white-50' : 'bg-white-50 text-black'}  px-8 py-2 rounded-md text-base font-semibold hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-sm max-md:px-2`} disabled={current === 'patente'}>
                         PATENTE
                     </button>
