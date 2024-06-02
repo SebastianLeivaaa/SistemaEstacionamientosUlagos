@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Mapa from "../assets/img/Map.png";
+import imageMapResize from "../utils/mageMapResizer.min";
 
 export const ParkingMap = () => {
   const [hoveredArea, setHoveredArea] = useState(null);
@@ -24,36 +25,31 @@ export const ParkingMap = () => {
     return coords.split(',').map(Number);
   };
 
+  useEffect(() => {
+    imageMapResize();
+  }, []);
+
   return (
     <div className="relative">
-      <img src={Mapa} alt="Mapa interactivo" className="w-[100%] h-auto" />
-
-      {areas.map((area, index) => {
-        const coords = parseCoords(area.coords);
-        const polygonPoints = coords.reduce((acc, point, index) => {
-          if (index % 2 === 0) {
-            return acc + `${point},`;
-          } else {
-            return acc + `${point} `;
-          }
-        }, "").trim();
-
-        return (
-          <svg
-            key={index}
-            className="absolute top-0 left-0 w-full h-full pointer-events-none"
-          >
-            <polygon
-              points={polygonPoints}
-              fill={hoveredArea === area.name ? 'rgba(255,0,0,0.5)' : 'transparent'}
+      <img src={Mapa} alt="Mapa interactivo" className="w-[100%] h-auto" useMap="#parking-map" />
+      <map name="parking-map">
+        {areas.map((area, index) => {
+          const coords = parseCoords(area.coords);
+          return (
+            <area
+              key={index}
+              shape={area.shape}
+              coords={coords.join(',')}
+              alt={area.name}
               onMouseEnter={() => handleMouseEnter(area.name)}
               onMouseLeave={handleMouseLeave}
-              className="pointer-events-auto cursor-pointer focus:outline-none"
-              tabIndex="0" // Para que el elemento pueda recibir el foco y aplicar el outline
+              className='cursor-pointer outline-none bg-blue-500' 
+              tabIndex="0"
             />
-          </svg>
-        );
-      })}
+          );
+        })}
+      </map>
+      
     </div>
   );
 };
