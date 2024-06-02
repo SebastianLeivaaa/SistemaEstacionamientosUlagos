@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Mapa from "../assets/img/Map.png";
-import imageMapResize from "../utils/mageMapResizer.min";
+import imageMapResize from "../utils/mageMapResizer.min.js";
 
 export const ParkingMap = () => {
   const [hoveredArea, setHoveredArea] = useState(null);
