@@ -87,7 +87,7 @@ export const ConfirmReservationFinal = (props) => {
                             <h1 className="text-2xl font-bold text-gray-900 text-center max-sm:text-lg">CONFIRMACIÓN REALIZADA</h1>
                         </div>
                         <div className="flex flex-col items-center gap-y-8">
-                            <div className="flex flex-col xs:px-[10%] px-0 sm:px-[20%] lg:px-[25%] 2xl:px-[25%] gap-y-2 w-[100%]">
+                            <div className="flex flex-col xs:px-[10%] sm:px-[20%] lg:px-[25%] 2xl:px-[25%] gap-y-2 w-[100%]">
                                 <div className="flex flex-row gap-x-2 justify-start">
                                     <h1 className='text-lg font-bold max-xs:text-xs max-md:text-sm max-lg:text-base'>Nombre:</h1>
                                     <h1 className='text-lg max-xs:text-xs max-md:text-sm max-lg:text-base'>{recordReservation[0].usua_nombre} {recordReservation[0].usua_apellido_paterno} {recordReservation[0].usua_apellido_materno}</h1>
@@ -116,7 +116,7 @@ export const ConfirmReservationFinal = (props) => {
                     </>
                 ) : (
                     <>
-                        <div className="flex flex-col w-full px-20">
+                        <div className="flex flex-col w-full px-20 max-sm:px-0">
                             <div className="flex flex-col shadow-3xl shadow-gray-800 w-full rounded-2xl items-center">
                                 <div className="flex flex-row w-full rounded-t-lg p-3 bg-blue-ribbon-600 text-white-50 justify-between">
                                     <span className="flex flex-row items-center gap-x-2 font-semibold">
