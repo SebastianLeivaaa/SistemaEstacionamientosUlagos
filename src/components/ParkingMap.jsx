@@ -31,12 +31,18 @@ export const ParkingMap = () => {
   useEffect(() => {
     imageMapResize();
     updateScaledAreas();
-
+  }, []);
+  
+  useEffect(() => {
     window.addEventListener('resize', updateScaledAreas);
     return () => {
       window.removeEventListener('resize', updateScaledAreas);
     };
   }, []);
+  
+  useEffect(() => {
+    updateScaledAreas();
+  }, [imgRef.current, mapRef.current]);
 
   const updateScaledAreas = () => {
     if (!mapRef.current || !imgRef.current) return;
