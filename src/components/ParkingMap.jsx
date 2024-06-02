@@ -66,12 +66,29 @@ export const ParkingMap = () => {
         className="w-[100%] h-auto"
         useMap="#parking-map"
       />
+      <map name="parking-map" ref={mapRef}>
+        {areas.map((area, index) => {
+          const coords = parseCoords(area.coords);
+          return (
+            <area
+              key={index}
+              shape={area.shape}
+              coords={coords.join(',')}
+              alt={area.name}
+              onMouseEnter={() => handleMouseEnter(area.name)}
+              onMouseLeave={handleMouseLeave}
+              className='cursor-pointer outline-none'
+              tabIndex="0"
+            />
+          );
+        })}
+      </map>
       <svg className="absolute top-0 left-0 w-full h-full" viewBox={`0 0 ${imgRef.current?.width || 0} ${imgRef.current?.height || 0}`}>
         {scaledAreas.map((area, index) => (
           <polygon
             key={index}
             points={area.scaledCoords.join(',')}
-            className={`cursor-pointer fill-white-50 hover:fill-blue-500 ${hoveredArea === area.name ? 'opacity-75' : 'opacity-50'}`}
+            className={`fill-white-50 hover:fill-blue-500 ${hoveredArea === area.name ? 'opacity-75' : 'opacity-50'}`}
           />
         ))}
       </svg>
