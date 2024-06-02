@@ -33,13 +33,13 @@ export const ConfirmReservationFinal = (props) => {
     const recordReservation = location.state?.recordReservation;
 
     const logOut = async () => {
-        const response = await axios.get("http://localhost:3090/api/logout", {withCredentials: true});
+        const response = await axios.get("/api/logout", {withCredentials: true});
         navigate('/');
     };
 
     const getProfile = async () => {
         try{
-            const response = await axios.get("http://localhost:3090/api/login", {withCredentials: true});
+            const response = await axios.get("/api/login", {withCredentials: true});
             setUser({
                 email: response.data.email,
                 userName: response.data.userName,
@@ -55,7 +55,7 @@ export const ConfirmReservationFinal = (props) => {
     const confirmReservation = async () => {
         setIsLoading(true);
         try{
-            const response = await axios.post("http://localhost:3090/api/confirm-reservation", { record: recordReservation[0], userRut: user.userRut}, {withCredentials: true});
+            const response = await axios.post("/api/confirm-reservation", { record: recordReservation[0], userRut: user.userRut}, {withCredentials: true});
             setConfirm(true);
         }catch(error){
             console.log(error);
