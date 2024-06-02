@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Mapa from "../assets/img/Map.png";
+import imageMapResize from "../utils/mageMapResizer.min";
 
 export const ParkingMap = () => {
   const [hoveredArea, setHoveredArea] = useState(null);
@@ -24,7 +25,9 @@ export const ParkingMap = () => {
     return coords.split(',').map(Number);
   };
 
-
+  useEffect(() => {
+    imageMapResize();
+  }, []);
 
   return (
     <div className="relative">
