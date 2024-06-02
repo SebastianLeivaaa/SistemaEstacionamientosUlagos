@@ -17,7 +17,7 @@ const navigate = useNavigate();
 
 const getProfile = async () => {
     try{
-        const response = await axios.get("http://localhost:3090/api/login", {withCredentials: true});
+        const response = await axios.get("/api/login", {withCredentials: true});
         setUser({
             email: response.data.email,
             userName: response.data.userName,
@@ -31,7 +31,7 @@ const getProfile = async () => {
 
 const getParkingSpaces = async () => {
     try{
-        const response = await axios.get("http://localhost:3090/api/parkingSpaces", {withCredentials: true});
+        const response = await axios.get("/api/parkingSpaces", {withCredentials: true});
         setParkingSpaces(response.data.total_libres);
     }catch(error){
         console.log(error);
@@ -48,7 +48,7 @@ useEffect(() => {
 }, []);
 
 const logOut = async () => {
-    const response = await axios.get("http://localhost:3090/api/logout", {withCredentials: true});
+    const response = await axios.get("/api/logout", {withCredentials: true});
     //console.log(response);
     navigate('/');
 }
