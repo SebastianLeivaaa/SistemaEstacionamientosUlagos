@@ -66,7 +66,7 @@ const logOut = async () => {
         <div className="flex w-full justify-start">
         <h1 className="font-bold text-xl">SELECCIONE UN ESTACIONAMIENTO:</h1>
         </div>
-        <div className="border-bold border-red-700 border">
+        <div className="border-bold border-red-700 border select-none">
             <ParkingMap/>
         </div>
       </div> 
