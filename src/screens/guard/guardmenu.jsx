@@ -76,7 +76,7 @@ export const Guardmenu = () => {
                 <div className="flex flex-row w-full justify-between">
                     <img src={Ulogo} alt="Logo Ulagos" className="w-44 h-auto"/>
                     <div className="flex flex-col items-start">
-                        <h1 className="text-xl font-bold text-center max-md:text-base text-congress-blue-900">{user.userName.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
+                        <h1 className="text-xl font-bold text-center max-md:text-base text-congress-blue-900">{user.userName != null ? user.userName.toLocaleUpperCase() : navigate('/')} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
                         <button onClick={logOut} className="mt-4 w-full bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/> CERRAR SESIÓN</button>
                     </div>
                 </div>

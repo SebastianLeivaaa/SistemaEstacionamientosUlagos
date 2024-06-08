@@ -16,7 +16,7 @@ import { ReservationHistory } from "./screens/guard/reservationHistory";
 import { RecordReservationByPatente } from "./screens/guard/recordReservationByPatente";
 import { RecordReservationByRut } from "./screens/guard/recordReservationByRut";
 import { RecordReservationByDate } from "./screens/guard/recordReservationByDate";
-import { GuardManage } from "./screens/guard/guardmanage"
+import { MainGuard } from "./screens/guard/mainGuard";
 import { Release } from "./screens/guard/release"
 import { ConfirmReservation } from "./screens/guard/confirmReservation";
 import { Reserve } from "./screens/user/reserve"
@@ -37,7 +37,7 @@ function App() {
         <Route path="/sign-in-final" element={<SignInFinal/>}/>
         <Route path="/user" element={<Usermenu/>}/>
         <Route path="/guard" element={<Guardmenu/>}/>
-        <Route path="/guardmanage" element={<GuardManage/>}/>
+        <Route path="/guardmanage" element={<MainGuard/>}/>
         <Route path="/release" element={<Release/>}/>
         <Route path="/manage-vehicle" element={<ManageVehicle/>}/>
         <Route path="/reservations" element={<Reservations/>}/>
