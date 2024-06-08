@@ -3,6 +3,19 @@ import Mapa from "../assets/img/Map.png";
 import imageMapResize from "../utils/mageMapResizer.min";
 import axios from "axios";
 
+
+const Modal = ({ area, onClose }) => {
+  return (
+    <div className=" fixed inset-0 flex items-center justify-center">
+      <div className=" bg-white-200 p-4 rounded shadow-lg">
+        <h2 className="text-lg font-bold mb-2">{area.name}</h2>
+        <p>Información sobre {area.name}</p>
+        <button onClick={onClose} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Cerrar</button>
+      </div>
+    </div>
+  );
+};
+
 export const ParkingMap = () => {
   const [hoveredArea, setHoveredArea] = useState(null);
   const [scaledAreas, setScaledAreas] = useState([]);
@@ -15,6 +28,15 @@ export const ParkingMap = () => {
   ]);
   const mapRef = useRef(null);
   const imgRef = useRef(null);
+  const [selectedArea, setSelectedArea] = useState(null);
+
+  const handleClick = (area) => {
+    setSelectedArea(area);
+  };
+
+  const closeModal = () => {
+    setSelectedArea(null);
+  };
 
   const getParkingsAvailablesBySection = async () => {
     try {
@@ -131,9 +153,11 @@ export const ParkingMap = () => {
             points={area.scaledCoords.join(',')}
             id={area.parkigsAvailables}
             className={`fill-white-50 hover:fill-blue-500 ${hoveredArea === area.name ? 'opacity-75' : 'opacity-50'}`}
+            onClick={() => handleClick(area)}
           />
         ))}
       </svg>
+      {selectedArea && <Modal area={selectedArea} onClose={closeModal} />}
     </div>
   );
 };
