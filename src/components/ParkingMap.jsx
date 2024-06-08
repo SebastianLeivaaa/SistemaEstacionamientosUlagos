@@ -47,7 +47,25 @@ export const ParkingMap = () => {
 
   useEffect(() => {
     getParkingsAvailablesBySection();
-    imageMapResize();
+  }, []);
+
+  useEffect(() => {
+    const handleImageLoad = () => {
+      updateScaledAreas();
+      imageMapResize();
+    };
+  
+    if (imgRef.current && !imgRef.current.complete) {
+      imgRef.current.addEventListener('load', handleImageLoad);
+    } else {
+      handleImageLoad();
+    }
+  
+    return () => {
+      if (imgRef.current) {
+        imgRef.current.removeEventListener('load', handleImageLoad);
+      }
+    };
   }, []);
 
   useEffect(() => {
