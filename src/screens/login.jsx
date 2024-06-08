@@ -52,7 +52,7 @@ export const Login = () => {
                 <div className="w-full flex flex-row">
                     <div className="w-[95%] flex flex-row border border-blue-ribbon-600">
                         <input id="email" name="email" onChange={handleChange} type="text" className="w-1/2 p-2 border-r border-blue-ribbon-600" placeholder="Usuario" />
-                        <select id="userDomain" name="userDomain" className="border-l bg-white-50 w-1/2" onChange={handleChange}>
+                        <select id="userDomain" name="userDomain" className=" bg-white-50 w-1/2" onChange={handleChange}>
                             <option value="@alumnos.ulagos.cl">@alumnos.ulagos.cl</option>
                             <option value="@ulagos.cl">@ulagos.cl</option>
                         </select>
