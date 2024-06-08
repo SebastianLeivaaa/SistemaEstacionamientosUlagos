@@ -16,7 +16,11 @@ const Modal = ({ area, onClose }) => {
 
 export const ParkingMap = () => {
   const [hoveredArea, setHoveredArea] = useState(null);
-  const [scaledAreas, setScaledAreas] = useState([]);
+  const [scaledAreas, setScaledAreas] = useState([{ name: 'Zona A', scaledCoords: [401,386,407,432,550,416,667,433,666,382,577,369,516,369], shape: 'poly' },
+  { name: 'Zona B', scaledCoords: [303,133,332,390,400,384,398,331,375,332,360,201,375,199,370,137,348,137], shape: 'poly' },
+  { name: 'Zona C', scaledCoords: [103,428,336,408,340,450,114,476], shape: 'poly' },
+  { name: 'Zona D', scaledCoords: [37,365,99,364,103,429,55,434,37,417], shape: 'poly' },
+  { name: 'Zona E', scaledCoords: [43,573,82,571,98,641,106,642,107,687,131,685,133,709,143,711,146,760,61,764], shape: 'poly' }]);
   const [selectedArea, setSelectedArea] = useState(null);
   const mapRef = useRef(null);
   const imgRef = useRef(null);
@@ -50,6 +54,7 @@ export const ParkingMap = () => {
   };
 
   useEffect(() => {
+    console.log(scaledAreas)
     imageMapResize();
     updateScaledAreas();
   }, []);

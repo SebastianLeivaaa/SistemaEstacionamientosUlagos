@@ -575,6 +575,24 @@ app.post('/api/confirm-reservation', async (req, res) => {
   }
 });
 
+//Consulta para obtener los estacionamientos disponibles por seccion
+app.get('/api/get-parkings-availables-by-section', async (req, res) => {
+  try {
+    const parkingSpaces = await sql`SELECT e.ESTA_SECC_ID, s.SECC_NOMBRE, COUNT(e.ESTA_NUMERO) AS cantidad_estacionamientos
+    FROM ESTACIONAMIENTO e 
+    INNER JOIN SECCION s ON e.ESTA_SECC_ID = s.SECC_ID 
+    WHERE e.ESTA_ESTADO = 'LIBRE' 
+    GROUP BY e.ESTA_SECC_ID, s.SECC_NOMBRE
+    ORDER BY s.SECC_NOMBRE ASC;`
+    ;
+    console.log(parkingSpaces);
+    res.json(parkingSpaces);
+  }catch (error) {
+    console.error('Error al obtener los estacionamientos:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+})
+
 //login
 app.get('/api/login', async (req, res) => {
   const myTokenName = req.cookies.myTokenName;
