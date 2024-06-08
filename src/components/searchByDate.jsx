@@ -84,7 +84,7 @@ export const SearchByDate = () => {
                 </div>
             )}
             <div className="flex flex-row justify-around mt-16 max-md:flex-col max-md:gap-y-4 max-md:mt-0">
-                <button className='flex flex-row max-md:text-sm p-3 bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold w-fit max-md:w-full text-white-50 items-center justify-center gap-x-2 '>
+                <button className='mr-6 flex flex-row max-md:text-sm p-3 bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold w-fit max-md:w-full text-white-50 items-center justify-center gap-x-2 '>
                     <IoHome className="text-2xl"/> VOLVER AL MENU PRINCIPAL
                 </button>
                 <button onClick={handleSubmit} className='flex flex-row p-3 max-md:text-sm bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold w-fit max-md:w-full text-white-50 items-center justify-center gap-x-2 '>
