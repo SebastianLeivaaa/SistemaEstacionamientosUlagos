@@ -27,7 +27,7 @@ export const GuardRelease = () => {
         e.preventDefault();
         try {
             const res = await axios.post(
-                '/api/release-reservation',
+                'http://localhost:3090/api/release-reservation',
                 { vehiclePatente: vehiclePatente2.value },
                 { withCredentials: true }
             );

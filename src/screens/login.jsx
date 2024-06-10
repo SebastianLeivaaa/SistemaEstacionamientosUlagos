@@ -26,7 +26,7 @@ export const Login = () => {
         setIsLoading(true);
         try {
             const res = await axios.post(
-                '/api/sesion',
+                'http://localhost:3090/api/sesion',
                 { email: credentials.email + credentials.userDomain, password: credentials.password },
                 { withCredentials: true }
             );

@@ -152,8 +152,8 @@ export const VehicleData = ( props ) => {
                             <h1 className='text-lg max-md:text-base'>{vehicleData.color}</h1>
                             <h1 className='text-lg max-md:text-base'>Tipo vehículo</h1>
                             <h1 className='text-lg max-md:text-base'>{vehicleData.tipo}</h1>
-                            <div className='col-span-2 flex items-center gap-x-16 px-8 justify-center w-full mt-10 max-md:px-2 max-md:gap-x-4 max-md:text-sm'>
-                                <button onClick={vehicleData.estado === 'activo' ? handleDisable : handleEnable} className={`text-white-50 rounded-md p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold  max-md:font-semibold ${vehicleData.estado === 'activo' ? 'bg-red-400 hover:bg-gray-700' : 'bg-green-600 hover:bg-green-800'}`}>{vehicleData.estado === 'activo' ? <FaX/> : <FaCheck/>} {vehicleData.estado === 'activo' ? 'Deshabilitar' : 'Habilitar'}</button>
+                            <div className='col-span-2 flex flex-col md:flex-row items-center justify-center gap-x-16 px-8 w-full mt-10 max-md:px-2 max-md:gap-x-4 max-md:text-sm'>
+                                <button onClick={vehicleData.estado === 'activo' ? handleDisable : handleEnable} className={`text-white-50 mb-4 md:mb-0 rounded-md p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold  max-md:font-semibold ${vehicleData.estado === 'activo' ? 'bg-red-400 hover:bg-gray-700' : 'bg-green-600 hover:bg-green-800'}`}>{vehicleData.estado === 'activo' ? <FaX/> : <FaCheck/>} {vehicleData.estado === 'activo' ? 'Deshabilitar' : 'Habilitar'}</button>
                                 <button onClick={handleDelete} className='text-white-50 rounded-md bg-red-500 hover:bg-red-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold max-md:font-semibold '><FaTrashAlt/> Eliminar</button>
                             </div>
                         </div>
