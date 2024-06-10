@@ -21,7 +21,7 @@ export const Guardmenu = () => {
 
     const getProfile = async () => {
         try{
-            const response = await axios.get("http://localhost:3090/api/login", {withCredentials: true});
+            const response = await axios.get("/api/login", {withCredentials: true});
             setUser({
                 email: response.data.email,
                 userName: response.data.userName,
@@ -34,7 +34,7 @@ export const Guardmenu = () => {
     }
     const getParkingSpaces = async () => {
         try{
-            const response = await axios.get("http://localhost:3090/api/parkingSpaces", {withCredentials: true});
+            const response = await axios.get("/api/parkingSpaces", {withCredentials: true});
             setParkingSpaces(response.data.total_libres);
         }catch(error){
             console.log(error);
@@ -51,7 +51,7 @@ export const Guardmenu = () => {
     }, []);
 
     const logOut = async () => {
-        const response = await axios.get("http://localhost:3090/api/logout", {withCredentials: true});
+        const response = await axios.get("/api/logout", {withCredentials: true});
         //console.log(response);
         navigate('/');
     }
