@@ -3,6 +3,8 @@ import { MdEmail, MdLock, MdLogin } from "react-icons/md";
 import { PasswordInput } from "../components/passwordInput";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ClipLoader } from 'react-spinners';
+
 
 export const Login = () => {
     const [error, setError] = useState('');
@@ -69,7 +71,7 @@ export const Login = () => {
                 </div>
                 {error && <p className='text-red-600'>{error}</p>}
                 <button type="submit" className={`mt-8 w-full bg-blue-ribbon-600 font-bold text-white-50 px-4 py-2 rounded-md text-lg hover:bg-blue-ribbon-700 flex flex-row items-center justify-center gap-x-2 max-md:text-base ${isLoading ? 'cursor-wait' : ''}`} disabled={isLoading}>
-                    <MdLogin className="text-3xl max-md:text-2xl" /> INGRESAR
+                    {isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>) : (<MdLogin className="text-3xl max-md:text-2xl" />)} INGRESAR
                 </button>
             </form>
             <button onClick={handleClick} className="underline text-blue-ribbon-500 text-lg max-md:text-base">¿Olvidaste tu contraseña?</button>
