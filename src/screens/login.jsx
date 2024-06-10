@@ -29,7 +29,7 @@ export const Login = () => {
         try {
             const res = await axios.post(
                 '/api/sesion',
-                { email: credentials.email + credentials.userDomain, password: credentials.password },
+                { email: credentials.email.toLowerCase() + credentials.userDomain, password: credentials.password },
                 { withCredentials: true }
             );
             if (res.data === "usuario") {

@@ -71,7 +71,7 @@ app.post("/api/query-user-exists", async (req, res) => {
 
   try {
     const resultRut = await sql`select * from usuario where usua_rut = ${userRut.toUpperCase()}`;
-    const resultEmail = await sql`select * from usuario where usua_correo = ${userFullEmail}`;
+    const resultEmail = await sql`select * from usuario where usua_correo = ${userFullEmail.toLowerCase()}`;
     const resultPhone = await sql`select * from usuario where usua_telefono = ${userPhone}`
 
     res.send({infoRut: resultRut, infoEmail: resultEmail, infoPhone: resultPhone});
@@ -83,7 +83,7 @@ app.post("/api/query-user-exists", async (req, res) => {
 //Consulta para enviar un correo electronico a tu cuenta
 app.post("/api/send-email", async (req, res) => {
   const { userEmail, userDomain } = req.body;
-  const fullUserEmail = `${userEmail}${userDomain}`;
+  const fullUserEmail = `${userEmail.toLowerCase()}${userDomain}`;
 
   try {
     if (SENDER_EMAIL_ID === "EMAIL_ID") {
@@ -102,7 +102,7 @@ app.post("/api/send-email", async (req, res) => {
 //Consulta para enviar un correo electronico a tu cuenta para recuperar la contraseña
 app.post("/api/send-email-recover", async (req, res) => {
   const { userEmail, userDomain } = req.body;
-  const fullUserEmail = `${userEmail}${userDomain}`;
+  const fullUserEmail = `${userEmail.toLowerCase()}${userDomain}`;
 
   try {
     const resultUserExists = await sql`select * from usuario where usua_correo = ${fullUserEmail}`;
@@ -177,7 +177,7 @@ app.post('/api/sesion', async (req, res) => {
 app.post("/api/register-user", async (req, res) => {
   const { userName, userLastNamePat, userLastNameMat, userRut, userEmail, userPhone, userType, userDomain, password, vehiclePatente, vehicleMarca, vehicleModelo, vehicleYear, vehicleType, vehicleColor } = req.body;
 
-  const fullUserEmail = `${userEmail}${userDomain}`;
+  const fullUserEmail = `${userEmail.toLowerCase()}${userDomain}`;
   try {
     const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${vehiclePatente.toUpperCase()}`;
     if (existingVehicle.length > 0) {
@@ -203,7 +203,7 @@ app.post("/api/register-user", async (req, res) => {
 //ACTUALIZAR LA NUEVA CLAVE DEL USUARIO
 app.post("/api/update-password", async (req, res) => {
   const { userEmail, userDomain, password } = req.body;
-  const fullUserEmail = `${userEmail}${userDomain}`;
+  const fullUserEmail = `${userEmail.toLowerCase()}${userDomain}`;
 
   try {
     const updatePassword = await sql`update usuario set usua_clave = ${password} where usua_correo = ${fullUserEmail}`;
