@@ -5,6 +5,8 @@ import Ulogo from "../../assets/img/Ulogo.png";
 import axios from "axios";
 import { RecordReservationDataGuard } from "../../components/recordReservationDataGuard";
 import { formatDateTwo } from "../../utils/formatDateTwo";
+import { useNavigate } from 'react-router-dom';
+
 
 
 export const RecordReservationByDate = (props) => {
@@ -17,7 +19,7 @@ export const RecordReservationByDate = (props) => {
 
     const location = useLocation();
     const recordReservation = location.state?.recordReservation;
-
+    const navigate = useNavigate();
     const logOut = async () => {
         const response = await axios.get("/api/logout", { withCredentials: true });
         navigate('/');

@@ -4,6 +4,8 @@ import { HiOutlineLogin } from "react-icons/hi";
 import Ulogo from "../../assets/img/Ulogo.png";
 import axios from "axios";
 import { RecordReservationDataGuard } from "../../components/recordReservationDataGuard";
+import { useNavigate } from 'react-router-dom';
+
 
 
 export const RecordReservationByPatente = (props) => {
@@ -21,6 +23,7 @@ export const RecordReservationByPatente = (props) => {
         const response = await axios.get("/api/logout", { withCredentials: true });
         navigate('/');
     }
+    const navigate = useNavigate();
 
     const getProfile = async () => {
         try{

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { HiOutlineLogin } from "react-icons/hi";
 import Ulogo from "../../assets/img/Ulogo.png";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import { RecordReservationDataGuard } from "../../components/recordReservationDataGuard";
 
 
@@ -16,6 +17,7 @@ export const RecordReservationByRut = (props) => {
 
     const location = useLocation();
     const recordReservation = location.state?.recordReservation;
+    const navigate = useNavigate();
 
     const logOut = async () => {
         const response = await axios.get("/api/logout", { withCredentials: true });
