@@ -321,6 +321,7 @@ app.post('/api/get-record-reservation', async (req, res) => {
         FROM reserva r
         INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
         WHERE rese_usua_rut = ${userRut.toUpperCase()} AND rese_estado != 'EN ESPERA'
+        ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC
     `;
     res.json(recordReservation);
   } catch (error) {
