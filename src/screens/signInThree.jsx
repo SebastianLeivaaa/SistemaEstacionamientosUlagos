@@ -108,7 +108,7 @@ export const SignInThree = () => {
 
     return(
         <div className="h-screen w-screen flex items-center justify-center">
-            <div className="bg-white-50 flex flex-col items-center p-12 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 max-h-[90%] overflow-y-scroll shadow-white-900 shadow-3xl">
+            <div className="bg-white-50 flex flex-col items-center p-12 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 h-[90%] max-h-[90%] overflow-y-scroll shadow-white-900 shadow-3xl">
                 <img src={Ulogo} alt="Logo Ulagos"/>
                 <h1 className="text-2xl font-bold text-center max-md:text-base">ESTACIONAMIENTOS ULAGOS</h1>
                 <div className="flex flex-row justify-around w-full">
@@ -121,7 +121,10 @@ export const SignInThree = () => {
                     />
                 </div>
                 <div className="flex flex-col p-4 p gap-x-6 gap-y-4 bg-white-50 w-[100%] rounded-2xl">
-                    <h1 className="text-center text-xl font-bold">Enviamos un mail de confirmación a {formData.userEmail}{formData.userDomain}</h1>
+                    <div className="flex flex-col w-full">
+                        <h1 className="text-center text-xl font-bold max-xs:text-lg">Enviamos un mail de confirmación a </h1>
+                        <h1 className="text-center text-xl font-bold max-xs:text-lg break-words whitespace-normal">{formData.userEmail}{formData.userDomain}</h1>
+                    </div>
                     <div className="flex flex-col text-gray-950">
                         <p className="text-center text-xl font-semibold">Tiempo restante</p>
                         <p className="text-center text-lg font-semibold">{formatTime(counter)}</p>
@@ -130,11 +133,11 @@ export const SignInThree = () => {
                         <HiOutlineMailOpen/>
                     </div>
                     {counter === 0 ? (
-                        <h3 className="text-center text-red-700 flex flex-row gap-x-2 items-center justify-center text-base"><IoIosWarning className="text-2xl"/> El código de confirmación ha expirado</h3>
+                        <h3 className="text-center text-red-700 flex flex-row gap-x-2 items-center justify-center text-base max-xs:flex-col"><IoIosWarning className="text-2xl max-xs:text-3xl"/> El código de confirmación ha expirado</h3>
                     ) : (
                         <h3 className="text-center">Código de confirmación</h3>
                     )}
-                    <div className="flex flex-row gap-x-2 justify-center">
+                    <div className="flex flex-row gap-x-2 justify-center w-full max-xs:px-12 max-xs:gap-x-[4px]">
                         {[...Array(6)].map((_, index) => (
                             <input
                                 ref={(el) => (inputsRef.current[index] = el)}
@@ -151,7 +154,7 @@ export const SignInThree = () => {
                         ))}
                     </div>
                     {isMessageError && (
-                        <h3 className="text-center text-red-700 flex flex-row gap-x-1 items-center justify-center"><RxCross2 className="text-2xl"/> El código de verificación no es válido</h3>
+                        <h3 className="text-center text-red-700 flex flex-row gap-x-1 items-center justify-center max-xs:flex-col"><RxCross2 className="text-2xl max-xs:text-3xl"/> El código de verificación no es válido</h3>
                     )}
                     <div className="flex w-[100%] items-center mt-2 justify-center">
                         {counter > 0 ? (

@@ -55,7 +55,7 @@ const logOut = async () => {
 
   return(
     <div className="min-h-screen w-screen flex items-center justify-center bg">
-      <div className="flex flex-col items-center p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50">
+      <div className="flex flex-col items-center p-8 gap-y-8 rounded-md max-md:w-[75%] max-h-[50%] max-md:px-4 max-md:py-8 bg-white-50">
         <div className="flex flex-wrap lg:flex-row w-full justify-end sm:justify-between lg:justify-between">
             <img src={Ulogo} alt="Logo Ulagos" className="px-5 w-full sm:w-60 h-auto"/>
             <div className="flex flex-col items-end justify-end mt-4">
@@ -64,9 +64,9 @@ const logOut = async () => {
             </div>
         </div>
         <div className="flex w-full justify-start">
-        <h1 className="font-bold text-xl">SELECCIONE UN ESTACIONAMIENTO:</h1>
+        <h1 className="font-bold text-xl text-center">SELECCIONE UN ESTACIONAMIENTO:</h1>
         </div>
-        <div className="border-bold border-red-700 border select-none">
+        <div className="border-bold border-red-700 border select-none flex items-center justify-center">
             <ParkingMap/>
         </div>
       </div> 

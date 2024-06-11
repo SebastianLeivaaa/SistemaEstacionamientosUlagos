@@ -72,15 +72,15 @@ export const Guardmenu = () => {
 
     return (
         <div className="min-h-screen w-screen flex items-center justify-center bg">
-            <div className="flex flex-col items-center p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50">
-                <div className="flex flex-row w-full justify-between">
-                    <img src={Ulogo} alt="Logo Ulagos" className="w-44 h-auto"/>
-                    <div className="flex flex-col items-start">
-                        <h1 className="text-xl font-bold text-center max-md:text-base text-congress-blue-900">{user.userName != null ? user.userName.toLocaleUpperCase() : navigate('/')} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
-                        <button onClick={logOut} className="mt-4 w-full bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/> CERRAR SESIÓN</button>
+            <div className="flex flex-col items-center p-8 gap-y-8 max-h-[90%] rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50">
+                <div className="flex flex-wrap lg:flex-row w-full justify-end sm:justify-between lg:justify-between">
+                    <img src={Ulogo} alt="Logo Ulagos" className="px-5 w-full sm:w-60 h-auto"/>
+                    <div className="flex flex-col max-xs:w-full items-end justify-end max-xs:justify-center max-xs:items-center mt-4">
+                        <h1 className="text-lg font-bold text-center max-md:text-base text-congress-blue-900">{user.userName.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
+                        <button onClick={logOut} className="mt-4 bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/>CERRAR SESIÓN</button>
                     </div>
                 </div>
-                <img src={Chinquihue} alt="Logo Ulagos" className="w-full  rounded-lg" />
+                <img src={Chinquihue} alt="Logo Ulagos" className="w-[85%] h-[85%] max-xs:w-full max-xs:h-full  rounded-lg" />
                 <div className="flex flex-col items-center">
                     {parkingSpaces !== null && parkingSpaces <= 15 && (
                         <h1 className={`flex flex-row gap-x-2 items-center text-3xl font-bold text-center max-md:text-xl ${textColor}`}>
@@ -96,10 +96,10 @@ export const Guardmenu = () => {
                     <button onClick={reservationHistory} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><LuHistory className="text-3xl"/>HISTORIAL DE RESERVAS</button>
                     <button onClick={confirmReservation} className='w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2'><FaCheck className='text-2xl'/> CONFIRMAR RESERVA</button>
                 </div>
-                <div className="h-full w-full bg-customGreen flex flex-col justify-center px-4 py-4 rounded-lg font-semibold">
-                    <h1>• Todo conductor debe mostrar su cédula de identidad o licencia de conducir para validar su nombre y RUT.</h1>
-                    <h1>• En caso de tener algún imprevisto con la patente, puede validarse con algún documento.</h1>
-                    <h1>• Para liberar estacionamiento, se debe ingresar la patente del vehículo que va a retirarse.</h1>
+                <div className="h-full w-full bg-customGreen flex flex-col justify-center px-4 py-4 rounded-lg font-semibold max-xs:gap-y-4">
+                    <h1 className="max-xs:text-xs">• Todo conductor debe mostrar su cédula de identidad o licencia de conducir para validar su nombre y RUT.</h1>
+                    <h1 className="max-xs:text-xs">• En caso de tener algún imprevisto con la patente, puede validarse con algún documento.</h1>
+                    <h1 className="max-xs:text-xs">• Para liberar estacionamiento, se debe ingresar la patente del vehículo que va a retirarse.</h1>
                 </div>
             </div>
         </div>

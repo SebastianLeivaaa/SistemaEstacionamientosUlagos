@@ -138,9 +138,9 @@ export const SignIn = () => {
             <Indice
             fase="1"
             />
-            <h1 className="font-bold p-4">DATOS PERSONALES</h1>
-            <div className="w-[100%] grid grid-cols-1 md:grid-cols-2 p-2">
-                <div className="w-full flex flex-col p-2">
+            <h1 className="font-bold p-4 max-xs:px-0">DATOS PERSONALES</h1>
+            <div className="w-[100%] grid grid-cols-1 md:grid-cols-2 p-2 max-xs:px-0">
+                <div className="w-full flex flex-col p-2 max-xs:px-0">
                     <h1 className="pb-3">Nombre(s)</h1>
                     <Datos
                         holder="Ingrese su nombre"
@@ -155,7 +155,7 @@ export const SignIn = () => {
                         <p className="text-red-500 text-sm">{errors.userName}</p>
                     )}
                 </div>
-                <div className="w-full flex flex-col p-2">
+                <div className="w-full flex flex-col p-2 max-xs:px-0">
                     <h1 className="pb-3">Apellido Paterno</h1>
                     <Datos
                         holder="Ingresa tu apellido paterno"
@@ -171,8 +171,8 @@ export const SignIn = () => {
                     )}
                 </div>
             </div>
-            <div className="w-[100%] grid grid-cols-1 md:grid-cols-2 p-2">
-                <div className="w-full flex flex-col p-2">
+            <div className="w-[100%] grid grid-cols-1 md:grid-cols-2 p-2 max-xs:px-0">
+                <div className="w-full flex flex-col p-2 max-xs:px-0">
                     <h1 className="pb-3">Apellido Materno</h1>
                     <Datos
                         holder="Ingresa tu apellido materno"
@@ -187,7 +187,7 @@ export const SignIn = () => {
                         <p className="text-red-500 text-sm">{errors.userLastNameMat}</p>
                     )}
                 </div>
-                <div className="w-full flex flex-col p-2">
+                <div className="w-full flex flex-col p-2 max-xs:px-0">
                     <h1 className="pb-3">RUT</h1>
                     <Rut
                         holder="Ej:20545267-1"
@@ -203,8 +203,8 @@ export const SignIn = () => {
                     )}
                 </div>
             </div>
-            <div className="w-[100%] grid grid-cols-1 md:grid-cols-2 p-2">
-                <div className="w-full flex flex-col p-2">
+            <div className="w-[100%] grid grid-cols-1 md:grid-cols-2 p-2 max-xs:px-0">
+                <div className="w-full flex flex-col p-2 max-xs:px-0">
                     <h1 className="pb-3">Tipo Usuario</h1>
                     <SelectUser
                         holder="Estudiante"
@@ -214,9 +214,9 @@ export const SignIn = () => {
                         value={formData.userType}
                     />
                 </div>
-                <div className="w-full flex flex-col p-2">
+                <div className="w-full flex flex-col p-2 max-xs:px-0">
                     <h1 className="pb-3">Correo electronico</h1>
-                    <div className="flex flex-row w-[90%] gap-x-1">
+                    <div className="flex flex-row w-[90%] max-md:w-[100%] gap-x-1">
                         <Datos
                             holder="Usuario"
                             tipo="text"
@@ -233,8 +233,8 @@ export const SignIn = () => {
                     )}
                 </div>
             </div>
-            <div className="w-[100%] grid grid-cols-1 md:grid-cols-2 p-2">
-                <div className="w-full flex flex-col p-2">
+            <div className="w-[100%] grid grid-cols-1 md:grid-cols-2 p-2 max-xs:px-0">
+                <div className="w-full flex flex-col p-2 max-xs:px-0">
                     <h1 className="pb-3">Télefono</h1>
                     <Phone
                         holder="Ej:958472045"
@@ -250,9 +250,9 @@ export const SignIn = () => {
                     )}
                 </div>
             </div>
-            <h1 className="font-bold p-4">DATOS VEHÍCULO</h1>
-            <div className="w-[100%] grid grid-cols-1 md:grid-cols-2 p-2">
-                <div className="w-full flex flex-col p-2">
+            <h1 className="font-bold p-4 max-xs:px-0">DATOS VEHÍCULO</h1>
+            <div className="w-[100%] grid grid-cols-1 md:grid-cols-2 p-2 max-xs:px-0">
+                <div className="w-full flex flex-col p-2 max-xs:px-0">
                     <h1 className="pb-3">Patente</h1>
                     <Datos
                         holder="Ej:GGXX20"

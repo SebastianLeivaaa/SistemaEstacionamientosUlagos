@@ -50,8 +50,8 @@ export const RecordReservationByPatente = (props) => {
                     </div>
                 </div>
                 <div className='flex flex-col items-center gap-y-4'>
-                    <h1 className='font-bold text-2xl mt-10'>HISTORIAL DE RESERVAS</h1>
-                    <h2 className='text-xl flex flex-row gap-x-1'>Resultados para patente <p className="font-bold">{recordReservation[0].rese_vehi_patente}</p></h2>
+                    <h1 className='font-bold text-2xl mt-10 text-center'>HISTORIAL DE RESERVAS</h1>
+                    <h2 className='text-xl flex flex-row gap-x-1 text-center'>Resultados para patente {recordReservation[0].rese_vehi_patente}</h2>
                 </div>
                 <div className='p-8 w-[100%] flex flex-col gap-y-12 max-md:w-[100%] max-md:p-0 items-center justify-center'>
                     {recordReservation.map((record, index) => (

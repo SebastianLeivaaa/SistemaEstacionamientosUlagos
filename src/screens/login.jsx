@@ -49,7 +49,7 @@ export const Login = () => {
     };
 
     return (
-        <div className={`h-full w-full flex flex-col items-center justify-center gap-y-8 mt-8 ${isLoading ? 'cursor-wait' : ''}`}>
+        <div className={`w-full flex flex-col items-center justify-center gap-y-8 mt-8 ${isLoading ? 'cursor-wait' : ''}`}>
             <form onSubmit={handleSubmit} className="flex flex-col items-center gap-y-8 w-full">
                 <div className="w-full flex flex-row">
                     <div className="w-[95%] flex flex-row border border-blue-ribbon-600">

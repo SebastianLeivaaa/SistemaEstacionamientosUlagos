@@ -8,7 +8,7 @@ export const Rut = (props) => {
         id={props.id}
         name={props.name}
         type={props.tipo}
-        className="w-[90%] p-1 border-[0.5px] border-blue-ribbon-600"
+        className="w-[90%] max-md:w-[100%] p-1 border-[0.5px] border-blue-ribbon-600"
         placeholder={props.holder}
         onChange={props.onChange}
         maxLength={props.maxLength}

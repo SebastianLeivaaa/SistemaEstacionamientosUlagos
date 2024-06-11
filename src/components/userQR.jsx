@@ -3,8 +3,8 @@ import QRCode from 'qrcode.react';
 
 export const UserQR = (props) => {
     return (
-      <div style={{ textAlign: 'center', margin: '20px' }}>
-        <QRCode value={props.rut} />
+      <div className='text-center'>
+        <QRCode value={props.rut} size={props.size} />
       </div>
     );
   };

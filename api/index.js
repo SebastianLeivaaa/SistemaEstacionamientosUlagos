@@ -366,13 +366,14 @@ app.post('/api/release-reservation', async (req, res) => {
 
   try {
     // Verificar si la patente existe'
-    const [existingReservation] = await sql`SELECT * FROM reserva WHERE rese_vehi_patente = ${vehiclePatente}`;
+    const timeFormat = await sql`SET TIME ZONE 'America/Santiago'`
+    const [existingReservation] = await sql`SELECT * FROM reserva WHERE rese_vehi_patente = ${vehiclePatente} AND rese_hora_salida IS NULL AND rese_estado = 'CONFIRMADA'`;
     if (!existingReservation) {
-      return res.status(404).send('No se encontró la patente proporcionada');
+      return res.status(404).send('No se encontró una reserva con la patente proporcionada');
     }
-    //se libera el estacionamiento y se elimina la reserva
+    //se libera el estacionamiento y se actualiza la hora de salida de la reserva
     await sql`UPDATE estacionamiento SET esta_estado = 'LIBRE' WHERE esta_id = ${existingReservation.rese_esta_id}`;
-    await sql`DELETE FROM reserva WHERE rese_vehi_patente = ${vehiclePatente}`;
+    await sql`UPDATE reserva SET rese_hora_salida = TO_CHAR(NOW(), 'HH24:MI:SS')::time WHERE rese_vehi_patente = ${vehiclePatente} AND rese_hora_salida IS NULL`;
 
     res.status(200).send(existingReservation.rese_esta_id.slice(-2));
   } catch (error) {

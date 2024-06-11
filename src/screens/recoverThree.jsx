@@ -55,25 +55,25 @@ export const RecoverThree = () => {
     
     return(
         <div className="h-screen w-screen flex items-center justify-center">
-            <div className="bg-white-50 flex min-w-[40%] flex-col items-center p-12 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 max-h-[90%] overflow-y-scroll shadow-white-900 shadow-3xl">
+            <div className="bg-white-50 flex min-w-[40%] flex-col items-center p-12 max-xs:h-[90%]  gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 max-h-[90%] overflow-y-scroll shadow-white-900 shadow-3xl">
             <img src={Ulogo} alt="Logo Ulagos"/>
             <h1 className="text-2xl font-bold text-center max-md:text-base">RECUPERAR CONTRASEÑA</h1>
-            <form onSubmit={handleSubmit} className="flex flex-wrap sm:grid sm:grid-cols-2 p-4 gap-x-6 gap-y-8 bg-white-50 w-[100%] rounded-2xl ">
-                <h1 className="font-bold flex justify-start px-2 flex-col w-full col-span-2">CREE SU NUEVA CONTRASEÑA</h1>
-                <div className="gap-y-1 flex flex-col px-4 sm:px-10 w-[100%]">
+            <form onSubmit={handleSubmit} className="flex flex-wrap sm:grid sm:grid-cols-2 p-4 max-xs:px-0 gap-x-6 gap-y-8 bg-white-50 w-[100%] rounded-2xl ">
+                <h1 className="font-bold flex justify-start flex-col w-full col-span-2">CREE SU NUEVA CONTRASEÑA</h1>
+                <div className="gap-y-1 flex flex-col w-[100%] max-xs:px-0">
                     <label htmlFor="password">Contraseña</label>
                     <PasswordInput id='password' name='password' onChange={handleChange}/>
                 </div>
-                <div className="gap-y-1 flex flex-col px-3 sm:px-10 w-[100%]">
+                <div className="gap-y-1 flex flex-col w-[100%] max-xs:px-0">
                     <label htmlFor="confirmPassword">Confirme contraseña</label>
                     <PasswordInput id='confirmPassword' name='confirmPassword' onChange={handleChange}/>
                 </div>
-                <div className="col-span-2 w-[100%] flex flex-col px-2">
+                <div className="col-span-2 w-[100%] flex flex-col px-2 max-xs:px-0">
                     <ul className="flex flex-col gap-y-2">
-                        <li className="flex flex-row gap-x-2 items-end text-xl"><FaCheckCircle className={`h-full ${validationPasswordOne.test(passwordData.password) ? 'text-green-600' : 'text-gray-800'}`}/> <p className="text-base">Debe tener al menos 8 caracteres.</p></li>
-                        <li className="flex flex-row gap-x-2 items-end text-xl"><FaCheckCircle className={`h-full ${validationPasswordTwo.test(passwordData.password) ? 'text-green-600' : 'text-gray-800'}`}/> <p className="text-base">Debe contener al menos una letra mayúscula.</p></li>
-                        <li className="flex flex-row gap-x-2 items-end text-xl"><FaCheckCircle className={`h-full ${validationPasswordThree.test(passwordData.password) ? 'text-green-600' : 'text-gray-800'}`}/> <p className="text-base">Debe contener al menos una letra minúscula.</p></li>
-                        <li className="flex flex-row gap-x-2 items-end text-xl"><FaCheckCircle className={`h-full ${validationPasswordFour.test(passwordData.password) ? 'text-green-600' : 'text-gray-800'}`}/> <p className="text-base">Debe contener al menos un número.</p></li>
+                        <li className="flex flex-row gap-x-2 items-end text-xl max-xs:text-lg w-full max-xs:items-center"><FaCheckCircle className={`h-full ${validationPasswordOne.test(passwordData.password) ? 'text-green-600' : 'text-gray-800'}`}/> <p className="text-base max-xs:text-xs">Debe tener al menos 8 caracteres.</p></li>
+                        <li className="flex flex-row gap-x-2 items-end text-xl max-xs:text-lg w-full max-xs:items-center"><FaCheckCircle className={`h-full ${validationPasswordTwo.test(passwordData.password) ? 'text-green-600' : 'text-gray-800'}`}/> <p className="text-base max-xs:text-xs">Debe contener al menos una letra mayúscula.</p></li>
+                        <li className="flex flex-row gap-x-2 items-end text-xl max-xs:text-lg w-full max-xs:items-center"><FaCheckCircle className={`h-full ${validationPasswordThree.test(passwordData.password) ? 'text-green-600' : 'text-gray-800'}`}/> <p className="text-base max-xs:text-xs">Debe contener al menos una letra minúscula.</p></li>
+                        <li className="flex flex-row gap-x-2 items-end text-xl max-xs:text-lg w-full max-xs:items-center"><FaCheckCircle className={`h-full ${validationPasswordFour.test(passwordData.password) ? 'text-green-600' : 'text-gray-800'}`}/> <p className="text-base max-xs:text-xs">Debe contener al menos un número.</p></li>
                     </ul>
                 </div>
                 <div className="text-end flex w-[100%] col-span-2 items-end justify-end">

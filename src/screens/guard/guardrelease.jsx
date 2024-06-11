@@ -6,6 +6,8 @@ import { Rut } from '../../components/rut';
 import { FaCheck, FaUser, FaArrowLeft} from "react-icons/fa";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ClipLoader } from 'react-spinners';
+
 
 
 
@@ -15,6 +17,8 @@ export const GuardRelease = () => {
         vehiclePatente2: ""
     });
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
 
     const handleChange2 = (e) => {
         setPatente({
@@ -25,10 +29,11 @@ export const GuardRelease = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const res = await axios.post(
                 '/api/release-reservation',
-                { vehiclePatente: vehiclePatente2.value },
+                { vehiclePatente: vehiclePatente2.value.toUpperCase() },
                 { withCredentials: true }
             );
             if(res.data){
@@ -41,6 +46,7 @@ export const GuardRelease = () => {
         } catch (error) {
             setError(error.response.data);
         }
+        setIsLoading(false);
     };
     
     return (
@@ -69,7 +75,7 @@ export const GuardRelease = () => {
                     </div>
                     <div className='w-full flex justify-center mb-4'>
                         <button type="submit" className="text-white-50 rounded-md bg-blue-ribbon-600 hover:bg-blue-ribbon-700 p-1.5 px-3 flex flex-row items-center gap-x-2 font-bold">
-                            {(<MdDirectionsCar className="text-2xl"/>)} LIBERAR ESTACIONAMIENTO
+                        {isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>) : (<MdDirectionsCar className="text-2xl"/>)} LIBERAR ESTACIONAMIENTO
                         </button>
                     </div>
                     <div className='flex justify-center'>{error && <p className='text-red-600'>{error}</p>}</div>

@@ -8,11 +8,14 @@ import { FaMapMarked } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { TiWarning } from "react-icons/ti";
+import { UserQR } from "../../components/userQR";
+
 
 export const Usermenu = () => {
     const [user, setUser] = useState({
         email: "",
         userName: "",
+        userRut: "",
         userLastNamePat: "",
         userLastNameMat: "",
     })
@@ -25,6 +28,7 @@ export const Usermenu = () => {
             setUser({
                 email: response.data.email,
                 userName: response.data.userName,
+                userRut: response.data.userRut,
                 userLastNamePat: response.data.userLastNamePat,
                 userLastNameMat: response.data.userLastNameMat,
             });
@@ -70,15 +74,18 @@ export const Usermenu = () => {
 
     return (
         <div className="min-h-screen w-screen flex items-center justify-center bg">
-            <div className="flex flex-col items-center p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50">
+            <div className="flex flex-col items-center p-8 gap-y-8 rounded-md max-md:w-[75%] w-[50%] max-md:px-4 max-md:py-8 bg-white-50">
                 <div className="flex flex-wrap lg:flex-row w-full justify-end sm:justify-between lg:justify-between">
                     <img src={Ulogo} alt="Logo Ulagos" className="px-5 w-full sm:w-60 h-auto"/>
-                    <div className="flex flex-col items-end justify-end mt-4">
+                    <div className="flex flex-col items-end justify-end max-xs:justify-center max-xs:items-center mt-4">
                         <h1 className="text-lg font-bold text-center max-md:text-base text-congress-blue-900">{user.userName.toLocaleUpperCase()} {user.userLastNamePat.toLocaleUpperCase()} {user.userLastNameMat.toLocaleUpperCase()}</h1>
                         <button onClick={logOut} className="mt-4 bg-white font-bold text-red-600  text-lg  flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl"/>CERRAR SESIÓN</button>
                     </div>
                 </div>
-                <img src={Chinquihue} alt="Logo Ulagos" className="w-[100%] flex rounded-lg" />
+                <div className="w-full flex flex-col items-center justify-center gap-y-4">
+                    <UserQR rut={user.userRut} size={200}/>
+                    <h1 className="text-2xl max-md:text-lg font-bold italic">TU CÓDIGO QR</h1>
+                </div>
                 <div className="flex flex-col items-center">
                     {parkingSpaces !== null && parkingSpaces <= 15 && (
                         <h1 className={`flex flex-row gap-x-2 items-center text-3xl font-bold text-center max-md:text-xl ${textColor}`}>
@@ -89,13 +96,15 @@ export const Usermenu = () => {
                         ¡{parkingSpaces !== null ? parkingSpaces : 'Cargando...'} ESTACIONAMIENTOS DISPONIBLES!
                     </h1>
                 </div>
-                <div className="flex flex-col sm:flex-row justify-between w-[90%] gap-y-5">
-                    <button onClick={reserve} className="w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>RESERVAR ESTACIONAMIENTO</button>
-                    <button onClick={reservations} className="w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2"><LuHistory className="text-3xl"/>MIS RESERVAS</button>                
-                </div>
-                <div className="flex flex-col sm:flex-row justify-between w-[90%] gap-y-4">
-                    <button  className="w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2"><FaMapMarked className="text-3xl"/>MAPA DE ESTACIONAMIENTO</button>
-                    <button onClick={manageVehicle} className="w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>ACTUALIZAR DATOS DE VEHÍCULO</button>                
+                <div className="flex flex-col max-xs:gap-y-4 w-full items-center gap-y-8">
+                    <div className="flex flex-col sm:flex-row justify-between w-[90%] max-xs:w-[100%] gap-y-4">
+                        <button onClick={reserve} className="w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>RESERVAR ESTACIONAMIENTO</button>
+                        <button onClick={reservations} className="w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2"><LuHistory className="text-3xl"/>MIS RESERVAS</button>                
+                    </div>
+                    <div className="flex flex-col sm:flex-row justify-between w-[90%] max-xs:w-[100%] gap-y-4">
+                        <button  className="w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2"><FaMapMarked className="text-3xl"/>MAPA DE ESTACIONAMIENTO</button>
+                        <button onClick={manageVehicle} className="w-full sm:w-[48%] bg-blue-ribbon-600 text-white-100 font-bold rounded-md p-4 text-sm sm:text-sm lg:text-lg flex flex-row items-center justify-center gap-x-2"><FaCarAlt className="text-3xl"/>ACTUALIZAR DATOS DE VEHÍCULO</button>                
+                    </div>
                 </div>
             </div>
         </div>

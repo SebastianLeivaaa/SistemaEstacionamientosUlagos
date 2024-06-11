@@ -121,7 +121,7 @@ export const ParkingMap = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-[75%] max-sm:w-[100%]">
       <img
         ref={imgRef}
         src={Mapa}

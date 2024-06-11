@@ -138,15 +138,15 @@ export const ManageVehicle = () => {
 
                     
                     {newVehicle && (
-                        <form onSubmit={handleSubmit} className='flex flex-col gap-y-8'>
+                        <form onSubmit={handleSubmit} className='flex flex-col gap-y-8 mt-8'>
                             <h1 className='flex items-center justify-center text-xl font-semibold'>Ingrese su nuevo vehiculo</h1>
-                            <div className='flex flex-row items-center gap-x-4 p-2 max-md:flex-col max-md:gap-y-4 max-md:items-start'>
+                            <div className='flex flex-row items-center justify-center gap-x-4 p-2 max-md:flex-col max-md:gap-y-4 max-md:items-start'>
                                 <label className='w-fit font-semibold'>Ingrese la patente: </label>
                                 <input onChange={handleChange} value={formData.vehiclePatente} type='text' id='vehiclePatente' name='vehiclePatente' minLength='6' maxLength='6' placeholder='EJ:GGXX20' className="p-1 border-[0.5px] border-blue-ribbon-600"></input>
-                                <button type='submit' className='flex flex-row gap-x-1 items-center bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold p-2 text-white-50'>{isLoading ? (<ClipLoader color="#0d6efd" size={24} />) : (<IoIosSave className='text-2xl' />)} Guardar</button>
+                                <button type='submit' className='flex flex-row gap-x-1 items-center bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold p-2 text-white-50'>{isLoading ? (<ClipLoader color="#FFFFFF" size={24} />) : (<IoIosSave className='text-2xl' />)} Guardar</button>
                             </div>
                             {message && (
-                                <h1 className={`p-2 rounded flex flex-row gap-x-2 justify-center items-center ${message.type === 'success' ? 'text-camarone-700' : 'text-red-800'}`}>
+                                <h1 className={`p-2 rounded flex flex-row gap-x-2 text-center justify-center items-center ${message.type === 'success' ? 'text-camarone-700' : 'text-red-800'}`}>
                                     {message.type === 'success' ? <FaCheck /> : <FaX />} {message.text}
                                 </h1>
                             )}
@@ -155,7 +155,7 @@ export const ManageVehicle = () => {
                 </div>
                 <div className='flex flex-row items-center gap-x-12 mt-8'>
                     <div className="items-s gap-x-12 w-full justify-center flex">
-                        <div className='flex flex-col gap-y-12 xl:w-[60%] lg:w-[90%] max-md:w-full max-md:p-3 items-center justify-center'>
+                        <div className='flex flex-col gap-y-12 xl:w-[60%] lg:w-[90%] max-md:w-full max-md:p-0 items-center justify-center'>
                             {vehicles.length > 0 ? (
                                 vehicles.map((vehicle, index) => (
                                     <VehicleData

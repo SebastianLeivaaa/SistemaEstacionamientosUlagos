@@ -54,17 +54,17 @@ export const CurrentReservation = (props) => {
             <h1 className="text-lg max-md:text-base font-bold italic text-center">PRESENTE EL CÓDIGO AL GUARDIA AL INGRESAR</h1>
             {!showConfirmation ? (
                 <div className="flex flex-row justify-around max-md:flex-col max-md:items-center max-md:gap-y-6">
-                    <button onClick={confirmDelete}  className='flex flex-row p-3 bg-red-500 hover:bg-red-700 rounded-md font-bold w-fit max-md:w-full max-md:justify-center text-white-50 items-center gap-x-2'>
+                    <button onClick={confirmDelete}  className='flex flex-row p-3 max-xs:text-sm bg-red-500 hover:bg-red-700 rounded-md font-bold w-fit max-md:w-full max-md:justify-center text-white-50 items-center gap-x-2'>
                         <FaTrashAlt className="text-xl"/> CANCELAR RESERVA
                     </button>
-                    <button onClick={userMenu}  className='flex flex-row p-3 bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold w-fit max-md:w-full text-white-50 items-center gap-x-2 '>
+                    <button onClick={userMenu}  className='flex flex-row p-3 max-xs:text-sm bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold w-fit max-md:w-full max-md:justify-center text-white-50 items-center gap-x-2 '>
                         <IoHome className="text-2xl"/> VOLVER AL MENU PRINCIPAL
                     </button>
                 </div>
             ) : (
                 <div className="flex flex-col gap-y-8 font-bold italic">
                     <h1 className="text-center text-xl">¿Estas seguro que quieres cancelar esta reserva?</h1>
-                    <div className="flex flex-row justify-center gap-x-16">
+                    <div className="flex flex-row justify-center gap-x-16 max-xs:gap-x-4">
                         <button onClick={deleteReservation}  className='flex flex-row py-3 px-8 bg-red-500 hover:bg-red-700 rounded-md font-bold  text-white-50 items-center gap-x-2'>
                             <FaCheck className="text-xl"/> SI
                         </button>
