@@ -29,22 +29,8 @@ const getProfile = async () => {
     }
 }
 
-const getParkingSpaces = async () => {
-    try{
-        const response = await axios.get("/api/parkingSpaces", {withCredentials: true});
-        setParkingSpaces(response.data.total_libres);
-    }catch(error){
-        console.log(error);
-    }
-}
 useEffect(() => {
     getProfile();
-    getParkingSpaces();
-    const interval = setInterval(() => {
-        getParkingSpaces();
-    }, 10000);
-
-    return () => clearInterval(interval);
 }, []);
 
 const logOut = async () => {

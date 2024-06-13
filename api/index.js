@@ -580,18 +580,43 @@ app.post('/api/confirm-reservation', async (req, res) => {
 //Consulta para obtener los estacionamientos disponibles por seccion
 app.get('/api/get-parkings-availables-by-section', async (req, res) => {
   try {
-    const parkingSpaces = await sql`SELECT e.ESTA_SECC_ID, s.SECC_NOMBRE, COUNT(e.ESTA_NUMERO) AS cantidad_estacionamientos
-    FROM ESTACIONAMIENTO e 
-    INNER JOIN SECCION s ON e.ESTA_SECC_ID = s.SECC_ID 
-    WHERE e.ESTA_ESTADO = 'LIBRE' 
-    GROUP BY e.ESTA_SECC_ID, s.SECC_NOMBRE
-    ORDER BY s.SECC_NOMBRE ASC;`
+    const parkingSpaces = await sql
+      `SELECT s.SECC_ID AS ESTA_SECC_ID, 
+        s.SECC_NOMBRE, 
+        COALESCE(COUNT(e.ESTA_NUMERO), 0) AS cantidad_estacionamientos_disponibles, 
+        s.SECC_CAPACIDAD
+        FROM SECCION s
+        LEFT JOIN ESTACIONAMIENTO e ON e.ESTA_SECC_ID = s.SECC_ID 
+        AND e.ESTA_ESTADO = 'LIBRE'
+        GROUP BY s.SECC_ID, s.SECC_NOMBRE, s.SECC_CAPACIDAD
+        ORDER BY s.SECC_NOMBRE ASC;
+;`
     ;
-    console.log(parkingSpaces);
     res.json(parkingSpaces);
+
   }catch (error) {
     console.error('Error al obtener los estacionamientos:', error);
     res.status(500).json({ error: 'Error en el servidor' });
+  }
+})
+
+//Consulta para obtener la informacion de los estacionamientos de una seccion
+
+app.post('/api/get-data-section' , async (req, res) => {
+  const { sectionId } = req.body;
+  try {
+    const dataSection = await sql`SELECT e.ESTA_ID, e.ESTA_NUMERO, e.ESTA_SECC_ID, e.ESTA_ESTADO, e.ESTA_TIPO, s.SECC_NOMBRE, s.SECC_CAPACIDAD
+    FROM ESTACIONAMIENTO e
+    INNER JOIN SECCION s ON e.ESTA_SECC_ID = s.SECC_ID
+    WHERE s.SECC_ID = ${sectionId}
+    ORDER BY e.ESTA_NUMERO ASC;`
+    ;
+    console.log(dataSection)
+    res.json(dataSection);
+  } catch (error) {
+    console.error('Error al obtener los estacionamientos:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  
   }
 })
 
