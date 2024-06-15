@@ -611,7 +611,6 @@ app.post('/api/get-data-section' , async (req, res) => {
     WHERE s.SECC_ID = ${sectionId}
     ORDER BY e.ESTA_NUMERO ASC;`
     ;
-    console.log(dataSection)
     res.json(dataSection);
   } catch (error) {
     console.error('Error al obtener los estacionamientos:', error);

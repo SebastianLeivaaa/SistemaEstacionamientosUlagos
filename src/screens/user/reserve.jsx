@@ -12,7 +12,6 @@ export const Reserve = () =>{
     userLastNamePat: "",
     userLastNameMat: "",
 })
-const [parkingSpaces, setParkingSpaces] = useState(null);
 const navigate = useNavigate();
 
 const getProfile = async () => {

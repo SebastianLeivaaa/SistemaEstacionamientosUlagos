@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from "react";
 import { VehicleSVG } from "./vehicleSVG";
 import axios from "axios";
+import { TbDisabled } from "react-icons/tb";
 
 
 export const SectionA = (props) => {
 
-    const [dataSection, setDataSection] = useState(null);
+    const [dataSection, setDataSection] = useState([]);
 
     const getDataSection = async (sectionId) => {
         try {
@@ -19,201 +20,48 @@ export const SectionA = (props) => {
 
     useEffect(() => {
         getDataSection(props.sectionId);
-    }, []);
+    }, [props.sectionId]);
+
+    const getColorForStatus = (estado) => {
+        switch (estado) {
+          case 'LIBRE':
+            return '#0082ff';
+          case 'OCUPADO':
+            return 'red';
+          case 'RESERVADO':
+            return '#36b139';
+          case 'NO DISPONIBLE':
+            return 'gray';
+          default:
+            return 'black'; 
+        }
+      };
 
     return(
-        <div className="flex flex-col w-full">
-            <ul className="flex flex-row">
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">1</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">2</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">3</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">4</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">5</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">6</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">7</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">8</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">9</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">10</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">11</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">12</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">13</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">14</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">15</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">16</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">17</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">18</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">19</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">20</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">21</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">22</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">23</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">24</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">25</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">26</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                        <div className='w-[1px] h-full bg-black'></div>
-                    </div>
-                </li>
-                <li className="flex flex-col gap-y-2">
-                    <span className="text-center">27</span>
-                    <div className="flex flex-row">
-                        <VehicleSVG height="50" width="50" fillColor="blue"/>
-                    </div>
-                </li>
-            </ul>
+      <div className="flex flex-col w-full items-center">
+        <ul className="grid grid-cols-9 w-fit gap-y-4">
+          {dataSection.slice().reverse().map((parking, index) => (
+              <li key={parking.esta_id} className="flex flex-col gap-y-1 justify-center">
+                  <span className="text-center">{`(${parking.esta_numero}${parking.esta_tipo === 'DISCAPACITADOS' && ('*')})`}</span>
+                  <div className="flex flex-row justify-center">
+                      <button 
+                          className={`flex flex-col items-center w-fit bg-white ${parking.esta_estado !== 'LIBRE' ? "hover:opacity-100" : "hover:opacity-75"}`}
+                          onClick={() => handleParkingClick(parking)}
+                          disabled={parking.esta_estado !== 'LIBRE'}
+                      >
+                          <VehicleSVG height="50" width="50" fillColor={getColorForStatus(parking.esta_estado)}/>
+                      </button>
+                      <div className='w-[1px] h-full bg-black'></div>
+                  </div>
+              </li>
+          ))}
+        </ul>
+        <div className="w-full bg-white-900 py-6 mt-4">
+          <div className="h-full border-dashed border-t-2 border-gray-200 w-full"></div>
         </div>
-
+        <div className="mt-4 text-center text-gray-600">
+          Representación visual de una fila física de estacionamientos
+        </div>
+      </div>
     );
 };
