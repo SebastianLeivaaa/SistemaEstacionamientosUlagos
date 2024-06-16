@@ -2,81 +2,10 @@ import React, { useEffect, useState, useRef } from 'react';
 import Mapa from "../assets/img/Map.png";
 import imageMapResize from "../utils/mageMapResizer.min";
 import axios from "axios";
-import { SectionA } from "./sectionA";
-import { SectionB } from "./sectionB";
-import { ParkingMapSection } from './ParkingMapSection';
-import { VehicleSVG } from './vehicleSVG';
-import { FaAsterisk } from "react-icons/fa";
+import { ModalSection } from "./modalSection";
 
 
-const Modal = ({ area, onClose }) => {
-
-  const getSectionCurrent = (section, sectionId) => {
-    switch (section) {
-      case 'SECCIÓN A':
-        return <SectionA sectionId={sectionId}/>;
-      case 'SECCIÓN B':
-        return <SectionB sectionId={sectionId}/>;
-      case 'RESERVADO':
-        return '#36b139';
-      case 'NO DISPONIBLE':
-        return 'gray';
-      default:
-        return 'black'; 
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 flex items-center justify-center">
-      <div className="bg-white-200 p-4 rounded shadow-lg w-fit max-md:w-[85%] flex flex-col gap-y-8 items-center">
-        <div className='flex flex-col gap-y-0'>
-          <h2 className="text-lg font-bold mb-2 text-center">{area.name}</h2>
-          <div className='flex items-center w-full justify-center'>
-            <ParkingMapSection nameSection={area.name}/>
-          </div>
-        </div>
-        <h1 className='text-xl text-center max-md:text-lg'>
-          Selecciona tu lugar de estacionamiento
-        </h1>
-        <li className='flex flex-wrap gap-x-2 gap-y-2 items-center w-full justify-center'>
-          <ul className='flex flex-row gap-x-0'>
-            <VehicleSVG height="25" width="25" fillColor="#0082ff"/>
-            <span className='max-xs:text-sm'>Disponible</span>
-          </ul>
-          <ul className='flex flex-row gap-x-0'>
-            <VehicleSVG height="25" width="25" fillColor="#36b139"/>
-            <span className='max-xs:text-sm'>Reservado</span>
-          </ul>
-          <ul className='flex flex-row gap-x-0'>
-            <VehicleSVG height="25" width="25" fillColor="red"/>
-            <span className='max-xs:text-sm'>Ocupado</span>
-          </ul>
-          <ul className='flex flex-row gap-x-0'>
-            <VehicleSVG height="25" width="25" fillColor="gray"/>
-            <span className='max-xs:text-sm'>No disponible</span>
-          </ul>
-          <ul className='flex flex-row items-center gap-x-1.5'>
-            <FaAsterisk className='text-xs'/>
-            <span className='max-xs:text-sm'>Discapacitados</span>
-          </ul>
-          <ul className='flex flex-row gap-x-1.5 items-center'>
-            <div className="bg-white-900 py-2.5 h-[25px] w-[25px] rounded-full">
-              <div className="h-full border-dashed border-t-2 border-gray-200 w-full"></div>
-            </div>
-            <span className='max-xs:text-sm'>Camino</span>
-          </ul>
-        </li>
-        <div className="flex items-center mb-2">
-          {getSectionCurrent(area.name, area.sectionId)}
-        </div>
-        <button onClick={onClose} className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white-50 rounded w-fit">Cerrar</button>
-      </div>
-    </div>
-
-  );
-};
-
-export const ParkingMap = () => {
+export const ParkingMap = (props) => {
   const [hoveredArea, setHoveredArea] = useState(null);
   const [scaledAreas, setScaledAreas] = useState([]);
   const [areas, setAreas] = useState([
@@ -100,9 +29,8 @@ export const ParkingMap = () => {
 
   const getParkingsAvailablesBySection = async () => {
     try {
-      const response = await axios.get("http://localhost:3090/api/get-parkings-availables-by-section", { withCredentials: true });
+      const response = await axios.get("/api/get-parkings-availables-by-section", { withCredentials: true });
       const data = response.data;
-      console.log(data);
 
       // Actualizar las áreas con la cantidad de estacionamientos disponibles
       const updatedAreas = areas.map(area => {
@@ -221,7 +149,7 @@ export const ParkingMap = () => {
           />
         ))}
       </svg>
-      {selectedArea && <Modal area={selectedArea} onClose={closeModal} />}
+      {selectedArea && <ModalSection area={selectedArea} onClose={closeModal} infoUser={props.infoUser} infoVehicleActive={props.infoVehicleActive} />}
     </div>
   );
 };

@@ -47,7 +47,7 @@ export const CurrentReservation = (props) => {
                 <div className="w-[60%] flex flex-col gap-y-4 max-md:w-[100%]">
                     <h1 className="text-lg max-md:text-base font-bold italic">N° ESTACIONAMIENTO: {props.numeroEstacionamiento}</h1>
                     <h1 className="text-lg max-md:text-base font-bold italic">FECHA: {formatDateTwo(props.fecha)}</h1>
-                    <h1 className="text-lg max-md:text-base font-bold italic">HORARIO MÁXIMO DE LLEGADA: {formatTimeTwo(props.horaInicio)}</h1>
+                    <h1 className="text-lg max-md:text-base font-bold italic">HORARIO MÁXIMO DE LLEGADA: {formatTimeTwo(props.horaLlegada)}</h1>
                     <h1 className="text-lg max-md:text-base font-bold italic">VEHICULO: {props.patente}</h1>
                 </div>
             </div>
@@ -58,7 +58,7 @@ export const CurrentReservation = (props) => {
                         <FaTrashAlt className="text-xl"/> CANCELAR RESERVA
                     </button>
                     <button onClick={userMenu}  className='flex flex-row p-3 max-xs:text-sm bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold w-fit max-md:w-full max-md:justify-center text-white-50 items-center gap-x-2 '>
-                        <IoHome className="text-2xl"/> VOLVER AL MENU PRINCIPAL
+                        <IoHome className="text-2xl"/> VOLVER AL MENÚ PRINCIPAL
                     </button>
                 </div>
             ) : (

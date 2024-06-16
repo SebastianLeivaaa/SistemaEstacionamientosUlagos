@@ -52,17 +52,33 @@ app.listen(port, async () => {
 
 //Consulta para ir eliminando las reservas que expiran
 const deleteExpiredReservas = async () => {
-
   try {
-    await sql`DELETE FROM reserva
-                WHERE rese_estado = 'EN ESPERA'
-                AND (rese_fecha + rese_hora_inicio <= NOW() - INTERVAL '30 minutes');`;
+    await sql.begin(async (sql) => {
+
+      await sql`SET TIME ZONE 'America/Santiago'`;
+      const expiredReservations = await sql`
+        DELETE FROM reserva
+        WHERE rese_estado = 'EN ESPERA'
+          AND (rese_fecha + rese_hora_inicio <= NOW() - INTERVAL '30 minutes')
+        RETURNING rese_esta_id
+      `;
+
+      const parkingIds = expiredReservations.map(reserva => reserva.rese_esta_id);
+
+      if (parkingIds.length > 0) {
+        await sql`
+          UPDATE estacionamiento
+          SET esta_estado = 'LIBRE'
+          WHERE esta_id = ANY(${parkingIds})
+        `;
+      }
+    });
   } catch (err) {
     console.error('Error deleting expired reservations:', err);
   }
 };
 
-setInterval(deleteExpiredReservas, 60 * 1000);
+setInterval(deleteExpiredReservas, 30 * 1000);
 
 //Consulta para verificar si el usuario existe en la base de datos
 app.post("/api/query-user-exists", async (req, res) => {
@@ -336,7 +352,7 @@ app.post('/api/get-current-reservation', async (req, res) => {
 
   try {
     const currentReservation = await sql`
-      SELECT r.rese_vehi_patente, r.rese_fecha, e.esta_numero, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_inicio
+      SELECT r.rese_vehi_patente, r.rese_fecha, e.esta_numero, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_llegada
         FROM reserva r
         INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
         WHERE rese_usua_rut = ${userRut.toUpperCase()} AND rese_estado = 'EN ESPERA'
@@ -353,7 +369,25 @@ app.post('/api/delete-reservation', async (req, res) => {
   const { userRut } = req.body;
 
   try {
-    const deleteReservation = await sql`DELETE FROM reserva WHERE rese_usua_rut = ${userRut.toUpperCase()} AND rese_estado = 'EN ESPERA'`;
+    await sql.begin(async (sql) => {
+
+      const deleteReservation = await sql`
+        DELETE FROM reserva
+        WHERE rese_usua_rut = ${userRut.toUpperCase()}
+          AND rese_estado = 'EN ESPERA'
+        RETURNING rese_esta_id
+      `;
+
+      const parkingIds = deleteReservation.map(reserva => reserva.rese_esta_id);
+
+      if (parkingIds.length > 0) {
+        await sql`
+          UPDATE estacionamiento
+          SET esta_estado = 'LIBRE'
+          WHERE esta_id = ANY(${parkingIds})
+        `;
+      }
+    });
     res.status(200).send('Reserva eliminada con éxito');
   } catch (error) {
     console.error('Error al eliminar la reserva:', error);
@@ -366,22 +400,43 @@ app.post('/api/release-reservation', async (req, res) => {
   const { vehiclePatente } = req.body;
 
   try {
-    // Verificar si la patente existe'
-    const timeFormat = await sql`SET TIME ZONE 'America/Santiago'`
-    const [existingReservation] = await sql`SELECT * FROM reserva WHERE rese_vehi_patente = ${vehiclePatente} AND rese_hora_salida IS NULL AND rese_estado = 'CONFIRMADA'`;
-    if (!existingReservation) {
-      return res.status(404).send('No se encontró una reserva con la patente proporcionada');
-    }
-    //se libera el estacionamiento y se actualiza la hora de salida de la reserva
-    await sql`UPDATE estacionamiento SET esta_estado = 'LIBRE' WHERE esta_id = ${existingReservation.rese_esta_id}`;
-    await sql`UPDATE reserva SET rese_hora_salida = TO_CHAR(NOW(), 'HH24:MI:SS')::time WHERE rese_vehi_patente = ${vehiclePatente} AND rese_hora_salida IS NULL`;
+    await sql.begin(async (sql) => {
+      // Establecer la zona horaria en el contexto de la transacción
+      await sql`SET TIME ZONE 'America/Santiago'`;
 
-    res.status(200).send(existingReservation.rese_esta_id.slice(-2));
+      // Verificar si la patente existe
+      const [existingReservation] = await sql`
+        SELECT * FROM reserva 
+        WHERE rese_vehi_patente = ${vehiclePatente} 
+        AND rese_hora_salida IS NULL 
+        AND rese_estado = 'CONFIRMADA'
+      `;
+
+      if (!existingReservation) {
+        return res.status(404).send('No se encontró una reserva con la patente proporcionada');
+      }
+
+      // Liberar el estacionamiento y actualizar la hora de salida de la reserva
+      await sql`
+        UPDATE estacionamiento 
+        SET esta_estado = 'LIBRE' 
+        WHERE esta_id = ${existingReservation.rese_esta_id}
+      `;
+      await sql`
+        UPDATE reserva 
+        SET rese_hora_salida = TO_CHAR(NOW(), 'HH24:MI:SS')::time 
+        WHERE rese_vehi_patente = ${vehiclePatente} 
+        AND rese_hora_salida IS NULL
+      `;
+
+      res.status(200).send(existingReservation.rese_esta_id.slice(-2));
+    });
   } catch (error) {
     console.error('Error al eliminar la reserva:', error);
     res.status(500).send('Error al eliminar la reserva');
   }
 });
+
 
 //Consulta para obtener el historial de las reservas por patente
 app.post('/api/get-record-reservation-by-patente', async (req, res) => {
@@ -618,6 +673,63 @@ app.post('/api/get-data-section' , async (req, res) => {
   
   }
 })
+
+//Consulta para ovbener el vehiculo activo
+app.post('/api/get-vehicle-active', async (req, res) => {
+  const { userRut } = req.body;
+
+  try {
+    const vehicleActive = await sql`
+      SELECT v.vehi_patente
+        FROM registrousuariovehiculo r
+        INNER JOIN vehiculo v ON r.regi_vehi_patente = v.vehi_patente
+        WHERE r.regi_usua_rut = ${userRut.toUpperCase()} AND r.regi_estado = 'activo'
+    `;
+    res.json(vehicleActive);
+  } catch (error) {
+    console.error('Error al obtener los vehículos:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+//Consulta para registrar una reserva
+app.post('/api/reserve-parking', async (req, res) => {
+  const { userRut, vehiclePatent, parkingId } = req.body;
+
+  try {
+    await sql.begin(async (sql) => {
+      // Establecer la zona horaria en el contexto de la transacción
+      await sql`SET TIME ZONE 'America/Santiago'`;
+
+      // Realizar el INSERT dentro de la transacción
+      const result = await sql`
+        INSERT INTO reserva (rese_usua_rut, rese_vehi_patente, rese_esta_id, rese_estado, rese_fecha, rese_hora_inicio)
+          VALUES (${userRut.toUpperCase()}, ${vehiclePatent.toUpperCase()}, ${parkingId}, 'EN ESPERA', TO_CHAR(NOW(), 'YYYY-MM-DD')::date, TO_CHAR(NOW(), 'HH24:MI:SS')::time)
+          RETURNING rese_fecha, (rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_llegada
+      `;
+
+      // Actualizar el estado del estacionamiento dentro de la misma transacción
+      await sql`
+        UPDATE estacionamiento
+        SET esta_estado = 'RESERVADO'
+        WHERE esta_id = ${parkingId}
+      `;
+
+      const { rese_fecha, rese_hora_llegada } = result[0];
+      res.status(200).json({
+        message: 'Reserva registrada con éxito',
+        timeReservation: {
+          fecha: rese_fecha,
+          hora_llegada: rese_hora_llegada
+        }
+      });
+    });
+  } catch (error) {
+    console.error('Error al registrar la reserva:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
 
 //login
 app.get('/api/login', async (req, res) => {

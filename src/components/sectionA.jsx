@@ -1,12 +1,16 @@
 import React, {useState, useEffect} from "react";
 import { VehicleSVG } from "./vehicleSVG";
 import axios from "axios";
-import { TbDisabled } from "react-icons/tb";
+import { getColorForStatus } from "../utils/colorForStatus";
+import { ModalSelectedParking } from "./modalSelectedParking";
+
 
 
 export const SectionA = (props) => {
 
     const [dataSection, setDataSection] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedParking, setSelectedParking] = useState([]);
 
     const getDataSection = async (sectionId) => {
         try {
@@ -18,35 +22,31 @@ export const SectionA = (props) => {
         }
       };
 
+    const handleParkingSelected = (parking) => {
+      setSelectedParking(parking);
+      setShowModal(true);
+    };
+
+    const closeModal = () => {
+      setShowModal(false);
+    };
+
     useEffect(() => {
         getDataSection(props.sectionId);
     }, [props.sectionId]);
 
-    const getColorForStatus = (estado) => {
-        switch (estado) {
-          case 'LIBRE':
-            return '#0082ff';
-          case 'OCUPADO':
-            return 'red';
-          case 'RESERVADO':
-            return '#36b139';
-          case 'NO DISPONIBLE':
-            return 'gray';
-          default:
-            return 'black'; 
-        }
-      };
 
     return(
-      <div className="flex flex-col w-full items-center">
+      <>
+        <div className="flex flex-col w-full items-center">
         <ul className="grid grid-cols-9 w-fit gap-y-4">
           {dataSection.slice().reverse().map((parking, index) => (
               <li key={parking.esta_id} className="flex flex-col gap-y-1 justify-center">
-                  <span className="text-center">{`(${parking.esta_numero}${parking.esta_tipo === 'DISCAPACITADOS' && ('*')})`}</span>
+                  <span className="text-center">{parking.esta_numero}{parking.esta_tipo === 'DISCAPACITADOS' && ('*')}</span>
                   <div className="flex flex-row justify-center">
                       <button 
                           className={`flex flex-col items-center w-fit bg-white ${parking.esta_estado !== 'LIBRE' ? "hover:opacity-100" : "hover:opacity-75"}`}
-                          onClick={() => handleParkingClick(parking)}
+                          onClick={() => handleParkingSelected(parking)}
                           disabled={parking.esta_estado !== 'LIBRE'}
                       >
                           <VehicleSVG height="50" width="50" fillColor={getColorForStatus(parking.esta_estado)}/>
@@ -62,6 +62,8 @@ export const SectionA = (props) => {
         <div className="mt-4 text-center text-gray-600">
           Representación visual de una fila física de estacionamientos
         </div>
-      </div>
+        </div>
+      {showModal && <ModalSelectedParking parking={selectedParking} closeModal={closeModal} infoUser={props.infoUser} infoVehicleActive={props.infoVehicleActive}/>}
+      </>
     );
 };

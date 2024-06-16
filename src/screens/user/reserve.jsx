@@ -11,7 +11,11 @@ export const Reserve = () =>{
     userName: "",
     userLastNamePat: "",
     userLastNameMat: "",
+    userRut: "",
 })
+
+const [vehicleActive, setVehicleActive] = useState('');
+
 const navigate = useNavigate();
 
 const getProfile = async () => {
@@ -22,14 +26,31 @@ const getProfile = async () => {
             userName: response.data.userName,
             userLastNamePat: response.data.userLastNamePat,
             userLastNameMat: response.data.userLastNameMat,
+            userRut: response.data.userRut,
         });
+        return response.data.userRut;
     }catch(error){
         navigate("/");
     }
 }
 
+const getVehicleActive = async (userRut) => {
+  try {
+      const response = await axios.post('/api/get-vehicle-active', { userRut }, { withCredentials: true });
+      setVehicleActive(response.data[0].vehi_patente);
+  } catch (error) {
+      console.log(error);
+  }
+};
+
 useEffect(() => {
-    getProfile();
+  const fetchProfileAndVehicles = async () => {
+      const userRut = await getProfile();
+      if (userRut) {
+          await getVehicleActive(userRut);
+      }
+  };
+  fetchProfileAndVehicles();
 }, []);
 
 const logOut = async () => {
@@ -52,7 +73,7 @@ const logOut = async () => {
         <h1 className="font-bold text-xl text-center">SELECCIONE UN ESTACIONAMIENTO:</h1>
         </div>
         <div className="border-bold border-red-700 border select-none flex items-center justify-center">
-            <ParkingMap/>
+            <ParkingMap infoUser={user} infoVehicleActive={vehicleActive}/>
         </div>
       </div> 
     </div>

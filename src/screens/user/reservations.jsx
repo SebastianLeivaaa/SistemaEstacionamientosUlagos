@@ -111,7 +111,7 @@ const logOut = async () => {
                 <h1 className="text-2xl font-bold text-center text-gray-700">No tienes reservas vigentes</h1>
               </div>
             ) : (
-              <CurrentReservation userRut={user.userRut} patente={currentReservation[0].rese_vehi_patente} fecha={currentReservation[0].rese_fecha} numeroEstacionamiento={currentReservation[0].esta_numero} horaInicio={currentReservation[0].rese_hora_inicio} refreshReservations={fetchProfileAndReservations}/> 
+              <CurrentReservation userRut={user.userRut} patente={currentReservation[0].rese_vehi_patente} fecha={currentReservation[0].rese_fecha} numeroEstacionamiento={currentReservation[0].esta_numero} horaLlegada={currentReservation[0].rese_hora_llegada} refreshReservations={fetchProfileAndReservations}/> 
             )
           )
           : (
