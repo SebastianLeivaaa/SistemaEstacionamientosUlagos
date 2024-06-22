@@ -16,7 +16,7 @@ export const SectionB = (props) => {
 
     const getDataSection = async (sectionId) => {
         try {
-          const response = await axios.post("/api/get-data-section", { sectionId }, { withCredentials: true });
+          const response = await axios.post("http://localhost:3090/api/get-data-section", { sectionId }, { withCredentials: true });
           const data = response.data;
           setDataSection(data);
             } catch (error) {
@@ -49,7 +49,7 @@ export const SectionB = (props) => {
                     </div>
                   )}
                   <li className="flex flex-col gap-y-1 justify-center">
-                    <span className="text-center">{parking.esta_numero}{parking.esta_tipo === 'DISCAPACITADOS' && ('*')}</span>
+                    <span className="text-center text-black dark:text-white-50">{parking.esta_numero}{parking.esta_tipo === 'DISCAPACITADOS' && ('*')}</span>
                     <div className="flex flex-row justify-center">
                       <button 
                          className={`flex flex-col items-center w-fit bg-white ${parking.esta_estado !== 'LIBRE' ? "hover:opacity-100" : "hover:opacity-75"}`}
@@ -58,17 +58,17 @@ export const SectionB = (props) => {
                       >
                         <VehicleSVG height="50" width="50" fillColor={getColorForStatus(parking.esta_estado)}/>
                       </button>
-                      <div className='w-[1px] h-full bg-black'></div>
+                      <div className='w-[1px] h-full bg-black dark:bg-white-50'></div>
                     </div>
                   </li>
                 </React.Fragment>
               ))}
             </ul>
-            <div className="mt-4 text-center text-gray-600">
+            <div className="mt-4 text-center text-gray-600 dark:text-gray-400">
               Representación visual de dos filas físicas de estacionamientos
             </div>
           </div>
-          {showModal && <ModalSelectedParking parking={selectedParking} closeModal={closeModal} infoUser={props.infoUser} infoVehicleActive={props.infoVehicleActive}/>}
+          {showModal && <ModalSelectedParking parking={selectedParking} closeModal={closeModal} handleCurrentPage={props.handleCurrentPage} infoUser={props.infoUser} infoVehicleActive={props.infoVehicleActive}/>}
         </>
       );
       

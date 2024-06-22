@@ -28,14 +28,14 @@ export const Login = () => {
         setIsLoading(true);
         try {
             const res = await axios.post(
-                '/api/sesion',
+                'http://localhost:3090/api/sesion',
                 { email: credentials.email.toLowerCase() + credentials.userDomain, password: credentials.password },
                 { withCredentials: true }
             );
             if (res.data === "usuario") {
-                navigate('/user');
+                navigate('/base-layout');
             } else {
-                navigate('/guard');
+                navigate('/base-layout2');
             }
         } catch (error) {
             setError("Credenciales incorrectas");
@@ -49,12 +49,12 @@ export const Login = () => {
     };
 
     return (
-        <div className={`w-full flex flex-col items-center justify-center gap-y-8 mt-8 ${isLoading ? 'cursor-wait' : ''}`}>
-            <form onSubmit={handleSubmit} className="flex flex-col items-center gap-y-8 w-full">
+        <div className={`w-full h-full  flex flex-col items-center justify-center gap-y-20 mt-8 ${isLoading ? 'cursor-wait' : ''}`}>
+            <form onSubmit={handleSubmit} className="h-[50%] flex flex-col justify-between items-center gap-y-8 w-full">
                 <div className="w-full flex flex-row">
-                    <div className="w-[95%] flex flex-row border border-blue-ribbon-600">
-                        <input id="email" name="email" onChange={handleChange} type="text" className="w-1/2 p-2 border-r border-blue-ribbon-600" placeholder="Usuario" />
-                        <select id="userDomain" name="userDomain" className=" bg-white-50 w-1/2" onChange={handleChange}>
+                    <div className="w-[95%] flex flex-row">
+                        <input id="email" name="email" onChange={handleChange} type="text" className="w-full p-1 bg-gray-100 dark:bg-gray-700 text-black dark:text-white-50 border-[0.5px] border-midnight-700" placeholder="Usuario" />
+                        <select id="userDomain" name="userDomain" className=" p-1 bg-gray-100 dark:bg-gray-700 text-black dark:text-white-50 border-[0.5px] border-midnight-70 w-1/2" onChange={handleChange}>
                             <option value="@alumnos.ulagos.cl">@alumnos.ulagos.cl</option>
                             <option value="@ulagos.cl">@ulagos.cl</option>
                         </select>
@@ -63,18 +63,18 @@ export const Login = () => {
                         <MdEmail className="text-blue-ribbon-600 text-2xl" />
                     </div>
                 </div>
-                <div className="w-full flex flex-row">
+                <div className="w-full  flex flex-row">
                     <PasswordInput onChange={handleChange} name="password" />
                     <div className="w-[10%] border-[0.5px] border-l-[0px] border-blue-ribbon-600 flex items-center justify-center max-md:w-[15%]">
                         <MdLock className="text-blue-ribbon-600 text-2xl" />
                     </div>
                 </div>
                 {error && <p className='text-red-600'>{error}</p>}
-                <button type="submit" className={`mt-8 w-full bg-blue-ribbon-600 font-bold text-white-50 px-4 py-2 rounded-md text-lg hover:bg-blue-ribbon-700 flex flex-row items-center justify-center gap-x-2 max-md:text-base ${isLoading ? 'cursor-wait' : ''}`} disabled={isLoading}>
+                <button type="submit" className={`mt-9 w-full bg-midnight-700 font-bold text-white-50 px-3 py-3 rounded-md text-lg hover:bg-blue-ribbon-700 flex flex-row items-center justify-center gap-x-2 max-md:text-base ${isLoading ? 'cursor-wait' : ''}`} disabled={isLoading}>
                     {isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>) : (<MdLogin className="text-3xl max-md:text-2xl" />)} INGRESAR
                 </button>
             </form>
-            <button onClick={handleClick} className="underline text-blue-ribbon-500 text-lg max-md:text-base">¿Olvidaste tu contraseña?</button>
+            <button onClick={handleClick} className="underline text-midnight-600 text-lg max-md:text-base">¿Olvidaste tu contraseña?</button>
         </div>
     );
 };

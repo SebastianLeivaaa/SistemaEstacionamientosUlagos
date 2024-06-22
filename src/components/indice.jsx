@@ -5,7 +5,7 @@ import { FaCheck } from "react-icons/fa";
 export const Indice = ( props ) => {
 
     return (
-        <div className="w-full h-20 bg-blue-ribbon-600 flex items-center">
+        <div className="w-full h-20 bg-midnight-800 rounded-md flex items-center">
             <div className={`${props.fase == "4" ? "hidden" : ""} w-full flex flex-row items-center p-6 justify-center`}>
                 
                     <div className={`${props.fase > "1" ? "hidden md:flex items-center" : ""}flex items-center`}>

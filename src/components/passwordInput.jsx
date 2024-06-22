@@ -10,13 +10,13 @@ export const PasswordInput = (props) => {
     };
 
     return (
-        <div className="relative w-[100%] max-md:w-[100%]">
+        <div className="relative w-[100%]  max-md:w-[100%]">
             <input
                 id={props.id}
                 name={props.name}
                 onChange={props.onChange}
                 type={showPassword ? 'text' : 'password'}
-                className="w-full p-2 border-[0.5px] border-blue-ribbon-600" 
+                className="w-full p-1 bg-gray-100 dark:bg-gray-700 text-black dark:text-white-50 border-[0.5px] border-midnight-700" 
                 placeholder="Contraseña"
             />
             <button

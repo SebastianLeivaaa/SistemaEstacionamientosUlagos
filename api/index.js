@@ -198,7 +198,7 @@ app.post("/api/register-user", async (req, res) => {
     const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${vehiclePatente.toUpperCase()}`;
     if (existingVehicle.length > 0) {
       const insertUser = await sql`insert into usuario(usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_rut, usua_correo, usua_clave, usua_telefono, usua_tipo) 
-                                  values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut.toUpperCase()}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
+                                  values(${userName.trim()}, ${userLastNamePat.trim()}, ${userLastNameMat.trim()}, ${userRut.toUpperCase()}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
       const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado)
                                                       values (${userRut.toUpperCase()}, ${vehiclePatente.toUpperCase()}, 'activo')`;
     } else{
@@ -296,9 +296,14 @@ app.post('/api/add-new-vehicle', async (req, res) => {
   const { patente, userRut } = req.body;
 
   try {
-    // Agregar vehículo a la tabla 'vehiculo'
     const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${patente.toUpperCase()}`;
     const existingRegister = await sql`SELECT * FROM registrousuariovehiculo WHERE regi_vehi_patente = ${patente.toUpperCase()} AND regi_usua_rut = ${userRut.toUpperCase()}`
+
+    const vehicleCount = await sql`SELECT COUNT(*) FROM registrousuariovehiculo WHERE regi_usua_rut = ${userRut.toUpperCase()}`;
+
+    if (vehicleCount[0].count >= 6) {
+      return res.status(400).json({ error: 'No puede tener más de 6 vehículos registrados' });
+    }
 
     if(existingVehicle.length > 0){
       if(existingRegister.length > 0){
@@ -308,7 +313,7 @@ app.post('/api/add-new-vehicle', async (req, res) => {
           INSERT INTO registrousuariovehiculo (regi_vehi_patente, regi_usua_rut, regi_estado) 
           VALUES (${patente.toUpperCase()}, ${userRut.toUpperCase()}, 'inactivo')
         `;
-        res.status(200).json({ message: 'Vehículo agregado exitosamente' });
+        res.status(200).json({ message: 'Registro pendiente de verificación' });
       }
     }else{
       const addVehicle = await sql`
@@ -319,7 +324,7 @@ app.post('/api/add-new-vehicle', async (req, res) => {
           INSERT INTO registrousuariovehiculo (regi_vehi_patente, regi_usua_rut, regi_estado) 
           VALUES (${patente.toUpperCase()}, ${userRut.toUpperCase()}, 'inactivo')
         `;
-      res.status(200).json({ message: 'Vehículo agregado exitosamente' });
+      res.status(200).json({ message: 'Registro pendiente de verificación' });
     }
   } catch (error) {
     console.error('Error al agregar el vehículo:', error);
@@ -333,7 +338,7 @@ app.post('/api/get-record-reservation', async (req, res) => {
 
   try {
     const recordReservation = await sql`
-      SELECT r.rese_vehi_patente, r.rese_hora_llegada, r.rese_hora_salida, r.rese_fecha, e.esta_numero 
+      SELECT r.rese_vehi_patente, r.rese_hora_llegada, r.rese_hora_salida, r.rese_fecha, r.rese_fecha_salida, e.esta_numero 
         FROM reserva r
         INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
         WHERE rese_usua_rut = ${userRut.toUpperCase()} AND rese_estado != 'EN ESPERA'
@@ -346,15 +351,17 @@ app.post('/api/get-record-reservation', async (req, res) => {
   }
 });
 
+
 //Consulta para obtener la reserva vigente del usuario
 app.post('/api/get-current-reservation', async (req, res) => {
   const { userRut } = req.body;
 
   try {
     const currentReservation = await sql`
-      SELECT r.rese_vehi_patente, r.rese_fecha, e.esta_numero, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_llegada
+      SELECT r.rese_vehi_patente, r.rese_fecha, e.esta_numero, s.secc_nombre, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_llegada
         FROM reserva r
         INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+        INNER JOIN SECCION s ON e.esta_secc_id = s.secc_id
         WHERE rese_usua_rut = ${userRut.toUpperCase()} AND rese_estado = 'EN ESPERA'
     `;
     res.json(currentReservation);
@@ -425,6 +432,7 @@ app.post('/api/release-reservation', async (req, res) => {
       await sql`
         UPDATE reserva 
         SET rese_hora_salida = TO_CHAR(NOW(), 'HH24:MI:SS')::time 
+          AND rese_fecha_salida = CURRENT_DATE
         WHERE rese_vehi_patente = ${vehiclePatente} 
         AND rese_hora_salida IS NULL
       `;
@@ -558,7 +566,7 @@ app.post('/api/get-record-reservation-by-date', async (req, res) => {
   } catch (error) {
     console.error('Error al obtener el historial:', error);
     res.status(500).json({ error: 'Error en el servidor' });
-  }
+  }c
 });
 
 //Consulta para obtener la reserva activa del usuario mediante el rut
@@ -730,6 +738,65 @@ app.post('/api/reserve-parking', async (req, res) => {
   }
 });
 
+//Consulta para obtener el historial de las reservas por usuario
+app.post('/api/get-user-statistics', async (req, res) => {
+  const { userRut } = req.body;
+
+  try {
+    const [
+      reservationsThisMonth,
+      mostUsedSection,
+      averageHoursPerReservation,
+      totalReservations,
+    ] = await Promise.all([
+      sql`
+        SELECT COUNT(*) AS count
+        FROM reserva
+        WHERE rese_usua_rut = ${userRut.toUpperCase()}
+          AND EXTRACT(MONTH FROM rese_fecha) = EXTRACT(MONTH FROM CURRENT_DATE)
+          AND rese_estado != 'EN ESPERA'
+      `,
+      sql`
+        SELECT s.secc_nombre, COUNT(*) AS count
+        FROM reserva r
+        INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+        INNER JOIN seccion s ON e.esta_secc_id = s.secc_id
+        WHERE rese_usua_rut = ${userRut.toUpperCase()}
+          AND rese_estado != 'EN ESPERA'
+        GROUP BY s.secc_nombre
+        ORDER BY count DESC
+        LIMIT 1
+      `,
+      sql`
+        SELECT
+          AVG(EXTRACT(EPOCH FROM (rese_fecha_salida - rese_fecha) * interval '1 day' + (rese_hora_salida - rese_hora_llegada)) / 3600) AS average_hours
+          FROM reserva r
+        WHERE rese_usua_rut = ${userRut.toUpperCase()}
+          AND rese_hora_salida IS NOT NULL
+          AND rese_estado != 'EN ESPERA'
+      `,
+      sql`
+        SELECT COUNT(*) AS count
+        FROM reserva
+        WHERE rese_usua_rut = ${userRut.toUpperCase()}
+          AND rese_estado != 'EN ESPERA'
+      `,
+    ]);
+
+    const averageHours = averageHoursPerReservation[0]?.average_hours ?? 0;
+
+    res.json({
+      reservationsThisMonth: reservationsThisMonth[0].count,
+      mostUsedSection: mostUsedSection.length > 0 ? mostUsedSection[0].secc_nombre : '',
+      averageHoursPerReservation: averageHours,
+      totalReservations: totalReservations[0].count,
+    });
+  } catch (error) {
+    console.error('Error al obtener las estadísticas:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
 
 //login
 app.get('/api/login', async (req, res) => {
@@ -770,5 +837,50 @@ app.get('/api/logout', async (req, res) => {
 
   }catch(error){
     return res.status(401).json({ error: "invalid token"})
+  }
+});
+
+//Consulta para obtener reservas activas
+app.get('/api/get-active-reservations', async (req, res) => {
+  try {
+    const reservas = await sql`
+      SELECT COUNT(*) AS count
+      FROM estacionamiento
+      WHERE esta_estado = 'RESERVADO'
+    `;
+    res.json(reservas);
+  } catch (error) {
+    console.error('Error al obtener los reservas:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+//Consulta para obtener reservas no disponibles
+app.get('/api/get-inactive-reservations', async (req,res) => {
+  try {
+    const reservas = await sql`
+      SELECT COUNT(*) AS count
+      FROM estacionamiento
+      WHERE esta_estado = 'NO DISPONIBLE'
+    `;
+    res.json(reservas);
+  } catch (error) {
+    console.error('Error al obtener los reservas:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+//Consulta para obtener reservas ocupadas
+app.get('/api/get-taken-reservations', async (req, res) => {
+  try {
+    const reservas = await sql`
+      SELECT COUNT(*) AS count
+      FROM estacionamiento
+      WHERE esta_estado = 'OCUPADO'
+    `;
+    res.json(reservas);
+  } catch (error) {
+    console.error('Error al obtener los reservas:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
   }
 });

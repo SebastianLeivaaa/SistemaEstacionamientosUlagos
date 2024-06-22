@@ -22,6 +22,8 @@ import { ConfirmReservation } from "./screens/guard/confirmReservation";
 import { Reserve } from "./screens/user/reserve"
 import { ConfirmReservationFinal } from "./components/confirmReservationFinal";
 import { ReserveSuccess } from "./screens/user/reserveSuccess";
+import { BaseLayout } from "./screens/user/baseLayout";
+import { BaseLayout2 } from "./screens/guard/baseLayout";
 
 function App() {
 
@@ -50,6 +52,8 @@ function App() {
         <Route path="/confirm-reservation-final" element={<ConfirmReservationFinal/>}/>
         <Route path="/user-reserve" element={<Reserve/>}/>
         <Route path="/reserve-success" element={<ReserveSuccess/>}/>
+        <Route path="/base-layout" element={<BaseLayout/>}/>
+        <Route path="/base-layout2" element={<BaseLayout2/>}/>
       </Routes>
     </>
   )

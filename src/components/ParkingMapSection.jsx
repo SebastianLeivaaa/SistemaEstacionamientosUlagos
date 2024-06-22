@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Mapa from "../assets/img/Map.png";
+import Mapa2 from "../assets/img/Map2.png";
 import imageMapResize from "../utils/mageMapResizer.min";
-import axios from "axios";
-import { SectionA } from "./sectionA";
+
 
 export const ParkingMapSection = (props) => {
     const [scaledAreas, setScaledAreas] = useState([]);
@@ -71,14 +71,24 @@ export const ParkingMapSection = (props) => {
     };
   
     return (
-      <div className="relative w-[10%] h-[10%] max-xs:w-[40%] max-xs:h-[40%]">
-        <img
-          ref={imgRef}
-          src={Mapa}
-          alt="Mapa interactivo"
-          className="w-[100%] h-auto"
-          useMap="#parking-map"
-        />
+      <div className="relative w-[100px] h-[100px]">
+        {props.darkToggle ? (
+            <img
+              ref={imgRef}
+              src={Mapa2}
+              alt="Mapa interactivo"
+              className="w-[100px] h-[100px]"
+              useMap="#parking-map"
+            />
+          ) : (
+            <img
+              ref={imgRef}
+              src={Mapa}
+              alt="Mapa interactivo"
+              className="w-[100px] h-[100px]"
+              useMap="#parking-map"
+            />
+          )}
         <map name="parking-map" ref={mapRef}>
           {areas.map((area, index) => {
             const coords = parseCoords(area.coords);
@@ -94,7 +104,7 @@ export const ParkingMapSection = (props) => {
             );
           })}
         </map>
-        <svg className="absolute top-0 left-0 w-full h-full" viewBox={`0 0 ${imgRef.current?.width || 0} ${imgRef.current?.height || 0}`}>
+        <svg className="absolute top-0 left-0 w-[100px] h-[100px]" viewBox={`0 0 ${imgRef.current?.width || 0} ${imgRef.current?.height || 0}`}>
           {scaledAreas.map((area, index) => (
             <polygon
               key={index}
