@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { HiOutlineLogin } from "react-icons/hi";
 import { CurrentReservation } from "../../components/currentRevervation";
-import { RecordReservationData } from "./components/recordReservationData";
+import { RecordReservationData } from "../screens/user/components/recordReservationData";
 import { LuCalendarClock } from "react-icons/lu";
 import { FaArrowLeft } from "react-icons/fa";
 

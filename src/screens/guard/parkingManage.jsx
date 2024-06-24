@@ -1,18 +1,18 @@
 import React from "react";
-// import { CurrentReservation } from "./components/currentReservation";
-// import { QuickAccess } from "./components/quickAccess";
-// import { Advice } from "./components/advice";
+import { ReleaseParking } from "./components/releaseParking";
+import { Capacity } from "./components/capacity";
+import { ParkingMapGuard } from "../../components/parkingMapGuard";
 // import { Statistics } from "./components/stat";
 
-export const ParkingManage = ({ user }) => {;
+export const ParkingManage = ({ user, darkToggle }) => {;
 
   return (
-    <div className="w-full h-full flex flex-col px-4 xl:px-60 m-auto items-center grow max-md:px-2 gap-y-4 overflow-y-scroll">
-      <h1 className="w-full h-full flex items-center justify-center">nfvsadnkvfnskjfvlsfvnasj</h1>
-      {/* <CurrentReservation user={user} />
-      <QuickAccess handleCurrentPage={handleCurrentPage} />
-      <Advice />
-      <Statistics /> */}
+    <div className="relative w-full flex flex-col pt-60 max-sm:pt-24 max-md:pt-24 px-4 2xl:px-60 items-center justify-center max-md:px-2 gap-y-4 overflow-y-scroll">
+      <div className="w-full h-full grid grid-cols-2 max-md:grid-cols-1 gap-x-4 gap-y-4 max-md:pt-24">
+        <ReleaseParking user={user} />
+        <Capacity />
+      </div>
+      <ParkingMapGuard guard="guard" darkToggle={darkToggle} user={user}/>   
     </div>
   );
 };

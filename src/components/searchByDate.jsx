@@ -1,7 +1,5 @@
 import React, {useState} from "react";
-import { IoHome } from "react-icons/io5";
 import { IoSearch } from "react-icons/io5"
-import { useNavigate } from 'react-router-dom';;
 import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
 import { TiWarning } from "react-icons/ti";
@@ -9,13 +7,11 @@ import { formatDateTwo } from "../utils/formatDateTwo";
 
 
 
-export const SearchByDate = () => {
+export const SearchByDate = ( { updateRecordReservation, handleResultFor } ) => {
 
     const [formData, setFormData] = useState({
         date: '',
     });
-
-    const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState(null);
@@ -35,7 +31,7 @@ export const SearchByDate = () => {
         setErrors({});
         setMessage(null);
         const newErrors = {};
-        if(formData.date < minDate || formData.date >= today){
+        if(formData.date < minDate || formData.date > today){
             newErrors.date = `Por favor, ingrese una fecha entre ${formatDateTwo(minDate)} y ${formatDateTwo(today)}`;
         }
 
@@ -44,9 +40,11 @@ export const SearchByDate = () => {
         }else{
             try {
                 const response = await axios.post("/api/get-record-reservation-by-date", formData, { withCredentials: true });
-                console.log(response.data)
-                navigate('/record-reservation-by-date', { state: { recordReservation: response.data } } )
+                updateRecordReservation(response.data);
+                handleResultFor('fecha');
             }catch(error){
+                updateRecordReservation([])
+                handleResultFor('');
                 setMessage({ text: error.response?.data?.message || 'Error al buscar el historial' });
             }
         }
@@ -58,39 +56,37 @@ export const SearchByDate = () => {
 
 
     return (
-        <div className="flex flex-col w-full gap-y-8">
-            <div className="flex flex-col gap-y-4 max-md:gap-y-2">
-                <label className="text-xl max-md:text-lg">Fecha</label>
-                <input
-                    type='date'
-                    id='date'
-                    onChange={handleChange}
-                    value={formData.date}
-                    maxLength='6'
-                    name='date'
-                    className='w-[50%] max-md:w-[100%] p-1 border-[0.5px] border-blue-ribbon-600'
-                    placeholder='DD/MM/AAAA'
-                    max={today}
-                    min={minDate}
-                />
-                {errors.date && (
-                    <p className='text-red-600 text-base max-md:text-center'>{errors.date}</p>
-                )}
-            </div>
-            {message && (
-                <div className="flex flex-row gap-x-2 justify-center items-center max-md:flex-col">
-                    <TiWarning className="text-2xl text-red-600"/>
-                    <p className='text-red-600 text-base max-md:text-center'>{message.text}</p>
+        <>
+            <form className="flex flex-row w-full gap-x-8 max-xl:gap-x-2 max-lg:flex-col gap-y-4 justify-center mt-8">
+                <div className="flex flex-row max-lg:w-full items-center justify-center gap-x-2 max-lg:flex-col max-xl:gap-y-2 max-xl:items-center max-lg:items-start">
+                    <label className="w-fit font-semibold text-xl max-xl:text-base max-md:text-base text-black dark:text-white-50">Fecha:</label>
+                    <input
+                        type='date'
+                        id='date'
+                        onChange={handleChange}
+                        value={formData.date}
+                        maxLength='6'
+                        name='date'
+                        className='p-1 max-lg:w-[50%] max-md:w-[100%] px-2 bg-gray-100 dark:bg-gray-700 text-black dark:text-white-50 border-[0.5px] border-midnight-700'
+                        placeholder='DD/MM/AAAA'
+                        max={today}
+                        min={minDate}
+                    />
                 </div>
+                <button onClick={handleSubmit} className='flex flex-row w-fit max-md:w-full max-lg:mt-4 gap-x-1 items-center justify-center bg-midnight-700 hover:bg-midnight-800 rounded-md font-bold p-2 text-white-50'>
+                    {isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>) : (<IoSearch className="text-2xl"/>)}  Consultar
+                </button>
+            </form>
+            {errors.date && (
+                <p className='p-2 rounded flex flex-row text-lg gap-x-1 max-lg:flex-col gap-y-1 justify-centeritems-center text-center dark:text-yellow-500 text-red-600'>
+                    <TiWarning className="text-2xl"/> {errors.date}
+                </p>
             )}
-            <div className="flex flex-row justify-around mt-16 max-md:flex-col max-md:gap-y-4 max-md:mt-0">
-                <button onClick={() => {navigate('/guard')}} className='mr-6 flex flex-row max-md:text-sm p-3 bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold w-fit max-md:w-full text-white-50 items-center justify-center gap-x-2 '>
-                    <IoHome className="text-2xl"/> VOLVER AL MENU PRINCIPAL
-                </button>
-                <button onClick={handleSubmit} className='flex flex-row p-3 max-md:text-sm bg-blue-ribbon-600 hover:bg-blue-ribbon-700 rounded-md font-bold w-fit max-md:w-full text-white-50 items-center justify-center gap-x-2 '>
-                    {isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>) : (<IoSearch className="text-2xl"/>)}  CONSULTAR
-                </button>
-            </div>
-        </div>
+            {message && (
+                <p className='p-2 rounded flex flex-row text-lg gap-x-1 max-lg:flex-col gap-y-1 justify-center items-center text-center dark:text-yellow-500 text-red-600'>
+                    <TiWarning className="text-2xl"/> {message.text}
+                </p>
+            )}
+        </>
     )
 }

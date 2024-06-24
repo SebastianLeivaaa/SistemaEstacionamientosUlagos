@@ -3,6 +3,7 @@ import { VehicleSVG } from "./vehicleSVG";
 import axios from "axios";
 import { getColorForStatus } from "../utils/colorForStatus";
 import { ModalSelectedParking } from "./modalSelectedParking";
+import { ModalSelectedParkingGuard } from "./modalSelectedParkingGuard";
 
 
 
@@ -10,12 +11,13 @@ import { ModalSelectedParking } from "./modalSelectedParking";
 export const SectionE = (props) => {
 
     const [dataSection, setDataSection] = useState([]);
+    const [isGuard, setIsGuard] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [selectedParking, setSelectedParking] = useState([]);
 
     const getDataSection = async (sectionId) => {
         try {
-          const response = await axios.post("http://localhost:3090/api/get-data-section", { sectionId }, { withCredentials: true });
+          const response = await axios.post("/api/get-data-section", { sectionId }, { withCredentials: true });
           const data = response.data;
           setDataSection(data);
             } catch (error) {
@@ -24,12 +26,20 @@ export const SectionE = (props) => {
       };
 
     const handleParkingSelected = (parking) => {
-        setSelectedParking(parking);
-        setShowModal(true);
-    };
-      
-    const closeModal = () => {
+      setSelectedParking(parking);
+      if (props.guard === "guard") {
+        setIsGuard(true);
         setShowModal(false);
+        
+      } else {
+          setIsGuard(false);
+          setShowModal(true);
+      }
+    };
+
+    const closeModal = () => {
+      setShowModal(false);
+      setIsGuard(false);
     };
 
     useEffect(() => {
@@ -38,6 +48,8 @@ export const SectionE = (props) => {
 
       return (
         <>
+            {showModal && (<div className="fixed inset-0 bg-black opacity-50 z-30"></div>)}
+            {isGuard && (<div className="fixed inset-0 bg-black opacity-50 z-30"></div>)}
             <div className="flex flex-col w-full items-center">
                 <ul className="grid grid-cols-6 w-fit gap-y-4">
                     {dataSection.map((parking, index) => (
@@ -68,6 +80,7 @@ export const SectionE = (props) => {
                 </div>
             </div>
             {showModal && <ModalSelectedParking parking={selectedParking} closeModal={closeModal} handleCurrentPage={props.handleCurrentPage} infoUser={props.infoUser} infoVehicleActive={props.infoVehicleActive}/>}
+            {isGuard && <ModalSelectedParkingGuard parking={selectedParking} closeModal={closeModal} onCloseSection={props.onCloseSection}  handleCurrentPage={props.handleCurrentPage} user={props.user}/>}
         </>
       );
 };

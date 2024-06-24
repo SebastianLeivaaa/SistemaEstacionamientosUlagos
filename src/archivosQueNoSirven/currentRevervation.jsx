@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { UserQR } from "./userQR";
+import { UserQR } from "../components/userQR.jsx";
 import { formatTimeTwo } from "../utils/formatTimeTwo.js";
 import { formatDateTwo } from "../utils/formatDateTwo.js";
 import { FaTrashAlt } from "react-icons/fa";

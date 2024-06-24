@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { HiOutlineLogin } from "react-icons/hi";
 import Ulogo from "../../assets/img/Ulogo.png";
 import axios from "axios";
-import { RecordReservationDataGuard } from "../../components/recordReservationDataGuard";
+import { RecordReservationDataGuard } from "../screens/guard/components/recordReservationDataGuard";
 import { useNavigate } from 'react-router-dom';
 
 

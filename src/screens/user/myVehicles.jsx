@@ -42,7 +42,7 @@ export const MyVehicles = ( {user} ) => {
 
         try {
             if(formData.vehiclePatente.length === 6){
-                const response = await axios.post("http://localhost:3090/api/add-new-vehicle", newVehicleData, { withCredentials: true });
+                const response = await axios.post("/api/add-new-vehicle", newVehicleData, { withCredentials: true });
                 await getVehicles(user.userRut);
                 setFormData({ vehiclePatente: '' });
                 setMessage({ type: 'success', text: response.data.message });
@@ -59,7 +59,7 @@ export const MyVehicles = ( {user} ) => {
 
     const getVehicles = async (userRut) => {
         try {
-            const response = await axios.post('http://localhost:3090/api/get-vehicles', { userRut }, { withCredentials: true });
+            const response = await axios.post('/api/get-vehicles', { userRut }, { withCredentials: true });
             // Ordenar vehículos para que los activos estén primero
             const sortedVehicles = response.data.sort((a, b) => a.regi_estado.localeCompare(b.regi_estado));
             setVehicles(sortedVehicles);
@@ -78,7 +78,7 @@ export const MyVehicles = ( {user} ) => {
     }, [vehicles]);
 
     return(
-        <div className="w-full h-full flex flex-col px-4 xl:px-60 m-auto items-center grow max-md:px-2 gap-y-4 overflow-y-scroll">
+        <div className="w-full h-full flex flex-col px-4 pt-8 2xl:px-60 m-auto items-center max-md:px-2 gap-y-4 overflow-y-scroll">
             <div className="w-full grid grid-cols-2 max-md:grid-cols-1 gap-4">
                 <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl contrast-[95%] mb-8 rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4">
                     <h1 className="dark:text-white-50 text-black font-bold text-2xl flex flex-row gap-x-2 items-center"><MdAdd className="text-4xl text-black dark:text-white-50"/> Agregar nuevo vehículo</h1>
@@ -99,7 +99,7 @@ export const MyVehicles = ( {user} ) => {
                 </div>
                 <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl contrast-[95%] mb-8 rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4">
                     <h1 className="dark:text-white-50 text-black font-bold text-2xl flex flex-row gap-x-2 items-center"><FaBell className="text-4xl text-black dark:text-white-50"/>Recordatorio</h1>
-                    <p className="text-black dark:text-white-50 text-lg font-semibold text-center max-md:text-base">Recuerda que solo puedes tener un máximo de 6 vehículos registrados en el sistema.</p>
+                    <p className="text-black dark:text-white-50 text-lg font-semibold text-start max-md:text-base">Recuerda que solo puedes tener un máximo de 6 vehículos registrados en el sistema.</p>
                 </div>
             </div>
             <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl contrast-[95%] mb-8 rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4">

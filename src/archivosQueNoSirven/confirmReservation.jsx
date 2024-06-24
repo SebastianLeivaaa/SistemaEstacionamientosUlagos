@@ -1,28 +1,29 @@
 import React, {useState, useEffect} from "react";
-import { useLocation } from 'react-router-dom';
-import { HiOutlineLogin } from "react-icons/hi";
-import Ulogo from "../../assets/img/Ulogo.png";
-import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import { RecordReservationDataGuard } from "../../components/recordReservationDataGuard";
+import Ulogo from "../../assets/img/Ulogo.png";
+import { HiOutlineLogin } from "react-icons/hi";
+import axios from "axios";
+import { ConfirmReservationByRut } from "../../components/confirmReservationByRut";
+import { ConfirmReservationByQr } from "../../components/confirmReservationByQr";
+import { IoSearch } from "react-icons/io5"
 
 
-export const RecordReservationByRut = (props) => {
+export const ConfirmReservation = () => {
+
     const [user, setUser] = useState({
         email: "",
         userName: "",
         userLastNamePat: "",
         userLastNameMat: "",
     });
+    const [current, setCurrent] = useState('rut');
 
-    const location = useLocation();
-    const recordReservation = location.state?.recordReservation;
     const navigate = useNavigate();
 
     const logOut = async () => {
-        const response = await axios.get("/api/logout", { withCredentials: true });
+        const response = await axios.get("/api/logout", {withCredentials: true});
         navigate('/');
-    }
+    };
 
     const getProfile = async () => {
         try{
@@ -38,10 +39,19 @@ export const RecordReservationByRut = (props) => {
         }
     };
 
+    const handleRutClick = () => {
+        setCurrent('rut');
+    };
+
+    const handleQrClick = () => {
+        setCurrent('qr');
+    };
+
     useEffect(() => {
         getProfile();
     }, []);
-    return (
+
+    return(
         <div className="w-screen min-h-screen flex items-center justify-center py-16">
             <div className="flex flex-col h-[800px] w-[50%] overflow-y-scroll p-8 gap-y-8 rounded-md max-md:w-[75%] max-md:px-4 max-md:py-8 bg-white-50 relative">
                 <div className="flex flex-wrap sm:flex-row w-full justify-between">
@@ -52,28 +62,25 @@ export const RecordReservationByRut = (props) => {
                     </div>
                 </div>
                 <div className='flex flex-col items-center gap-y-4'>
-                    <h1 className='font-bold text-2xl mt-10 text-center'>HISTORIAL DE RESERVAS</h1>
-                    <h2 className='text-xl flex flex-row gap-x-1 text-center'>Resultados para RUT {recordReservation[0].rese_usua_rut}</h2>
+                    <h1 className='font-bold text-2xl mt-10'>CONFIRMAR RESERVA</h1>
+                    <h2 className='text-xl'>Confirmar por</h2>
                 </div>
-                <div className='p-8 w-[100%] flex flex-col gap-y-12 max-md:w-[100%] max-md:p-0 items-center justify-center'>
-                    {recordReservation.map((record, index) => (
-                        <RecordReservationDataGuard 
-                            key={index} 
-                            patente={record.rese_vehi_patente}
-                            fecha={record.rese_fecha}
-                            rut={record.rese_usua_rut}
-                            nombre={record.usua_nombre}
-                            apellidoPat={record.usua_apellido_paterno}
-                            apellidoMat={record.usua_apellido_materno}
-                            horaLlegada={record.rese_hora_llegada}
-                            horaSalida={record.rese_hora_salida}
-                            numeroEstacionamiento={record.esta_numero}
-                            tipo={record.usua_tipo}
-                            firstRecord={index === 0}
-                        />
-                    ))}
+                <div className="flex flex-row justify-evenly w-full">
+                    <button onClick={handleRutClick} className={`${current === 'rut' ? 'bg-blue-ribbon-600 text-white-50' : 'bg-white-50 text-black'}  px-8 py-2 rounded-md text-base font-semibold hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-sm max-md:px-2`} disabled={current === 'rut'}>
+                        RUT
+                    </button>
+                    <button onClick={handleQrClick} className={`${current === 'qr' ? 'bg-blue-ribbon-600 text-white-50' : 'bg-white-50 text-black'}  px-8 py-2 rounded-md text-base font-semibold hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-sm max-md:px-2`} disabled={current === 'qr'}>
+                        CÓDIGO QR
+                    </button>
+                </div>
+                <div className='w-full px-16 py-8 flex flex-col gap-y-12 max-lg:w-[100%] max-md:py-0 max-lg:px-4 items-center justify-center'>
+                    {current === 'rut' ? (
+                        <ConfirmReservationByRut/>
+                    ) : (
+                        <ConfirmReservationByQr />
+                    )}
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};

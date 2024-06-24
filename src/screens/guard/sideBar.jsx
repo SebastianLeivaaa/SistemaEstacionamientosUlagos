@@ -68,7 +68,7 @@ export const SideBar = ({ onToggleMenu, handleToggleMenu, userName, userLastName
                             if(isMaxLG) handleToggleMenu();
                         }}
                         className={`p-4 px-2 flex flex-row gap-x-2 items-center rounded-md ${currentPage === '/parking-manage' ? 'bg-midnight-700 dark:bg-midnight-500 text-white-50 dark:text-black' : 'text-black dark:text-white-50 hover:bg-midnight-700 hover:text-white-50 hover:dark:bg-midnight-500 hover:dark:text-black'}`}>
-                        <MdLocalParking /> Admin. Estacionamientos
+                        <MdLocalParking /> Administrar parkings
                     </button>
                     <button
                         onClick={() => {

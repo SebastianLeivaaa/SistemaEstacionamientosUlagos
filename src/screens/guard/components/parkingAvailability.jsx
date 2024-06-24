@@ -14,7 +14,7 @@ import { MdLocalParking, MdDirectionsCarFilled } from "react-icons/md";
 
 
 
-export const CurrentReservation = ({ user }) => {
+export const ParkingAvailability = ({ user }) => {
 
     const [parkingSpaces, setParkingSpaces] = useState(null);
     const [reservations, setReservations] = useState(null);
@@ -23,7 +23,7 @@ export const CurrentReservation = ({ user }) => {
 
     const getParkingSpaces = async () => {
         try{
-            const response = await axios.get("http://localhost:3090/api/parkingSpaces", {withCredentials: true});
+            const response = await axios.get("/api/parkingSpaces", {withCredentials: true});
             setParkingSpaces(response.data.total_libres);
         }catch(error){
             console.log(error);
@@ -31,7 +31,7 @@ export const CurrentReservation = ({ user }) => {
     }
     const getReservations = async () => {
         try{
-            const response = await axios.get("http://localhost:3090/api/get-active-reservations", {withCredentials: true});
+            const response = await axios.get("/api/get-active-reservations", {withCredentials: true});
             setReservations(response.data[0].count);
         }catch(error){
             console.log(error);
@@ -39,7 +39,7 @@ export const CurrentReservation = ({ user }) => {
     }
     const getInactiveReservations = async () => {
         try{
-            const response = await axios.get("http://localhost:3090/api/get-inactive-reservations", {withCredentials: true});
+            const response = await axios.get("/api/get-inactive-reservations", {withCredentials: true});
             setInactiveReservations(response.data[0].count);
         }catch(error){
             console.log(error);
@@ -47,7 +47,7 @@ export const CurrentReservation = ({ user }) => {
     }
     const getTakenReservations = async () => {
         try{
-            const response = await axios.get("http://localhost:3090/api/get-taken-reservations", {withCredentials: true});
+            const response = await axios.get("/api/get-taken-reservations", {withCredentials: true});
             setTakenReservations(response.data[0].count);
         }catch(error){
             console.log(error);
@@ -91,46 +91,36 @@ export const CurrentReservation = ({ user }) => {
     }, []);
 
 
-    
-    //const textColor = parkingSpaces <= 15 ? 'text-red-500' : 'text-green-700';
-    return (
+        return (
         <>
            
             <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl  contrast-[95%] rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4 text-white-50 font-bold text-xl">
                 <h1 className="dark:text-white-50 text-black font-bold text-2xl flex flex-row gap-x-2 items-center"><MdDirectionsCarFilled className="text-3xl text-black dark:text-white-50" /> Estacionamientos</h1>
                 <div className="flex flex-row gap-x-8 w-full justify-start max-lg:grid max-lg:grid-cols-4 max-md:grid-cols-2 max-lg:gap-x-2 max-md:gap-x-2 gap-y-3" >
-                    <div className="flex flex-col max-md:py-2 w-full h-full items-center max-md:gap-y-2">
-                        <div className="flex flex-col p-2 py-6 max-md:py-2 bg-red-500 rounded-md w-full h-full items-center max-md:gap-y-2">
+                        <div className="flex flex-col p-2 py-4 max-md:py-2 bg-red-500 rounded-md w-full h-full items-center">
                             <h1 className="text-white-50 text-xl font-bold text-center max-md:text-base max-sm:text-xs">Ocupados</h1>
                             <span className="text-white-50 font-bold text-4xl max-md:text-2xl max-sm:text-base">
                                 {takenReservations !== null ? takenReservations : 'Cargando...'}
                             </span>
                         </div>
-                    </div>   
-                    <div className="flex flex-col max-md:py-2 w-full h-full items-center max-md:gap-y-2">
-                        <div className="flex flex-col p-2 py-6 max-md:py-2 bg-green-600 rounded-md w-full h-full items-center max-md:gap-y-2">
+                        <div className="flex flex-col p-2 py-4 max-md:py-2 bg-green-600 rounded-md w-full h-full items-center">
                             <h1 className="text-white-50 text-xl font-bold text-center max-md:text-base max-sm:text-xs">Libres</h1>
                             <span className="text-white-50 font-bold text-4xl max-md:text-2xl max-sm:text-base">
                                 {parkingSpaces !== null ? parkingSpaces : 'Cargando...'}
                             </span>
                         </div>
-                    </div>  
-                    <div className="flex flex-col max-md:py-2 w-full h-full items-center max-md:gap-y-2">
-                        <div className="flex flex-col p-2 py-6 max-md:py-2 bg-yellow-500 rounded-md w-full h-full items-center max-md:gap-y-2">
+                        <div className="flex flex-col p-2 py-4 max-md:py-2 bg-yellow-500 rounded-md w-full h-full items-center">
                             <h1 className="text-white-50 text-xl font-bold text-center max-md:text-base max-sm:text-xs">Reservados</h1>
                             <span className="text-white-50 font-bold text-4xl max-md:text-2xl max-sm:text-base">
                                 {reservations !== null ? reservations : 'Cargando...'}
                             </span>
                         </div>
-                    </div>  
-                    <div className="flex flex-col max-md:py-2 w-full h-full items-center max-md:gap-y-2">
-                        <div className="flex flex-col p-2 py-6 max-md:py-2 bg-gray-600 rounded-md w-full h-full items-center max-md:gap-y-2">
+                        <div className="flex flex-col p-2 py-4 max-md:py-2 bg-gray-600 rounded-md w-full h-full items-center">
                             <h1 className="text-white-50 text-xl font-bold text-center max-md:text-base max-sm:text-xs">No Disponibles</h1>
                             <span className="text-white-50 font-bold text-4xl max-md:text-2xl max-sm:text-base">
                                 {inactiveReservations !== null ? inactiveReservations : 'Cargando...'}
                             </span>
                         </div>
-                    </div>  
                 </div>
             </div>
             

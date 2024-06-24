@@ -111,6 +111,7 @@ app.post("/api/send-email", async (req, res) => {
     const info = await sendCodeEmail(code, fullUserEmail);
     res.send({ info: info, code: code });
   } catch (error) {
+    console.log(error)
     res.send(error);
   }
 });
@@ -241,6 +242,22 @@ app.get('/api/parkingSpaces', async (req, res) => {
   }
 });
 
+//consulta para obtener los estacionamientos2
+app.get('/api/parkingSpaces2', async (req, res) => {
+  try {
+    const parkingSpaces = await sql`SELECT (COUNT(es.esta_id) * 100.0 / ed.edif_capacidad_estacionamiento) AS porcentaje_ocupado
+                                      FROM EDIFICIO ed JOIN ESTACIONAMIENTO es 
+                                      ON ed.edif_id = es.esta_edif_id
+                                        WHERE es.esta_estado = 'LIBRE'
+                                    group by ED.edif_capacidad_estacionamiento`;
+
+    res.json({total_libres: parkingSpaces[0].porcentaje_ocupado});
+  } catch (error) {
+    console.error('Error al obtener los estacionamientos:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
 //Consulta para ovbener los vehiculos
 app.post('/api/get-vehicles', async (req, res) => {
   const { userRut } = req.body;
@@ -351,6 +368,13 @@ app.post('/api/get-record-reservation', async (req, res) => {
   }
 });
 
+/*
+SELECT r.rese_vehi_patente, r.rese_fecha, e.esta_numero, s.secc_nombre, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_llegada
+          FROM reserva r
+          INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+          INNER JOIN SECCION s ON e.esta_secc_id = s.secc_id
+          WHERE (rese_usua_rut = ${userRut.toUpperCase()} OR rese_visi_rut = ${userRut.toUpperCase()}) AND (rese_estado = 'EN ESPERA' OR (rese_estado = 'CONFIRMADA' AND rese_hora_salida IS NULL))
+*/
 
 //Consulta para obtener la reserva vigente del usuario
 app.post('/api/get-current-reservation', async (req, res) => {
@@ -358,11 +382,11 @@ app.post('/api/get-current-reservation', async (req, res) => {
 
   try {
     const currentReservation = await sql`
-      SELECT r.rese_vehi_patente, r.rese_fecha, e.esta_numero, s.secc_nombre, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_llegada
-        FROM reserva r
-        INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
-        INNER JOIN SECCION s ON e.esta_secc_id = s.secc_id
-        WHERE rese_usua_rut = ${userRut.toUpperCase()} AND rese_estado = 'EN ESPERA'
+      SELECT r.rese_vehi_patente, r.rese_fecha, r.rese_hora_llegada, r.rese_estado, r.rese_hora_salida, e.esta_numero, s.secc_nombre, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_llegada_max
+          FROM reserva r
+          INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+          INNER JOIN SECCION s ON e.esta_secc_id = s.secc_id
+          WHERE rese_usua_rut = ${userRut.toUpperCase()} AND (rese_estado = 'EN ESPERA' OR (rese_estado = 'CONFIRMADA' AND rese_hora_salida IS NULL))
     `;
     res.json(currentReservation);
   } catch (error) {
@@ -370,6 +394,8 @@ app.post('/api/get-current-reservation', async (req, res) => {
     res.status(500).json({ error: 'Error en el servidor' });
   }
 });
+
+
 
 //Consulta para eliminar una reserva
 app.post('/api/delete-reservation', async (req, res) => {
@@ -404,7 +430,7 @@ app.post('/api/delete-reservation', async (req, res) => {
 
 //Consulta para liberar una reserva por patente
 app.post('/api/release-reservation', async (req, res) => {
-  const { vehiclePatente } = req.body;
+  const { vehiclePatente, guardRut } = req.body;
 
   try {
     await sql.begin(async (sql) => {
@@ -414,7 +440,7 @@ app.post('/api/release-reservation', async (req, res) => {
       // Verificar si la patente existe
       const [existingReservation] = await sql`
         SELECT * FROM reserva 
-        WHERE rese_vehi_patente = ${vehiclePatente} 
+        WHERE (rese_vehi_patente = ${vehiclePatente.toUpperCase()} OR rese_visi_vehi_patente = ${vehiclePatente.toUpperCase()})
         AND rese_hora_salida IS NULL 
         AND rese_estado = 'CONFIRMADA'
       `;
@@ -429,14 +455,15 @@ app.post('/api/release-reservation', async (req, res) => {
         SET esta_estado = 'LIBRE' 
         WHERE esta_id = ${existingReservation.rese_esta_id}
       `;
+
       await sql`
         UPDATE reserva 
-        SET rese_hora_salida = TO_CHAR(NOW(), 'HH24:MI:SS')::time 
-          AND rese_fecha_salida = CURRENT_DATE
-        WHERE rese_vehi_patente = ${vehiclePatente} 
+        SET rese_hora_salida = TO_CHAR(NOW(), 'HH24:MI:SS')::time,
+            rese_fecha_salida = CURRENT_DATE,
+            rese_guar_rut_salida = ${guardRut}
+        WHERE (rese_vehi_patente = ${vehiclePatente.toUpperCase()} OR rese_visi_vehi_patente = ${vehiclePatente.toUpperCase()})
         AND rese_hora_salida IS NULL
       `;
-
       res.status(200).send(existingReservation.rese_esta_id.slice(-2));
     });
   } catch (error) {
@@ -456,7 +483,7 @@ app.post('/api/get-record-reservation-by-patente', async (req, res) => {
       res.status(500).json({ message: 'El vehículo no se encuentra registrado en la base de datos' });
     } else{
       let query = sql`
-          SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
+          SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_fecha_salida, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
             FROM reserva r
             INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
             INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
@@ -466,7 +493,7 @@ app.post('/api/get-record-reservation-by-patente', async (req, res) => {
 
       if (date) {
         query = sql`
-        SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
+        SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_fecha_salida, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
           FROM reserva r
           INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
           INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
@@ -503,7 +530,7 @@ app.post('/api/get-record-reservation-by-rut', async (req, res) => {
       res.status(500).json({ message: 'El usuario no se encuentra registrado en la base de datos' });
     } else{
       let query = sql`
-          SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
+          SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_fecha_salida, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
             FROM reserva r
             INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
             INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
@@ -513,7 +540,7 @@ app.post('/api/get-record-reservation-by-rut', async (req, res) => {
 
       if (date) {
         query = sql`
-        SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
+        SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_fecha_salida, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
           FROM reserva r
           INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
           INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
@@ -546,7 +573,7 @@ app.post('/api/get-record-reservation-by-date', async (req, res) => {
   try {
 
       let query = sql`
-          SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
+          SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_fecha_salida, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo
             FROM reserva r
             INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
             INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
@@ -566,13 +593,12 @@ app.post('/api/get-record-reservation-by-date', async (req, res) => {
   } catch (error) {
     console.error('Error al obtener el historial:', error);
     res.status(500).json({ error: 'Error en el servidor' });
-  }c
+  }
 });
 
 //Consulta para obtener la reserva activa del usuario mediante el rut
 app.post('/api/get-active-reservation-by-rut', async (req, res) => {
-  const { rut, codVerificador } = req.body;
-  const rutUser = `${rut}-${codVerificador}`
+  const { rut } = req.body;
 
   try {
     const activeReservation = await sql`
@@ -580,7 +606,7 @@ app.post('/api/get-active-reservation-by-rut', async (req, res) => {
         FROM reserva r
         INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
         INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut
-        WHERE rese_usua_rut = ${rutUser.toUpperCase()} AND rese_estado = 'EN ESPERA'
+        WHERE rese_usua_rut = ${rut.toUpperCase()} AND rese_estado = 'EN ESPERA'
     `;
     if(activeReservation.length === 0){
       res.status(500).json({ message: 'No se encontró una reserva activa asociado a este rut' });
@@ -700,7 +726,7 @@ app.post('/api/get-vehicle-active', async (req, res) => {
   }
 });
 
-//Consulta para registrar una reserva
+//Consulta para registrar una reserva por el usuario
 app.post('/api/reserve-parking', async (req, res) => {
   const { userRut, vehiclePatent, parkingId } = req.body;
 
@@ -711,9 +737,8 @@ app.post('/api/reserve-parking', async (req, res) => {
 
       // Realizar el INSERT dentro de la transacción
       const result = await sql`
-        INSERT INTO reserva (rese_usua_rut, rese_vehi_patente, rese_esta_id, rese_estado, rese_fecha, rese_hora_inicio)
-          VALUES (${userRut.toUpperCase()}, ${vehiclePatent.toUpperCase()}, ${parkingId}, 'EN ESPERA', TO_CHAR(NOW(), 'YYYY-MM-DD')::date, TO_CHAR(NOW(), 'HH24:MI:SS')::time)
-          RETURNING rese_fecha, (rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_llegada
+        INSERT INTO reserva (rese_usua_rut, rese_is_usua, rese_vehi_patente, rese_esta_id, rese_estado, rese_fecha, rese_hora_inicio)
+          VALUES (${userRut.toUpperCase()}, TRUE, ${vehiclePatent.toUpperCase()}, ${parkingId}, 'EN ESPERA', TO_CHAR(NOW(), 'YYYY-MM-DD')::date, TO_CHAR(NOW(), 'HH24:MI:SS')::time)
       `;
 
       // Actualizar el estado del estacionamiento dentro de la misma transacción
@@ -723,13 +748,52 @@ app.post('/api/reserve-parking', async (req, res) => {
         WHERE esta_id = ${parkingId}
       `;
 
-      const { rese_fecha, rese_hora_llegada } = result[0];
       res.status(200).json({
         message: 'Reserva registrada con éxito',
-        timeReservation: {
-          fecha: rese_fecha,
-          hora_llegada: rese_hora_llegada
-        }
+      });
+    });
+  } catch (error) {
+    console.error('Error al registrar la reserva:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
+//Consulta para registrar una reserva mediante el guardia
+app.post('/api/reserve-parking-by-guard', async (req, res) => {
+  const { userRut, vehiclePatent, parkingId, guardRut } = req.body;
+
+  try {
+    await sql.begin(async (sql) => {
+      // Establecer la zona horaria en el contexto de la transacción
+      await sql`SET TIME ZONE 'America/Santiago'`;
+
+
+      const getActiveReservation = await sql`
+        SELECT r.rese_vehi_patente, r.rese_fecha, e.esta_numero, s.secc_nombre, (r.rese_hora_inicio + INTERVAL '30 minutes') AS rese_hora_llegada
+          FROM reserva r
+          INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+          INNER JOIN SECCION s ON e.esta_secc_id = s.secc_id
+          WHERE (rese_usua_rut = ${userRut.toUpperCase()} OR rese_visi_rut = ${userRut.toUpperCase()}) AND (rese_estado = 'EN ESPERA' OR (rese_estado = 'CONFIRMADA' AND rese_hora_salida IS NULL))
+      `;
+
+      if (getActiveReservation.length > 0) {
+        return res.status(400).json({ error: 'El usuario ya tiene una reserva activa' });
+      }
+      // Realizar el INSERT dentro de la transacción
+      const result = await sql`
+        INSERT INTO reserva (rese_visi_rut, rese_is_usua, rese_visi_vehi_patente, rese_esta_id, rese_estado, rese_guar_rut, rese_fecha, rese_hora_inicio)
+          VALUES (${userRut.toUpperCase()}, FALSE, ${vehiclePatent.toUpperCase()}, ${parkingId}, 'CONFIRMADA', ${guardRut}, TO_CHAR(NOW(), 'YYYY-MM-DD')::date, TO_CHAR(NOW(), 'HH24:MI:SS')::time)
+      `;
+
+      // Actualizar el estado del estacionamiento dentro de la misma transacción
+      await sql`
+        UPDATE estacionamiento
+        SET esta_estado = 'OCUPADO'
+        WHERE esta_id = ${parkingId}
+      `;
+
+      res.status(200).json({
+        message: 'Reserva registrada con éxito',
       });
     });
   } catch (error) {
@@ -743,53 +807,109 @@ app.post('/api/get-user-statistics', async (req, res) => {
   const { userRut } = req.body;
 
   try {
-    const [
-      reservationsThisMonth,
-      mostUsedSection,
-      averageHoursPerReservation,
-      totalReservations,
-    ] = await Promise.all([
-      sql`
-        SELECT COUNT(*) AS count
-        FROM reserva
-        WHERE rese_usua_rut = ${userRut.toUpperCase()}
-          AND EXTRACT(MONTH FROM rese_fecha) = EXTRACT(MONTH FROM CURRENT_DATE)
-          AND rese_estado != 'EN ESPERA'
-      `,
-      sql`
-        SELECT s.secc_nombre, COUNT(*) AS count
-        FROM reserva r
-        INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
-        INNER JOIN seccion s ON e.esta_secc_id = s.secc_id
-        WHERE rese_usua_rut = ${userRut.toUpperCase()}
-          AND rese_estado != 'EN ESPERA'
-        GROUP BY s.secc_nombre
-        ORDER BY count DESC
-        LIMIT 1
-      `,
-      sql`
-        SELECT
-          AVG(EXTRACT(EPOCH FROM (rese_fecha_salida - rese_fecha) * interval '1 day' + (rese_hora_salida - rese_hora_llegada)) / 3600) AS average_hours
+    await sql.begin(async (sql) => {
+      await sql`SET TIME ZONE 'America/Santiago'`;
+      const [
+        reservationsThisMonth,
+        mostUsedSection,
+        averageHoursPerReservation,
+        totalReservations,
+      ] = await Promise.all([
+        sql`
+          SELECT COUNT(*) AS count
+          FROM reserva
+          WHERE rese_usua_rut = ${userRut.toUpperCase()}
+            AND EXTRACT(MONTH FROM rese_fecha) = EXTRACT(MONTH FROM CURRENT_DATE)
+            AND EXTRACT(YEAR FROM rese_fecha) = EXTRACT(YEAR FROM CURRENT_DATE)
+            AND rese_estado != 'EN ESPERA'
+        `,
+        sql`
+          SELECT s.secc_nombre, COUNT(*) AS count
           FROM reserva r
-        WHERE rese_usua_rut = ${userRut.toUpperCase()}
-          AND rese_hora_salida IS NOT NULL
-          AND rese_estado != 'EN ESPERA'
-      `,
-      sql`
-        SELECT COUNT(*) AS count
-        FROM reserva
-        WHERE rese_usua_rut = ${userRut.toUpperCase()}
-          AND rese_estado != 'EN ESPERA'
-      `,
-    ]);
+          INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id
+          INNER JOIN seccion s ON e.esta_secc_id = s.secc_id
+          WHERE rese_usua_rut = ${userRut.toUpperCase()}
+            AND rese_estado != 'EN ESPERA'
+          GROUP BY s.secc_nombre
+          ORDER BY count DESC
+          LIMIT 1
+        `,
+        sql`
+          SELECT
+            AVG(EXTRACT(EPOCH FROM (rese_fecha_salida - rese_fecha) * interval '1 day' + (rese_hora_salida - rese_hora_llegada)) / 3600) AS average_hours
+            FROM reserva r
+          WHERE rese_usua_rut = ${userRut.toUpperCase()}
+            AND rese_hora_salida IS NOT NULL
+            AND rese_estado != 'EN ESPERA'
+        `,
+        sql`
+          SELECT COUNT(*) AS count
+          FROM reserva
+          WHERE rese_usua_rut = ${userRut.toUpperCase()}
+            AND rese_estado != 'EN ESPERA'
+        `,
+      ]);
+  
+      const averageHours = averageHoursPerReservation[0]?.average_hours ?? 0;
+  
+      res.json({
+        reservationsThisMonth: reservationsThisMonth[0].count,
+        mostUsedSection: mostUsedSection.length > 0 ? mostUsedSection[0].secc_nombre : '',
+        averageHoursPerReservation: averageHours,
+        totalReservations: totalReservations[0].count,
+      });
+    });
+  } catch (error) {
+    console.error('Error al obtener las estadísticas:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
 
-    const averageHours = averageHoursPerReservation[0]?.average_hours ?? 0;
+app.get('/api/get-statistics', async (req, res) => {
 
-    res.json({
-      reservationsThisMonth: reservationsThisMonth[0].count,
-      mostUsedSection: mostUsedSection.length > 0 ? mostUsedSection[0].secc_nombre : '',
-      averageHoursPerReservation: averageHours,
-      totalReservations: totalReservations[0].count,
+  try {
+    await sql.begin(async (sql) => {
+      await sql`SET TIME ZONE 'America/Santiago'`;
+      const [
+        reservationsActive,
+        reservationToday,
+        reservationMonth,
+        occupationPercentage,
+      ] = await Promise.all([
+        sql`
+          SELECT COUNT(*) AS count
+          FROM reserva
+          WHERE rese_estado = 'EN ESPERA'
+        `,
+        sql`
+          SELECT COUNT(*) AS count
+          FROM reserva r
+          WHERE r.rese_fecha = CURRENT_DATE
+            AND r.rese_estado != 'EN ESPERA'
+        `,
+        sql`
+          SELECT COUNT(*) AS count
+          FROM reserva
+          WHERE EXTRACT(MONTH FROM rese_fecha) = EXTRACT(MONTH FROM CURRENT_DATE)
+            AND EXTRACT(YEAR FROM rese_fecha) = EXTRACT(YEAR FROM CURRENT_DATE)
+            AND rese_estado != 'EN ESPERA'
+        `,
+        sql`
+          SELECT (COUNT(es.esta_id) * 100.0 / ed.edif_capacidad_estacionamiento) AS porcentaje_ocupado
+          FROM EDIFICIO ed JOIN ESTACIONAMIENTO es 
+          ON ed.edif_id = es.esta_edif_id
+          WHERE es.esta_estado != 'LIBRE'
+          GROUP BY ED.edif_capacidad_estacionamiento
+        `,
+      ]);
+  
+  
+      res.json({
+        reservationsActive: reservationsActive[0].count,
+        reservationToday: reservationToday[0].count,
+        reservationMonth: reservationMonth[0].count,
+        occupationPercentage: occupationPercentage[0].porcentaje_ocupado,
+      });
     });
   } catch (error) {
     console.error('Error al obtener las estadísticas:', error);
@@ -809,7 +929,7 @@ app.get('/api/login', async (req, res) => {
       userLastNamePat: user.userLastNamePat,
       userLastNameMat: user.userLastNameMat,
       userRut: user.userRut,
-      Isguard: user.Isguard,
+      IsGuard: user.IsGuard,
     });
   }catch(error){
     console.error('Error al verificar el token:', error);

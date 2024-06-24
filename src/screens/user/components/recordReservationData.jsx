@@ -1,16 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { formatDate } from "../../../utils/formatDate";
 import { formatDateTwo } from "../../../utils/formatDateTwo";
-import { TiArrowSortedDown } from "react-icons/ti";
-import { TiArrowSortedUp } from "react-icons/ti";
-import axios from "axios";
+
 
 
 export const RecordReservationData = ({ patente, fecha, horaLlegada, horaSalida, fechaSalida, numeroEstacionamiento }) => {
-    const [showReservation, setShowReservation] = useState();
     
-
     return (
         <>
             

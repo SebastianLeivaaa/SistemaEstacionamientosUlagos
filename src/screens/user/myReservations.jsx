@@ -20,7 +20,7 @@ export const MyReservations = ({ user }) => {
 
   const getRecordReservation = async (userRut) => {
     try {
-      const response = await axios.post('http://localhost:3090/api/get-record-reservation', { userRut }, { withCredentials: true });
+      const response = await axios.post('/api/get-record-reservation', { userRut }, { withCredentials: true });
       setRecordReservation(response.data);
     } catch (error) {
       console.log(error);
@@ -70,7 +70,7 @@ export const MyReservations = ({ user }) => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col px-4 xl:px-60 m-auto items-center grow max-md:px-2 gap-y-4 overflow-y-scroll">
+    <div className="w-full h-full flex flex-col px-4 2xl:px-60 pt-8 m-auto items-center max-md:px-2 gap-y-4 overflow-y-scroll">
       <CurrentReservation user={user} />
       <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl contrast-[95%] mb-8 rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4">
         <h1 className="dark:text-white-50 text-black font-bold text-2xl flex flex-row gap-x-2 items-center"><FaFileAlt className="text-2xl text-black dark:text-white-50"/> Historial de reservas</h1>
@@ -81,9 +81,8 @@ export const MyReservations = ({ user }) => {
               <h1 className="text-center text-2xl max-md:text-xl font-bold text-black dark:text-white-50">No tienes una reserva vigente</h1>
             </div>
           ) : (
-            currentRecords.map((record, index) => (
+            currentRecords.map((record) => (
               <RecordReservationData
-                key={index}
                 patente={record.rese_vehi_patente}
                 fecha={record.rese_fecha}
                 horaLlegada={record.rese_hora_llegada}

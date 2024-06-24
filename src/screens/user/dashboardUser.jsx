@@ -7,7 +7,7 @@ import { UserStatistics } from "./components/userStatistics";
 export const DashboardUser = ({ user, handleCurrentPage }) => {;
 
   return (
-    <div className="w-full h-full flex flex-col px-4 xl:px-60 m-auto items-center grow max-md:px-2 gap-y-4 overflow-y-scroll">
+    <div className="w-full h-full flex flex-col px-4 2xl:px-60 pt-8 m-auto items-center max-md:px-2 gap-y-4 overflow-y-scroll">
       <CurrentReservation user={user} />
       <QuickAccess handleCurrentPage={handleCurrentPage} />
       <AlertParkingAvailables />

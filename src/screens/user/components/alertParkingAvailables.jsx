@@ -8,7 +8,7 @@ export const AlertParkingAvailables = () => {
     const [parkingSpaces, setParkingSpaces] = useState(null);
     const getParkingSpaces = async () => {
         try{
-            const response = await axios.get("http://localhost:3090/api/parkingSpaces", {withCredentials: true});
+            const response = await axios.get("/api/parkingSpaces", {withCredentials: true});
             setParkingSpaces(response.data.total_libres);
         }catch(error){
             console.log(error);

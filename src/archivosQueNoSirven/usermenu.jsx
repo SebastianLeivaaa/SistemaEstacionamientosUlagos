@@ -8,7 +8,7 @@ import { FaMapMarked } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import { TiWarning } from "react-icons/ti";
-import { UserQR } from "../../components/userQR";
+import { UserQR } from "../components/userQR";
 
 
 export const Usermenu = () => {

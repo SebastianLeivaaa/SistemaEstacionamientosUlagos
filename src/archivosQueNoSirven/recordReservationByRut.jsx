@@ -3,13 +3,10 @@ import { useLocation } from 'react-router-dom';
 import { HiOutlineLogin } from "react-icons/hi";
 import Ulogo from "../../assets/img/Ulogo.png";
 import axios from "axios";
-import { RecordReservationDataGuard } from "../../components/recordReservationDataGuard";
-import { formatDateTwo } from "../../utils/formatDateTwo";
 import { useNavigate } from 'react-router-dom';
+import { RecordReservationDataGuard } from "../screens/guard/components/recordReservationDataGuard";
 
-
-
-export const RecordReservationByDate = (props) => {
+export const RecordReservationByRut = (props) => {
     const [user, setUser] = useState({
         email: "",
         userName: "",
@@ -20,6 +17,7 @@ export const RecordReservationByDate = (props) => {
     const location = useLocation();
     const recordReservation = location.state?.recordReservation;
     const navigate = useNavigate();
+
     const logOut = async () => {
         const response = await axios.get("/api/logout", { withCredentials: true });
         navigate('/');
@@ -52,9 +50,9 @@ export const RecordReservationByDate = (props) => {
                         <button onClick={logOut} className="mt-4 bg-white font-bold text-red-600 text-lg flex flex-row items-center justify-center gap-x-1 max-md:text-base"><HiOutlineLogin className="text-3xl max-md:text-2xl" />CERRAR SESIÓN</button>
                     </div>
                 </div>
-                <div className='flex flex-col items-center justify-center gap-y-4'>
+                <div className='flex flex-col items-center gap-y-4'>
                     <h1 className='font-bold text-2xl mt-10 text-center'>HISTORIAL DE RESERVAS</h1>
-                    <h2 className='text-xl flex flex-row gap-x-1 text-center'>Resultados para la fecha {formatDateTwo(recordReservation[0].rese_fecha)}</h2>
+                    <h2 className='text-xl flex flex-row gap-x-1 text-center'>Resultados para RUT {recordReservation[0].rese_usua_rut}</h2>
                 </div>
                 <div className='p-8 w-[100%] flex flex-col gap-y-12 max-md:w-[100%] max-md:p-0 items-center justify-center'>
                     {recordReservation.map((record, index) => (

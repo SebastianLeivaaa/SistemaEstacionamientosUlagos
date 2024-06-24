@@ -49,7 +49,7 @@ export const VehicleData = ( props ) => {
 
     const deleteVehicle = async () => {
         try {
-            const response = await axios.delete("http://localhost:3090/api/delete-vehicle", {
+            const response = await axios.delete("/api/delete-vehicle", {
                 data: {
                     patente: vehicleData.patente,
                     userRut: vehicleData.rut
@@ -66,7 +66,7 @@ export const VehicleData = ( props ) => {
 
     const changeStateVehicle = async () => {
         try {
-            const response = await axios.put("http://localhost:3090/api/change-state-vehicle", {
+            const response = await axios.put("/api/change-state-vehicle", {
                 patente: vehicleData.patente,
                 estado: vehicleData.estado === 'activo' ? 'inactivo' : 'activo',
                 userRut: vehicleData.rut

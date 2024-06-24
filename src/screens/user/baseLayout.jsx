@@ -39,7 +39,7 @@ export const BaseLayout = () => {
 
   const getProfile = async () => {
     try {
-      const response = await axios.get("http://localhost:3090/api/login", {
+      const response = await axios.get("/api/login", {
         withCredentials: true,
       });
       setUser({
@@ -54,11 +54,6 @@ export const BaseLayout = () => {
     }
   };
 
-  const logOut = async () => {
-    const response = await axios.get("/api/logout", {withCredentials: true});
-    //console.log(response);
-    navigate('/');
-  }
 
   const getCurrentPage = (currentPage) => {
     switch(currentPage){
@@ -107,7 +102,7 @@ export const BaseLayout = () => {
         currentPage={currentPage}
       />
       <div
-        className={`w-[100%] h-screen transition-all duration-300 ease-in-out max-lg:pl-0 gap-y-6 max-md:gap-y-4 flex flex-col bg-white-50  dark:bg-midnight-950 ${
+        className={`w-[100%] h-screen transition-all duration-300 ease-in-out max-lg:pl-0 gap-y-0 max-md:gap-y-0 flex flex-col bg-white-50  dark:bg-midnight-950 ${
           onToggleMenu ? "pl-[256px]" : "pl-[0%]"
         }`}
       >

@@ -6,7 +6,7 @@ import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
 import { TiWarning } from "react-icons/ti";
 import { validateRut } from "../utils/validateRut";
-import { QrReader } from "./qrReader";
+import { QrReader } from "../components/qrReader";
 
 export const ConfirmReservationByQr = () => {
     const [isLoading, setIsLoading] = useState(false);

@@ -1,8 +1,8 @@
 import {React, useState} from 'react';
 import { MdDirectionsCar } from 'react-icons/md';
 import Ulogo from "../../assets/img/Ulogo.png"; 
-import { Datos } from '../../components/datos';
-import { Rut } from '../../components/rut';
+import { Datos } from '../components/datos';
+import { Rut } from '../components/rut';
 import { FaCheck, FaUser, FaArrowLeft} from "react-icons/fa";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';

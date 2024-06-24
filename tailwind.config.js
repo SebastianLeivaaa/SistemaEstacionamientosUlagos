@@ -18,6 +18,14 @@ export default {
       boxShadow: {
         '3xl': '0 0px 30px -8px #000',
       },
+      width: {
+        'login': '32rem', // ancho para el div de login
+        'signin': '54rem', // ancho para el div de registro
+      },
+      transitionProperty: {
+        'width': 'width',
+        'height': 'height',
+      },
       colors: {
         //PARA AGREGAR COLORES PERSONALIZADOS
         'congress-blue': {

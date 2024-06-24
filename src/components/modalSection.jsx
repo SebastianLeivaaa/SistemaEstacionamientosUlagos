@@ -9,20 +9,20 @@ import { VehicleSVG } from './vehicleSVG';
 import { FaAsterisk } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 
-export const ModalSection = ({ area, onClose, handleCurrentPage, infoUser, darkToggle, vehicleActive }) => {
+export const ModalSection = ({ area, onClose, handleCurrentPage, infoUser, darkToggle, vehicleActive, guard, user }) => {
 
     const getSectionCurrent = (section, sectionId) => {
       switch (section) {
         case 'SECCIÓN A':
-          return <SectionA sectionId={sectionId} infoUser={infoUser} infoVehicleActive={vehicleActive} handleCurrentPage={handleCurrentPage}/>;
+          return <SectionA sectionId={sectionId} infoUser={infoUser} infoVehicleActive={vehicleActive} handleCurrentPage={handleCurrentPage} guard={guard} user={user} onCloseSection={onClose}/>;
         case 'SECCIÓN B':
-          return <SectionB sectionId={sectionId} infoUser={infoUser} infoVehicleActive={vehicleActive} handleCurrentPage={handleCurrentPage}/>;
+          return <SectionB sectionId={sectionId} infoUser={infoUser} infoVehicleActive={vehicleActive} handleCurrentPage={handleCurrentPage} guard={guard} user={user} onCloseSection={onClose}/>;
         case 'SECCIÓN C':
-          return <SectionC sectionId={sectionId} infoUser={infoUser} infoVehicleActive={vehicleActive} handleCurrentPage={handleCurrentPage}/>;
+          return <SectionC sectionId={sectionId} infoUser={infoUser} infoVehicleActive={vehicleActive} handleCurrentPage={handleCurrentPage} guard={guard} user={user} onCloseSection={onClose}/>;
         case 'SECCIÓN D':
-          return <SectionD sectionId={sectionId} infoUser={infoUser} infoVehicleActive={vehicleActive} handleCurrentPage={handleCurrentPage}/>;
+          return <SectionD sectionId={sectionId} infoUser={infoUser} infoVehicleActive={vehicleActive} handleCurrentPage={handleCurrentPage} guard={guard} user={user} onCloseSection={onClose}/>;
         case 'SECCIÓN E':
-          return <SectionE sectionId={sectionId} infoUser={infoUser} infoVehicleActive={vehicleActive} handleCurrentPage={handleCurrentPage}/>;
+          return <SectionE sectionId={sectionId} infoUser={infoUser} infoVehicleActive={vehicleActive} handleCurrentPage={handleCurrentPage} guard={guard} user={user} onCloseSection={onClose}/>;
         default:
           return null; 
       }

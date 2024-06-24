@@ -3,7 +3,7 @@ import { HiOutlineLogin } from "react-icons/hi";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 import Ulogo from "../../assets/img/Ulogo.png";
-import { ParkingMap } from "../../components/ParkingMap"; 
+import { ParkingMap } from "../components/ParkingMap"; 
 
 export const Reserve = () =>{
   const [user, setUser] = useState({

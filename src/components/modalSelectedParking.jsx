@@ -17,7 +17,7 @@ export const ModalSelectedParking = (props) => {
     const registerReservation = async () => {
         setIsLoading(true);
         try{
-            const response = await axios.post("http://localhost:3090/api/reserve-parking", { parkingId: props.parking.esta_id, userRut: props.infoUser.userRut, vehiclePatent: props.infoVehicleActive }, { withCredentials: true });
+            const response = await axios.post("/api/reserve-parking", { parkingId: props.parking.esta_id, userRut: props.infoUser.userRut, vehiclePatent: props.infoVehicleActive }, { withCredentials: true });
             if(response.status === 200){
                 setShowModalConfirmation(true);
             }else{

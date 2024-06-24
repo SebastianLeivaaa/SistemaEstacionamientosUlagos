@@ -7,7 +7,7 @@ import { ModalSection } from "./modalSection";
 import { MdLocalParking } from "react-icons/md";
 
 
-export const ParkingMap = (props) => {
+export const ParkingMapGuard = (props) => {
   const [hoveredArea, setHoveredArea] = useState(null);
   const [scaledAreas, setScaledAreas] = useState([]);
   const [areas, setAreas] = useState([
@@ -24,6 +24,7 @@ export const ParkingMap = (props) => {
 
   const handleClick = (area) => {
     setSelectedArea(area);
+    
   };
 
   const closeModal = () => {
@@ -135,8 +136,8 @@ export const ParkingMap = (props) => {
   return (
     <>
       {selectedArea && (<div className="fixed inset-0 bg-black opacity-50 z-50"></div>)}
-      <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl justify-start items-center contrast-[95%] mt-24 max-sm:mt-0 rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4">
-        <h1 className="dark:text-white-50 text-black font-bold text-2xl flex flex-row gap-x-2 items-center w-full justify-start"><MdLocalParking className="text-4xl text-black dark:text-white-50"/> Reservar estacionamiento</h1>
+      <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl items-center justify-center contrast-[95%] mb-8 rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4 text-white-50">
+        <h1 className="dark:text-white-50 text-black font-bold text-2xl flex flex-row gap-x-2 items-center justify-start"><MdLocalParking className="text-3xl text-black dark:text-white-50" />Otorgar Estacionamientos</h1>
         <h2 className="dark:text-white-50 text-black font-bold text-xl flex flex-row gap-x-2 items-center">Seleccione una sección</h2>
         <div className="relative max-w-[560px] max-md:w-[75%] max-sm:w-[100%]" onMouseMove={handleMouseMove}>
           {props.darkToggle ? (
@@ -224,8 +225,8 @@ export const ParkingMap = (props) => {
             <span className="text-black dark:text-white-50">Agotados</span>
           </li>
         </ul>
-      </div>
-      {selectedArea && <ModalSection area={selectedArea} onClose={closeModal} handleCurrentPage={props.handleCurrentPage} infoUser={props.infoUser} vehicleActive={props.vehicleActive} infoVehicleActive={props.infoVehicleActive} darkToggle={props.darkToggle} />}
+        </div>
+      {selectedArea && <ModalSection area={selectedArea} user={props.user} onClose={closeModal} handleCurrentPage={props.handleCurrentPage} darkToggle={props.darkToggle} guard={props.guard} />}
     </>
   );
 };

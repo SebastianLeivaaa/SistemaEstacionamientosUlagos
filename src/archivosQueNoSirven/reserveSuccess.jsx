@@ -11,7 +11,7 @@ import { FaCheck } from "react-icons/fa";
 import { ClipLoader } from 'react-spinners';
 import { FaX } from "react-icons/fa6";
 import { BsXCircle } from "react-icons/bs";
-import { formatDateTwo } from "../../utils/formatDateTwo";
+import { formatDateTwo } from "../utils/formatDateTwo";
 import { BsCheckCircle } from "react-icons/bs";
 
 

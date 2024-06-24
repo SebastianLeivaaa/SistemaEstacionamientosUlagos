@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
-import Ulogo from "../../assets/img/Ulogo.png";
 import { HiOutlineLogin } from "react-icons/hi";
+import Ulogo from "../../assets/img/Ulogo.png";
 import axios from "axios";
-import { ConfirmReservationByRut } from "../../components/confirmReservationByRut";
-import { ConfirmReservationByQr } from "../../components/confirmReservationByQr";
+import { SearchByPatent } from "../components/searchByPatent";
+import { SearchByRut } from "../components/searchByRut";
+import { SearchByDate } from "../components/searchByDate";
 
-export const ConfirmReservation = () => {
+
+export const ReservationHistory = () => {
 
     const [user, setUser] = useState({
         email: "",
@@ -14,8 +16,8 @@ export const ConfirmReservation = () => {
         userLastNamePat: "",
         userLastNameMat: "",
     });
-    const [current, setCurrent] = useState('rut');
 
+    const [current, setCurrent] = useState('patente');
     const navigate = useNavigate();
 
     const logOut = async () => {
@@ -37,13 +39,18 @@ export const ConfirmReservation = () => {
         }
     };
 
+    const handlePatenteClick = () => {
+        setCurrent('patente');
+    }
+
     const handleRutClick = () => {
         setCurrent('rut');
-    };
+    }
 
-    const handleQrClick = () => {
-        setCurrent('qr');
-    };
+    const handleDateClick = () => {
+        setCurrent('fecha');
+    }
+
 
     useEffect(() => {
         getProfile();
@@ -60,25 +67,30 @@ export const ConfirmReservation = () => {
                     </div>
                 </div>
                 <div className='flex flex-col items-center gap-y-4'>
-                    <h1 className='font-bold text-2xl mt-10'>CONFIRMAR RESERVA</h1>
-                    <h2 className='text-xl'>Confirmar por</h2>
+                    <h1 className='font-bold text-2xl mt-10 text-center'>HISTORIAL DE RESERVAS</h1>
+                    <h2 className='text-xl text-center'>Buscar por</h2>
                 </div>
                 <div className="flex flex-row justify-evenly w-full">
+                    <button onClick={handlePatenteClick} className={`${current === 'patente' ? 'bg-blue-ribbon-600 text-white-50' : 'bg-white-50 text-black'}  px-8 py-2 rounded-md text-base font-semibold hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-sm max-md:px-2`} disabled={current === 'patente'}>
+                        PATENTE
+                    </button>
                     <button onClick={handleRutClick} className={`${current === 'rut' ? 'bg-blue-ribbon-600 text-white-50' : 'bg-white-50 text-black'}  px-8 py-2 rounded-md text-base font-semibold hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-sm max-md:px-2`} disabled={current === 'rut'}>
                         RUT
                     </button>
-                    <button onClick={handleQrClick} className={`${current === 'qr' ? 'bg-blue-ribbon-600 text-white-50' : 'bg-white-50 text-black'}  px-8 py-2 rounded-md text-base font-semibold hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-sm max-md:px-2`} disabled={current === 'qr'}>
-                        CÓDIGO QR
+                    <button onClick={handleDateClick} className={`${current === 'fecha' ? 'bg-blue-ribbon-600 text-white-50' : 'bg-white-50 text-black'}  px-8 py-2 rounded-md text-base font-semibold hover:bg-blue-ribbon-600 hover:text-white-50 max-md:text-sm max-md:px-2`} disabled={current === 'fecha'}>
+                        FECHA
                     </button>
                 </div>
-                <div className='w-full px-16 py-8 flex flex-col gap-y-12 max-lg:w-[100%] max-md:py-0 max-lg:px-4 items-center justify-center'>
-                    {current === 'rut' ? (
-                        <ConfirmReservationByRut/>
+                <div className='w-full px-24 py-8 flex flex-col gap-y-12 max-md:w-[100%] max-md:py-0 max-md:px-4 items-center justify-center'>
+                    {current === 'patente' ? (
+                        <SearchByPatent/>
+                    ) : current === 'rut' ? (
+                        <SearchByRut/>
                     ) : (
-                        <ConfirmReservationByQr />
+                        <SearchByDate/>
                     )}
                 </div>
             </div>
         </div>
-    );
-};
+    )
+}
