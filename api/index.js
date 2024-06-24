@@ -948,7 +948,7 @@ app.get('/api/logout', async (req, res) => {
     res.clearCookie('myTokenName', {
       httpOnly: true,
       secure: true,
-      sameSite: strict,
+      sameSite: 'strict',
       path: '/'
     });
     res.status(200).json('logout successfully');
