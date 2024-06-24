@@ -35,45 +35,18 @@ export const Main = () => {
 
     const getProfile = async () => {
         try {
-          // Verificar si la cookie 'myTokenName' está presente
-          const myTokenName = getCookie('myTokenName'); // Implementa esta función para obtener la cookie
-      
-          if (!myTokenName) {
-            // No hay cookie válida, redirigir al inicio
-            navigate('/');
-            return;
-          }
-      
-          // Hacer la solicitud a `/api/login` sin enviar cookies automáticamente
           const response = await axios.get("/api/login", {
-            withCredentials: false, // No enviar cookies automáticamente
+            withCredentials: true,
           });
-      
-          // Verificar el tipo de usuario y redirigir en consecuencia
           if (response.data.IsGuard) {
             navigate('/base-layout2');
-          } else {
+            } else {
             navigate('/base-layout');
-          }
+            }
         } catch (error) {
-          console.error('Error al obtener el perfil:', error);
-          navigate("/"); // Redirigir al inicio en caso de error o no autenticado
+          navigate("/");
         }
       };
-      
-      // Función para obtener una cookie específica por su nombre
-      function getCookie(name) {
-        const cookieString = document.cookie;
-        const cookies = cookieString.split('; ');
-        for (let cookie of cookies) {
-          const [cookieName, cookieValue] = cookie.split('=');
-          if (cookieName === name) {
-            return cookieValue;
-          }
-        }
-        return null;
-      }
-      
 
     useEffect(() => {
         getProfile();
