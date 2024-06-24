@@ -971,9 +971,6 @@ app.get('/api/logout', async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log('Server running on port 3000');
-});
 
 //Consulta para obtener reservas activas
 app.get('/api/get-active-reservations', async (req, res) => {
