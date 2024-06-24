@@ -155,7 +155,7 @@ app.post('/api/sesion', async (req, res) => {
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
+          sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
           maxAge: 900, // 15 minutos
           path: '/'
         });
@@ -173,7 +173,7 @@ app.post('/api/sesion', async (req, res) => {
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
-          sameSite: 'strict',
+          sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
           maxAge: 900, // 15 minutos
           path: '/'
         });
@@ -938,26 +938,22 @@ app.get('/api/login', async (req, res) => {
 });
 
 //logout
-app.get('/api/logout', (req, res) => {
+app.get('/api/logout', async (req, res) => {
   const myTokenName = req.cookies.myTokenName;
-
   if (!myTokenName) {
     return res.status(401).json({ error: 'no token' });
   }
-
-  const serialized = serialize('myTokenName', '', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    maxAge: -1,
-    path: '/'
-  });
-
-  res.setHeader('Set-Cookie', serialized);
-
   try {
     jwt.verify(myTokenName, process.env.SECRET);
-    return res.status(200).json('logout successfully');
+    const serialized = serialize('myTokenName', '', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Solo true en producción
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // Cambiar a 'lax' en desarrollo
+      maxAge: 0,
+      path: '/'
+    });
+    res.setHeader('Set-Cookie', serialized);
+    res.status(200).json('logout successfully');
   } catch (error) {
     return res.status(401).json({ error: 'invalid token' });
   }
