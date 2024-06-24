@@ -945,12 +945,7 @@ app.get('/api/logout', async (req, res) => {
   }
   try {
     jwt.verify(myTokenName, process.env.SECRET);
-    res.clearCookie('myTokenName', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-      path: '/'
-    });
+    res.clearCookie('myTokenName');
     res.status(200).json('logout successfully');
   } catch (error) {
     return res.status(401).json({ error: 'invalid token' });
