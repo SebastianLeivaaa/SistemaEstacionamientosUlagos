@@ -939,23 +939,35 @@ app.get('/api/login', async (req, res) => {
 
 //logout
 app.get('/api/logout', async (req, res) => {
-  const myTokenName = req.cookies.myTokenName;
-  if (!myTokenName) {
-    return res.status(401).json({ error: 'no token' });
-  }
   try {
+    const myTokenName = req.cookies.myTokenName;
+    if (!myTokenName) {
+      return res.status(401).json({ error: 'No hay token' });
+    }
+
+    // Verificar y decodificar el token si es necesario
     jwt.verify(myTokenName, process.env.SECRET);
-    const serialized = serialize('myTokenName', '', {
+
+    // Crear una cookie vacía con maxAge 0 para eliminarla
+    const clearCookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Solo true en producción
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // Cambiar a 'lax' en desarrollo
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
       maxAge: 0,
-      path: '/'
-    });
-    res.setHeader('Set-Cookie', serialized);
-    res.status(200).json('logout successfully');
+      path: '/',
+    };
+
+    // Serialize la cookie vacía para sobrescribir la existente
+    const clearCookieSerialized = serialize('myTokenName', '', clearCookieOptions);
+
+    // Establecer la cookie vacía para eliminarla
+    res.setHeader('Set-Cookie', clearCookieSerialized);
+
+    // Respondemos con éxito
+    res.status(200).json('Cookie eliminada correctamente');
   } catch (error) {
-    return res.status(401).json({ error: 'invalid token' });
+    console.error('Error al eliminar la cookie:', error);
+    res.status(500).json({ error: 'Error en el servidor al eliminar la cookie' });
   }
 });
 
