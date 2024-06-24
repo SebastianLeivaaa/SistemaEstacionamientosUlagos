@@ -11,7 +11,7 @@ export const SideBar = ({ onToggleMenu, handleToggleMenu, userName, userLastName
     const sidebarRef = useRef(null);
 
     const logOut = async () => {
-        const response = await axios.get("http://localhost:3090/api/logout", { withCredentials: true });
+        const response = await axios.get("/api/logout", { withCredentials: true });
         navigate('/');
     }
 
