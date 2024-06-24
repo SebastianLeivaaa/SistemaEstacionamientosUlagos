@@ -946,12 +946,15 @@ app.get('/api/logout', async (req, res) => {
     jwt.verify(myTokenName, process.env.SECRET);
     const serialized = serialize('myTokenName', '', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Solo true en producción
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Cambiar a 'none' en producción para probar
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
       maxAge: 0,
       path: '/'
     });
     res.setHeader('Set-Cookie', serialized);
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     res.status(200).json('logout successfully');
   } catch (error) {
     return res.status(401).json({ error: 'invalid token' });
