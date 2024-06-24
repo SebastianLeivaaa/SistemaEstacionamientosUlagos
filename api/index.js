@@ -947,8 +947,8 @@ app.get('/api/logout', async (req, res) => {
     jwt.verify(myTokenName, process.env.SECRET);
     res.clearCookie('myTokenName', {
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
       path: '/'
     });
     res.status(200).json('logout successfully');
@@ -956,7 +956,6 @@ app.get('/api/logout', async (req, res) => {
     return res.status(401).json({ error: 'invalid token' });
   }
 });
-
 
 
 //Consulta para obtener reservas activas
