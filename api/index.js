@@ -939,19 +939,16 @@ app.get('/api/login', async (req, res) => {
 
 //logout
 app.get('/api/logout', async (req, res) => {
-  const myTokenName = req.cookies.myTokenName;
-  if (!myTokenName) {
-    return res.status(401).json({ error: 'no token' });
-  }
   try {
-    jwt.verify(myTokenName, process.env.SECRET);
-    jwt.destroy(myTokenName);
+    // Limpiar el token del cliente (por ejemplo, eliminar la cookie)
+    res.clearCookie('myTokenName'); // Esto borra la cookie 'myTokenName'
 
     res.status(200).json('logout successfully');
   } catch (error) {
-    return res.status(401).json({ error: 'invalid token' });
+    return res.status(500).json({ error: 'logout failed' });
   }
 });
+
 
 
 //Consulta para obtener reservas activas
