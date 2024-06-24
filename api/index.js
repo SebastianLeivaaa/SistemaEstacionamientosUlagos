@@ -947,10 +947,11 @@ app.get('/api/logout', async (req, res) => {
     jwt.verify(myTokenName, process.env.SECRET);
     const serialized = serialize('myTokenName', '', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Solo true en producción
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // Cambiar a 'lax' en desarrollo
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
       maxAge: 0,
-      path: '/'
+      path: '/',
+      domain: process.env.NODE_ENV === 'production' ? 'estacionamientosulagos.vercel.app' : 'localhost' // Ajustar el dominio según el entorno
     });
     res.setHeader('Set-Cookie', serialized);
     res.status(200).json('logout successfully');
