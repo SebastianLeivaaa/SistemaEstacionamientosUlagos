@@ -940,15 +940,14 @@ app.get('/api/login', async (req, res) => {
 //logout
 app.get('/api/logout', async (req, res) => {
   try {
-    // Limpiar el token del cliente (por ejemplo, eliminar la cookie)
-    res.clearCookie('myTokenName'); // Esto borra la cookie 'myTokenName'
+    // Borrar la cookie estableciendo una fecha de expiración en el pasado
+    res.cookie('myTokenName', '', { expires: new Date(0) });
 
     res.status(200).json('logout successfully');
   } catch (error) {
     return res.status(500).json({ error: 'logout failed' });
   }
 });
-
 
 
 //Consulta para obtener reservas activas
