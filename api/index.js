@@ -947,8 +947,8 @@ app.get('/api/logout', async (req, res) => {
     jwt.verify(myTokenName, process.env.SECRET);
     res.clearCookie('myTokenName', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      secure: true,
+      sameSite: 'none',
       path: '/'
     });
     res.status(200).json('logout successfully');
