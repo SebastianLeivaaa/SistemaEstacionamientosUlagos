@@ -937,7 +937,6 @@ app.get('/api/login', async (req, res) => {
   }
 });
 
-//logout
 app.get('/api/logout', async (req, res) => {
   const myTokenName = req.cookies.myTokenName;
   if (!myTokenName) {
@@ -948,7 +947,7 @@ app.get('/api/logout', async (req, res) => {
     const serialized = serialize('myTokenName', '', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Solo true en producción
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // Cambiar a 'lax' en desarrollo
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Cambiar a 'none' en producción para probar
       maxAge: 0,
       path: '/'
     });
@@ -958,7 +957,6 @@ app.get('/api/logout', async (req, res) => {
     return res.status(401).json({ error: 'invalid token' });
   }
 });
-
 
 //Consulta para obtener reservas activas
 app.get('/api/get-active-reservations', async (req, res) => {
