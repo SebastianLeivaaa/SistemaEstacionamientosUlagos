@@ -144,21 +144,30 @@ app.post("/api/send-email-recover", async (req, res) => {
 app.post('/api/sesion', async (req, res) => {
   try {
     const { email, password } = req.body;
-    //console.log("llego esto: ",email, password)
 
     // Buscar guardia primero
     const guards = await sql`SELECT * FROM guardia WHERE guar_correo = ${email}`;
     if (guards.length > 0) {
       const guard = guards[0];
       if (password === guard.guar_clave) {
-        const token = jwt.sign({ userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, userRut: guard.guar_rut, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
+        const token = jwt.sign({
+          userEmail: guard.guar_correo,
+          userName: guard.guar_nombre,
+          userLastNamePat: guard.guar_apellido_paterno,
+          userLastNameMat: guard.guar_apellido_materno,
+          userRut: guard.guar_rut,
+          IsGuard: true
+        }, process.env.SECRET, { expiresIn: '15m' });
+
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
           maxAge: 900, // 15 minutos
-          path: '/'
+          path: '/',
+          domain: process.env.NODE_ENV === 'production' ? 'estacionamientosulagos.vercel.app' : 'localhost'
         });
+
         res.setHeader('Set-Cookie', serialized);
         return res.json('guardia'); // Retorna 'guardia' si el inicio de sesión es exitoso
       }
@@ -169,14 +178,24 @@ app.post('/api/sesion', async (req, res) => {
     if (users.length > 0) {
       const user = users[0];
       if (password === user.usua_clave) {
-        const token = jwt.sign({ userEmail: user.usua_correo, userName: user.usua_nombre, userLastNamePat: user.usua_apellido_paterno, userLastNameMat: user.usua_apellido_materno, userRut: user.usua_rut, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
+        const token = jwt.sign({
+          userEmail: user.usua_correo,
+          userName: user.usua_nombre,
+          userLastNamePat: user.usua_apellido_paterno,
+          userLastNameMat: user.usua_apellido_materno,
+          userRut: user.usua_rut,
+          IsGuard: false
+        }, process.env.SECRET, { expiresIn: '15m' });
+
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
           maxAge: 900, // 15 minutos
-          path: '/'
+          path: '/',
+          domain: process.env.NODE_ENV === 'production' ? 'estacionamientosulagos.vercel.app' : 'localhost'
         });
+
         res.setHeader('Set-Cookie', serialized);
         return res.json('usuario'); // Retorna 'usuario' si el inicio de sesión es exitoso
       }
@@ -188,6 +207,7 @@ app.post('/api/sesion', async (req, res) => {
     res.status(500).json({ error: 'Error en el servidor' });
   }
 });
+
 
 
 //INSERTAR USUARIO EN LA BASE DE DATOS
