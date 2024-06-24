@@ -945,7 +945,7 @@ app.get('/api/logout', async (req, res) => {
   }
   try {
     jwt.verify(myTokenName, process.env.SECRET);
-    const serialized = serialize('myTokenName', '', {
+    const serialized = serialize('myTokenName', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Solo true en producción
       sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax', // Cambiar a 'lax' en desarrollo
