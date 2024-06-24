@@ -945,12 +945,14 @@ app.get('/api/logout', async (req, res) => {
   }
   try {
     jwt.verify(myTokenName, process.env.SECRET);
-    res.clearCookie('myTokenName', {
+    const serialized = serialize('myTokenName', '', {
       httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
+      secure: true, // Solo true en producción
+      sameSite: 'strict', // Cambiar a 'lax' en desarrollo
+      maxAge: 0,
       path: '/'
     });
+    res.setHeader('Set-Cookie', serialized);
     res.status(200).json('logout successfully');
   } catch (error) {
     return res.status(401).json({ error: 'invalid token' });
