@@ -12,7 +12,7 @@ import { SignInFinal } from "./signInFinal";
 
 
 export const SignInThree = ( { formData, passwordData, code, handleLoginClick } ) => {
-    const [counter, setCounter] = useState(5); 
+    const [counter, setCounter] = useState(300); 
     const [inputValues, setInputValues] = useState(Array(6).fill(""));
     const [codeVer, setCodeVer] = useState(code);
     const [isMessageError, setIsMessageError] = useState(false);

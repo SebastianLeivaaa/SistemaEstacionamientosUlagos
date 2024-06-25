@@ -7,6 +7,8 @@ import { serialize } from 'cookie';
 import cookieParser from 'cookie-parser';
 import {generatorCode} from '../src/utils/generatorCode.js'
 import {sendCodeEmail} from '../src/utils/mailer.js'
+import bcrypt from 'bcrypt';
+
 
 
 
@@ -17,7 +19,7 @@ const app = express();
 //CONEXION A LA BASE DE DATOS
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
 const SENDER_EMAIL_ID = "estacionamientosulagos@gmail.com";
-
+const saltRounds = 10; // Cost factor for bcrypt
 
 const sql = postgres({
   host: PGHOST,
@@ -141,16 +143,17 @@ app.post("/api/send-email-recover", async (req, res) => {
 });
 
 //inicio de sesión
+
 app.post('/api/sesion', async (req, res) => {
   try {
     const { email, password } = req.body;
-    //console.log("llego esto: ",email, password)
 
     // Buscar guardia primero
     const guards = await sql`SELECT * FROM guardia WHERE guar_correo = ${email}`;
     if (guards.length > 0) {
       const guard = guards[0];
-      if (password === guard.guar_clave) {
+      const isMatch = await bcrypt.compare(password, guard.guar_clave);
+      if (isMatch) {
         const token = jwt.sign({ userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, userRut: guard.guar_rut, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
@@ -168,7 +171,8 @@ app.post('/api/sesion', async (req, res) => {
     const users = await sql`SELECT * FROM usuario WHERE usua_correo = ${email}`;
     if (users.length > 0) {
       const user = users[0];
-      if (password === user.usua_clave) {
+      const isMatch = await bcrypt.compare(password, user.usua_clave);
+      if (isMatch) {
         const token = jwt.sign({ userEmail: user.usua_correo, userName: user.usua_nombre, userLastNamePat: user.usua_apellido_paterno, userLastNameMat: user.usua_apellido_materno, userRut: user.usua_rut, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
@@ -196,15 +200,18 @@ app.post("/api/register-user", async (req, res) => {
 
   const fullUserEmail = `${userEmail.toLowerCase()}${userDomain}`;
   try {
+    // Hashing the password
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     const existingVehicle = await sql`SELECT * FROM vehiculo WHERE vehi_patente = ${vehiclePatente.toUpperCase()}`;
     if (existingVehicle.length > 0) {
       const insertUser = await sql`insert into usuario(usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_rut, usua_correo, usua_clave, usua_telefono, usua_tipo) 
-                                  values(${userName.trim()}, ${userLastNamePat.trim()}, ${userLastNameMat.trim()}, ${userRut.toUpperCase()}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
+                                    values(${userName.trim()}, ${userLastNamePat.trim()}, ${userLastNameMat.trim()}, ${userRut.toUpperCase()}, ${fullUserEmail}, ${hashedPassword}, ${userPhone}, ${userType})`;
       const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado)
                                                       values (${userRut.toUpperCase()}, ${vehiclePatente.toUpperCase()}, 'activo')`;
-    } else{
+    } else {
       const insertUser = await sql`insert into usuario(usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_rut, usua_correo, usua_clave, usua_telefono, usua_tipo) 
-                                  values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut.toUpperCase()}, ${fullUserEmail}, ${password}, ${userPhone}, ${userType})`;
+                                    values(${userName}, ${userLastNamePat}, ${userLastNameMat}, ${userRut.toUpperCase()}, ${fullUserEmail}, ${hashedPassword}, ${userPhone}, ${userType})`;
       const insertVehicle = await sql`insert into vehiculo(vehi_patente, vehi_marca, vehi_modelo, vehi_anio, vehi_tipo, vehi_color) 
                                       values(${vehiclePatente.toUpperCase()}, ${vehicleMarca}, ${vehicleModelo}, ${vehicleYear}, ${vehicleType}, ${vehicleColor})`;
       const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado)
