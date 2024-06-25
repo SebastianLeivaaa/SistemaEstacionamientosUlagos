@@ -7,7 +7,7 @@ export const QrReader = ({ onScan, timeoutInSeconds }) => {
   useEffect(() => {
     const qrScanner = new QrScanner(videoRef.current, result => {
       onScan(result);
-    });
+    }, { highlightScanRegion: true});
 
     qrScanner.start();
 
