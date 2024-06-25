@@ -193,6 +193,27 @@ app.post('/api/sesion', async (req, res) => {
   }
 });
 
+/*async function encryptAllPasswords() {
+  try {
+    // Obtener todos los usuarios
+    const users = await sql`SELECT * FROM guardia`;
+
+    for (const user of users) {
+      if (user.guar_clave.length !== 60) { // Verifica si la contraseña no está encriptada
+        console.log(user.guar_clave)
+        const hashedPassword = await bcrypt.hash(user.guar_clave, saltRounds);
+        await sql`UPDATE guardia SET guar_clave = ${hashedPassword} WHERE guar_rut = ${user.guar_rut}`;
+      }
+    }
+
+    console.log('Todas las contraseñas han sido encriptadas correctamente.');
+
+  } catch (error) {
+    console.error('Error al encriptar las contraseñas:', error);
+  }
+}
+
+encryptAllPasswords();*/
 
 
 //INSERTAR USUARIO EN LA BASE DE DATOS
@@ -229,9 +250,10 @@ app.post("/api/register-user", async (req, res) => {
 app.post("/api/update-password", async (req, res) => {
   const { userEmail, userDomain, password } = req.body;
   const fullUserEmail = `${userEmail.toLowerCase()}${userDomain}`;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
 
   try {
-    const updatePassword = await sql`update usuario set usua_clave = ${password} where usua_correo = ${fullUserEmail}`;
+    const updatePassword = await sql`update usuario set usua_clave = ${hashedPassword} where usua_correo = ${fullUserEmail}`;
     res.status(200).send('Contraseña actualizada con éxito');
   } catch (error) {
     res.status(500).send('Error al actualizar la contraseña');
