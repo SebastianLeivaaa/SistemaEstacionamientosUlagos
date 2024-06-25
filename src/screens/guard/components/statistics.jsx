@@ -18,6 +18,11 @@ export const Statistics = ( ) => {
 
     useEffect(() => {
         getStatistics();
+        const interval = setInterval(() => {
+            getStatistics();
+        }, 10000);
+
+        return () => clearInterval(interval);
     }, []);
 
     return(
