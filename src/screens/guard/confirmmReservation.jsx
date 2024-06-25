@@ -82,9 +82,6 @@ export const ConfirmmReservation = ({ user }) => {
     setErrors({});
     setMessage(null);
     const newErrors = {};
-    if(!validateRut(rutUser)){
-        newErrors.rut = 'Ingrese un código QR válido';
-    }
 
     if (Object.keys(newErrors).length > 0) {
         setScanActive(false);
