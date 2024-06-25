@@ -18,7 +18,7 @@ export const Statistics = ( ) => {
 
     useEffect(() => {
         getStatistics();
-    }, [statistics]);
+    }, []);
 
     return(
         <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl  contrast-[95%] rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4">
