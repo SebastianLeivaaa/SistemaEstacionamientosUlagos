@@ -13,7 +13,7 @@ import { RecoverThree } from "./recoverThree";
 export const RecoverTwo = ( { emailData, code, handleRecover} ) =>{
     const navigate = useNavigate();
     const location = useLocation();
-    const [counter, setCounter] = useState(2); 
+    const [counter, setCounter] = useState(300); 
     const [inputValues, setInputValues] = useState(Array(6).fill(""));
     const [codeVer, setCodeVer] = useState(code);
     const [thirdStepRecover, setThirdStepRecover] = useState(false);
