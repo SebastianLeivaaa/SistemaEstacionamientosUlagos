@@ -1,6 +1,6 @@
-import { useState } from "react"; 
-import Datos from "../components/datos"
-import { Indice } from "../components/indice";
+import React, { useState, useRef, useEffect } from "react";
+import Datos from "../components/datos";
+import Indice from "../components/indice";
 import SelectUser from "../components/selectUser";
 import SelectDomain from "../components/selectDomain";
 import Rut from "../components/rut";
@@ -13,8 +13,7 @@ import { validateEmailFormat } from "../utils/validateEmailFormat";
 import { useNavigate } from 'react-router-dom';
 import { SignInTwo } from "./signInTwo";
 
-
-export const SignIn = ( {handleLoginClick} ) => {
+export const SignIn = ({ handleLoginClick }) => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [secondStepSignIn, setSecondStepSignIn] = useState(false);
@@ -36,63 +35,69 @@ export const SignIn = ( {handleLoginClick} ) => {
         vehicleColor: null
     });
 
+    // Refs for inputs
+    const userNameRef = useRef(null);
+    const userLastNamePatRef = useRef(null);
+    const userLastNameMatRef = useRef(null);
+    const userRutRef = useRef(null);
+    const userEmailRef = useRef(null);
+    const userPhoneRef = useRef(null);
+    const vehiclePatenteRef = useRef(null);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-      
+
         if (name === "userType") {
-          const newDomain = value === 'Estudiante' ? '@alumnos.ulagos.cl' : value === 'Profesor' ? '@ulagos.cl' : '';
-          setFormData({
-            ...formData,
-            [name]: value,
-            userDomain: newDomain,
-            userEmail: '', // Reset email when changing user type
-          });
+            const newDomain = value === 'Estudiante' ? '@alumnos.ulagos.cl' : value === 'Profesor' ? '@ulagos.cl' : '';
+            setFormData({
+                ...formData,
+                [name]: value,
+                userDomain: newDomain,
+                userEmail: '', // Reset email when changing user type
+            });
         } else if (name === "userDomain") {
-          // Check if the current value already starts with '@'
-          const newValue = value.startsWith('@') ? value : `@${value}`;
-          setFormData({
-            ...formData,
-            [name]: newValue,
-          });
+            // Check if the current value already starts with '@'
+            const newValue = value.startsWith('@') ? value : `@${value}`;
+            setFormData({
+                ...formData,
+                [name]: newValue,
+            });
         } else {
-          setFormData({
-            ...formData,
-            [name]: value,
-          });
+            setFormData({
+                ...formData,
+                [name]: value,
+            });
         }
-      };
-      
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         const newErrors = {};
-        if(formData.userName.trim() === ''){
+        if (formData.userName.trim() === '') {
             newErrors.userName = 'Por favor ingrese su nombre.';
         }
-        if(formData.userLastNamePat.trim() === ''){
+        if (formData.userLastNamePat.trim() === '') {
             newErrors.userLastNamePat = 'Por favor ingrese su apellido paterno.';
         }
-        if(formData.userLastNameMat.trim() === ''){
+        if (formData.userLastNameMat.trim() === '') {
             newErrors.userLastNameMat = 'Por favor ingrese su apellido materno.';
         }
-        if(!validateRut(formData.userRut)){
+        if (!validateRut(formData.userRut)) {
             newErrors.userRut = 'Ingrese un rut válido';
         }
-        if(!validateFormatPhone(formData.userPhone)){
+        if (!validateFormatPhone(formData.userPhone)) {
             newErrors.userPhone = 'Ingrese un formato de telefono válido';
         }
-        if(!validateEmailFormat(`${formData.userEmail}${formData.userDomain}`)){
+        if (!validateEmailFormat(`${formData.userEmail}${formData.userDomain}`)) {
             newErrors.userEmail = "Ingrese un correo electrónico válido";
         }
-        if(formData.vehiclePatente.trim() === ''){
+        if (formData.vehiclePatente.trim() === '') {
             newErrors.vehiclePatente = 'Por favor ingrese la patente de su vehículo.';
         }
 
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-        } else {
-            try{
+        if (Object.keys(newErrors).length === 0) {
+            try {
                 const response = await fetch('/api/query-user-exists', {
                     method: 'POST',
                     headers: {
@@ -101,33 +106,52 @@ export const SignIn = ( {handleLoginClick} ) => {
                     body: JSON.stringify(formData),
                 });
 
-                if(response.ok){
+                if (response.ok) {
                     const responseData = await response.json();
 
-                    if(responseData.infoRut.length > 0){
+                    if (responseData.infoRut.length > 0) {
                         newErrors.userRut = 'Este rut ya existe en nuestro sistema';
                     }
-                    
-                    if(responseData.infoEmail.length > 0){
+
+                    if (responseData.infoEmail.length > 0) {
                         newErrors.userEmail = 'Este correo electrónico ya esta vinculado a una cuenta';
                     }
 
-                    if(responseData.infoPhone.length > 0){
+                    if (responseData.infoPhone.length > 0) {
                         newErrors.userPhone = 'Este número telefónico ya esta vinculado a una cuenta';
                     }
 
-                    if (Object.keys(newErrors).length > 0) {
-                        setErrors(newErrors);
-                    } else {
+                    setErrors(newErrors);
+
+                    if (Object.keys(newErrors).length === 0) {
                         setSecondStepSignIn(true);
                     }
                 }
-            } catch (error){
+            } catch (error) {
                 console.error('Error en la solicitud:', error);
             }
         }
+
+        setErrors(newErrors);
         setIsLoading(false);
-    }
+    };
+
+    // Scroll to first input with error on error change
+    useEffect(() => {
+        const scrollToError = () => {
+            if (Object.keys(errors).length > 0) {
+                if (errors.userName) userNameRef.current.scrollIntoView({ behavior: "smooth" });
+                else if (errors.userLastNamePat) userLastNamePatRef.current.scrollIntoView({ behavior: "smooth" });
+                else if (errors.userLastNameMat) userLastNameMatRef.current.scrollIntoView({ behavior: "smooth" });
+                else if (errors.userRut) userRutRef.current.scrollIntoView({ behavior: "smooth" });
+                else if (errors.userEmail) userEmailRef.current.scrollIntoView({ behavior: "smooth" });
+                else if (errors.userPhone) userPhoneRef.current.scrollIntoView({ behavior: "smooth" });
+                else if (errors.vehiclePatente) vehiclePatenteRef.current.scrollIntoView({ behavior: "smooth" });
+            }
+        };
+
+        scrollToError();
+    }, [errors]);
 
     return (
         <>
@@ -135,12 +159,10 @@ export const SignIn = ( {handleLoginClick} ) => {
                 <SignInTwo formData={formData} handleLoginClick={handleLoginClick} />
             ) : (
                 <form className="w-full flex flex-col overflow-y-auto px-4" onSubmit={handleSubmit}>
-                    <Indice
-                        fase="1"
-                    />
+                    <Indice fase="1" />
                     <h1 className="text-black dark:text-white-50 font-bold p-4 max-xs:px-0 w-[100%]">DATOS PERSONALES</h1>
                     <div className="text-black dark:text-white-50 font-semibold w-[100%] grid grid-cols-1 md:grid-cols-2 p-1 max-xs:px-0">
-                        <div className=" w-full flex flex-col p-4 max-xs:px-0">
+                        <div className=" w-full flex flex-col p-4 max-xs:px-0" ref={userNameRef}>
                             <h1 className="pb-3">Nombre(s)</h1>
                             <Datos
                                 holder="Ingrese su nombre"
@@ -155,7 +177,7 @@ export const SignIn = ( {handleLoginClick} ) => {
                                 <p className="text-red-500 text-sm">{errors.userName}</p>
                             )}
                         </div>
-                        <div className="w-full flex flex-col p-4 max-xs:px-0">
+                        <div className="w-full flex flex-col p-4 max-xs:px-0" ref={userLastNamePatRef}>
                             <h1 className="pb-3">Apellido Paterno</h1>
                             <Datos
                                 holder="Ingresa tu apellido paterno"
@@ -172,7 +194,7 @@ export const SignIn = ( {handleLoginClick} ) => {
                         </div>
                     </div>
                     <div className="text-black dark:text-white-50 font-semibold w-[100%] grid grid-cols-1 md:grid-cols-2 p-1 max-xs:px-0">
-                        <div className="w-full flex flex-col p-4 max-xs:px-0">
+                        <div className="w-full flex flex-col p-4 max-xs:px-0" ref={userLastNameMatRef}>
                             <h1 className="pb-3">Apellido Materno</h1>
                             <Datos
                                 holder="Ingresa tu apellido materno"
@@ -187,7 +209,7 @@ export const SignIn = ( {handleLoginClick} ) => {
                                 <p className="text-red-500 text-sm">{errors.userLastNameMat}</p>
                             )}
                         </div>
-                        <div className="w-full flex flex-col p-4 max-xs:px-0">
+                        <div className="w-full flex flex-col p-4 max-xs:px-0" ref={userRutRef}>
                             <h1 className="pb-3">RUT</h1>
                             <Rut
                                 holder="Ej:20545267-1"
@@ -216,7 +238,7 @@ export const SignIn = ( {handleLoginClick} ) => {
                         </div>
                         <div className="w-full flex flex-col p-4 max-xs:px-0">
                             <h1 className="pb-3">Correo electrónico</h1>
-                            <div className="flex flex-row w-[100%] max-md:w-[100%] gap-x-1">
+                            <div className="flex flex-row w-[100%] max-md:w-[100%] gap-x-1" ref={userEmailRef}>
                                 <Datos
                                     holder="Usuario"
                                     tipo="text"
@@ -225,6 +247,7 @@ export const SignIn = ( {handleLoginClick} ) => {
                                     maxLength="50"
                                     onChange={handleChange}
                                     value={formData.userEmail}
+                                    ref={userEmailRef}
                                 />
                                 {formData.userType === 'Externo' ? (
                                     <Datos
@@ -246,7 +269,7 @@ export const SignIn = ( {handleLoginClick} ) => {
                         </div>
                     </div>
                     <div className="text-black dark:text-white-50 font-semibold w-[100%] grid grid-cols-1 md:grid-cols-2 p-1 max-xs:px-0">
-                        <div className="w-full flex flex-col p-4 max-xs:px-0">
+                        <div className="w-full flex flex-col p-4 max-xs:px-0" ref={userPhoneRef}>
                             <h1 className="pb-3">Télefono</h1>
                             <Phone
                                 holder="Ej:958472045"
@@ -264,7 +287,7 @@ export const SignIn = ( {handleLoginClick} ) => {
                     </div>
                     <h1 className="text-black dark:text-white-50 font-bold p-4 max-xs:px-0">DATOS VEHÍCULO</h1>
                     <div className="text-black dark:text-white-50 font-semibold w-[100%] grid grid-cols-1 md:grid-cols-2 p-1 max-xs:px-0">
-                        <div className="w-full flex flex-col p-4 max-xs:px-0">
+                        <div className="w-full flex flex-col p-4 max-xs:px-0" ref={vehiclePatenteRef}>
                             <h1 className="pb-3">Patente</h1>
                             <Datos
                                 holder="Ej:GGXX20"
@@ -276,15 +299,17 @@ export const SignIn = ( {handleLoginClick} ) => {
                                 value={formData.vehiclePatente}
                             />
                             {errors.vehiclePatente && (
-                                    <p className="text-red-500 text-sm">{errors.vehiclePatente}</p>
+                                <p className="text-red-500 text-sm">{errors.vehiclePatente}</p>
                             )}
                         </div>
                     </div>
                     <div className="flex w-[100%] rounded-md mt-10 items-center justify-center xl:justify-end lg:justify-end md:justify-end p-2">
-                        <button type="submit" className="text-white-50 rounded-md bg-blue-ribbon-600 hover:bg-blue-ribbon-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold mr-4">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<MdKeyboardArrowRight className="text-2xl"/>)} CREE SU CONTRASEÑA </button>
+                        <button type="submit" className="text-white-50 rounded-md bg-blue-ribbon-600 hover:bg-blue-ribbon-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold mr-4">
+                            {isLoading ? (<ClipLoader color="#FFFFFF" size={24} />) : (<MdKeyboardArrowRight className="text-2xl" />)} CREE SU CONTRASEÑA
+                        </button>
                     </div>
                 </form>
             )}
         </>
     );
-}
+};

@@ -49,3 +49,5 @@ export const Indice = ( props ) => {
         </div>
     );
 };
+
+export default Indice;
