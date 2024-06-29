@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { UserQR } from "../../../components/userQR";
 import { formatTime } from "../../../utils/formatTime";
+import { formatTimeThree } from "../../../utils/formatTimeThree";
 import { LuCalendarClock } from "react-icons/lu";
 import { FaCheck } from "react-icons/fa";
 import { FaX } from "react-icons/fa6";
@@ -30,9 +31,11 @@ export const CurrentReservation = ({ user }) => {
         if(response.data[0].rese_estado === 'CONFIRMADA'){
             setConfirmReserve(true);
             const now = new Date();
-            const arrivalTimeParts = response.data[0].rese_hora_llegada.split(':');
-            const arrivalTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), ...arrivalTimeParts.map(Number));
-            const diffInSeconds = Math.floor((now.getTime() - arrivalTime.getTime()) / 1000);
+            const arrivalTime = response.data[0].rese_hora_llegada;
+            const arrivalDate = response.data[0].rese_fecha.split('T')[0];
+            const arrivalTimeFinal = new Date(arrivalDate + 'T' + arrivalTime);
+            const diffInSeconds = Math.floor((now.getTime() - arrivalTimeFinal.getTime()) / 1000);
+            console.log((now.getTime() - arrivalTimeFinal.getTime()) / 1000)
             setCounter2(diffInSeconds);
         } else {
             setConfirmReserve(false);
@@ -142,7 +145,7 @@ export const CurrentReservation = ({ user }) => {
                     <h1 className="text-white-50 text-xl font-bold text-center max-md:text-base max-sm:text-xs">Tiempo de uso:</h1>
                     <div className="w-full h-full flex justify-center items-center">
                       {currentReservation.length > 0 ? (
-                        <span className="text-white-50 font-bold text-4xl max-md:text-2xl max-sm:text-base">{formatTime(counter2)}</span>
+                        <span className="text-white-50 font-bold text-4xl max-md:text-2xl max-sm:text-base">{formatTimeThree(counter2)}</span>
                       ) : (
                         <span className="text-white-50 font-bold">Cargando...</span>
                       )}

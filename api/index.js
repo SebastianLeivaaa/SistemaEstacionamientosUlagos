@@ -674,20 +674,24 @@ app.post('/api/confirm-reservation', async (req, res) => {
   const { record, userRut } = req.body;
 
   try {
-    const timeFormat = await sql`SET TIME ZONE 'America/Santiago'`
+    await sql.begin(async (sql) => {
+      // Establecer la zona horaria en el contexto de la transacción
+      await sql`SET TIME ZONE 'America/Santiago'`;
 
-    const updateReservation = await sql`
-      UPDATE reserva
+      // Realizar el INSERT dentro de la transacción
+      await sql`
+        UPDATE reserva
         SET rese_estado = 'CONFIRMADA', rese_guar_rut = ${userRut.toUpperCase()}, rese_hora_llegada = TO_CHAR(NOW(), 'HH24:MI:SS')::time
         WHERE rese_id = ${record.rese_id}
-    `;
+      `;
 
-    const updateParking = await sql`
-      UPDATE estacionamiento
+      // Actualizar el estado del estacionamiento
+      await sql`
+        UPDATE estacionamiento
         SET esta_estado = 'OCUPADO'
-        WHERE esta_id = ${record.esta_id}  
-    `
-
+        WHERE esta_id = ${record.esta_id}
+      `;
+    })
     res.status(200).send('Reserva confirmada con éxito');
   }catch (error) {
     console.error('Error al confirmar la reserva:', error);

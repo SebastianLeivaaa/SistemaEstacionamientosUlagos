@@ -84,7 +84,7 @@ export const Login = ({ handleRecover }) => {
     };
 
     return (
-        <div className={`w-fit h-full flex flex-col items-center justify-center gap-y-10 mt-0 ${isLoading ? 'cursor-wait' : ''}`}>
+        <div className={`w-fit h-full flex flex-col items-center justify-center gap-y-10  ${isLoading ? 'cursor-wait' : ''}`}>
             <form onSubmit={handleSubmit} className="flex flex-col justify-center items-center gap-y-6 w-full">
                 <div className="w-full flex flex-row">
                     <div className="w-[95%] flex flex-row">
