@@ -82,7 +82,7 @@ export const ConfirmmReservation = ({ user }) => {
     setErrors({});
     setMessage(null);
     const newErrors = {};
-    if(!validateRut(rutUser)){
+    if(!validateRut(rutUser.data)){
         newErrors.rut = 'Ingrese un código QR válido';
     }
 
@@ -91,11 +91,12 @@ export const ConfirmmReservation = ({ user }) => {
         setErrors(newErrors);
     }else{
         try {
-            const response = await axios.post("/api/get-active-reservation-by-qr", {rutUser: rutUser}, { withCredentials: true });
+            const response = await axios.post("/api/get-active-reservation-by-qr", {rutUser: rutUser.data}, { withCredentials: true });
             setReservation(response.data);
             setScanActive(false);
         }catch(error){
             setScanActive(false);
+            console.log(response.data)
             setMessage({ text: error.response?.data?.message || 'Error al buscar el historial' });
         }
     }

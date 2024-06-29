@@ -215,7 +215,6 @@ app.post('/api/sesion', async (req, res) => {
 
 encryptAllPasswords();*/
 
-
 //INSERTAR USUARIO EN LA BASE DE DATOS
 app.post("/api/register-user", async (req, res) => {
   const { userName, userLastNamePat, userLastNameMat, userRut, userEmail, userPhone, userType, userDomain, password, vehiclePatente, vehicleMarca, vehicleModelo, vehicleYear, vehicleType, vehicleColor } = req.body;
