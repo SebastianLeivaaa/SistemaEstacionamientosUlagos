@@ -42,13 +42,17 @@ export const BaseLayout2 = () => {
       const response = await axios.get("/api/login", {
         withCredentials: true,
       });
-      setUser({
-        email: response.data.email,
-        userName: response.data.userName,
-        userRut: response.data.userRut,
-        userLastNamePat: response.data.userLastNamePat,
-        userLastNameMat: response.data.userLastNameMat,
-      });
+      if (!response.data.IsGuard) {
+        navigate("/");
+      } else{
+        setUser({
+          email: response.data.email,
+          userName: response.data.userName,
+          userRut: response.data.userRut,
+          userLastNamePat: response.data.userLastNamePat,
+          userLastNameMat: response.data.userLastNameMat,
+        });
+      }
     } catch (error) {
       navigate("/");
     }
