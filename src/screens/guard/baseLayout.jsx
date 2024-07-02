@@ -105,8 +105,8 @@ export const BaseLayout2 = () => {
         currentPage={currentPage}
       />
       <div
-        className={`w-[100%] h-screen transition-all duration-300 ease-in-out max-lg:pl-0 gap-y-0 max-md:gap-y-0 flex flex-col bg-white-50  dark:bg-midnight-950 ${
-          onToggleMenu ? "pl-[256px]" : "pl-[0%]"
+        className={`w-[100%] h-screen transition-all duration-300 ease-in-out gap-y-0 max-md:gap-y-0 flex flex-col bg-white-50  dark:bg-midnight-950 ${
+          onToggleMenu ? "2xl:pl-[256px]" : "pl-[0%]"
         }`}
       >
         <TopBar handleToggleMenu={handleToggleMenu} handleDarkToggle={handleDarkToggle} darkToggle={darkToggle}/>

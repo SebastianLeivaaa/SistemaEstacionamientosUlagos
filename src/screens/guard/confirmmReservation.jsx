@@ -118,7 +118,7 @@ const confirmReservation = async () => {
   return (
     <>
       {scanActive && (<div className="fixed inset-0 bg-black opacity-50 z-50"></div>)}
-      <div className="w-full h-full flex flex-col px-4 xl:px-60 pt-8 m-auto items-center max-md:px-2 gap-y-4 overflow-y-scroll">
+      <div className="w-full h-full flex flex-col px-4 2xl:px-32 pt-8 m-auto items-center max-md:px-2 gap-y-4 overflow-y-scroll">
         <div className="w-full  grid grid-cols-2 max-md:grid-cols-1 gap-x-4">
           <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl contrast-[95%] mb-8 rounded-md px-8 pt-8 pb-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4">
             <h1 className="text-2xl pb-2 font-bold text-center text-black dark:text-white-50 max-md:text-base">Confirmar Reserva con Rut</h1>

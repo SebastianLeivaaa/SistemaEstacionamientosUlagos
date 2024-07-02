@@ -7,7 +7,7 @@ import { Statistics } from "./components/statistics";
 export const DashboardGuard = ({ user, handleCurrentPage }) => {;
 
   return (
-    <div className="w-full h-full flex flex-col px-4 2xl:px-60 pt-8 m-auto items-center max-md:px-2 gap-y-4 overflow-y-scroll">
+    <div className="w-full h-full flex flex-col px-4 2xl:px-32 pt-8 m-auto items-center max-md:px-2 gap-y-4 overflow-y-scroll">
       
       <ParkingAvailability user={user} />
       <QuickAccess handleCurrentPage={handleCurrentPage} />

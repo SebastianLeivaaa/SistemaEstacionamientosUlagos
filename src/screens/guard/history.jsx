@@ -87,7 +87,7 @@ useEffect(() => {
 }, [recordReservation]);
 
   return (
-    <div className="w-full h-full flex flex-col px-4 2xl:px-60 pt-8 m-auto items-center max-md:px-2 gap-y-4 overflow-y-scroll">
+    <div className="w-full h-full flex flex-col px-4 2xl:px-32 pt-8 m-auto items-center max-md:px-2 gap-y-4 overflow-y-scroll">
       <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl contrast-[95%] rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4 text-white-50">
         <h1 className="dark:text-white-50 text-black font-bold text-2xl flex flex-row gap-x-2 items-center"><FaSearch className="text-3xl text-black dark:text-white-50" /> Buscar por</h1>
         <div className="flex flex-row gap-x-8 w-full justify-start max-lg:grid max-lg:grid-cols-3 max-md:grid-cols-3 max-lg:gap-x-2 max-md:gap-x-2 gap-y-3">

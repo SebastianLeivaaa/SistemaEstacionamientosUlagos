@@ -135,7 +135,7 @@ export const ParkingMap = (props) => {
   return (
     <>
       {selectedArea && (<div className="fixed inset-0 bg-black opacity-50 z-50"></div>)}
-      <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl justify-start items-center contrast-[95%] mt-24 max-sm:mt-0 rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4">
+      <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl justify-start items-center contrast-[95%] rounded-md p-8 max-md:p-4 w-full h-fit flex flex-col gap-y-8 max-md:gap-y-4">
         <h1 className="dark:text-white-50 text-black font-bold text-2xl flex flex-row gap-x-2 items-center w-full justify-start"><MdLocalParking className="text-4xl text-black dark:text-white-50"/> Reservar estacionamiento</h1>
         <h2 className="dark:text-white-50 text-black font-bold text-xl flex flex-row gap-x-2 items-center">Seleccione una sección</h2>
         <div className="relative max-w-[560px] max-md:w-[75%] max-sm:w-[100%]" onMouseMove={handleMouseMove}>
@@ -144,7 +144,7 @@ export const ParkingMap = (props) => {
               ref={imgRef}
               src={Mapa2}
               alt="Mapa interactivo"
-              className="w-[100%] h-auto"
+              className="w-[100%] h-[100%]"
               useMap="#parking-map"
             />
           ) : (
@@ -152,7 +152,7 @@ export const ParkingMap = (props) => {
               ref={imgRef}
               src={Mapa}
               alt="Mapa interactivo"
-              className="w-[100%] h-auto"
+              className="w-[100%] h-[100%]"
               useMap="#parking-map"
             />
           )}

@@ -6,7 +6,7 @@ import axios from "axios";
 import { ProfileInfo } from "../../components/profileInfo";
 
 export const SideBar = ({ onToggleMenu, handleToggleMenu, userName, userLastNamePat, userLastNameMat, userEmail, handleCurrentPage, currentPage }) => {
-    const [isMaxLG, setIsMaxLG] = useState(window.innerWidth <= 1024);
+    const [isMaxLG, setIsMaxLG] = useState(window.innerWidth <= 1280);
     const navigate = useNavigate();
     const sidebarRef = useRef(null);
 
@@ -15,26 +15,29 @@ export const SideBar = ({ onToggleMenu, handleToggleMenu, userName, userLastName
         navigate('/');
     }
 
-   
-
     const handleClickOutside = (event) => {
         if (isMaxLG && onToggleMenu && sidebarRef.current && !sidebarRef.current.contains(event.target)) {
             handleToggleMenu(); 
         }
     };
 
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMaxLG(window.innerWidth <= 1024); 
-        };
+    const handleResize = () => {
+        const newIsMaxLG = window.innerWidth <= 1280;
+        if (newIsMaxLG !== isMaxLG) {
+            setIsMaxLG(newIsMaxLG);
+            if (newIsMaxLG && onToggleMenu) {
+                handleToggleMenu();
+            }
+        }
+    };
 
+    useEffect(() => {
         window.addEventListener("resize", handleResize);
         
         return () => {
             window.removeEventListener("resize", handleResize);
         };
-    }, []);
-
+    }, [isMaxLG, onToggleMenu]);
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -47,7 +50,7 @@ export const SideBar = ({ onToggleMenu, handleToggleMenu, userName, userLastName
         <div className={`w-[256px] h-full fixed z-20 flex flex-col bg-white-50 dark:bg-midnight-950 border-r-[1px] border-white-400 dark:border-white-700 gap-y-6 p-3 transition-all duration-300 ease-in-out ${onToggleMenu ? "visible translate-x-0" : "invisible -translate-x-full"}`} ref={sidebarRef}>
             <nav className="flex flex-col w-full gap-y-4">
                 <div className="flex flex-row w-full justify-end items-center">
-                    <button className="dark:text-white-50 text-black max-lg:text-3xl lg:invisible" onClick={handleToggleMenu}>
+                    <button className="dark:text-white-50 text-black max-lg:text-3xl 2xl:invisible" onClick={handleToggleMenu}>
                         <RxCross2 className="text-3xl "/>
                     </button>
                 </div>

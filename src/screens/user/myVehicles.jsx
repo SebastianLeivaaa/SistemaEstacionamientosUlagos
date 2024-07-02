@@ -78,7 +78,7 @@ export const MyVehicles = ( {user} ) => {
     }, [vehicles]);
 
     return(
-        <div className="w-full h-full flex flex-col px-4 pt-8 2xl:px-60 m-auto items-center max-md:px-2 gap-y-4 overflow-y-scroll">
+        <div className="w-full h-full flex flex-col px-4 pt-8 2xl:px-32 m-auto items-center max-md:px-2 gap-y-4 overflow-y-scroll">
             <div className="w-full grid grid-cols-2 max-md:grid-cols-1 gap-4">
                 <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl contrast-[95%] mb-8 rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4">
                     <h1 className="dark:text-white-50 text-black font-bold text-2xl flex flex-row gap-x-2 items-center"><MdAdd className="text-4xl text-black dark:text-white-50"/> Agregar nuevo vehículo</h1>

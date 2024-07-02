@@ -80,7 +80,7 @@ export const ReserveParking = ( { user, darkToggle, onToggleMenu, handleToggleMe
     return(
         <>
             {(vehicleActive === '' || hasActiveReservation || !isWithinReservationHours || hasUseReservation)  && (<div className="fixed inset-0 bg-black opacity-50 z-30"></div>)}
-            <div className="relative w-full flex flex-col pt-8 px-4 2xl:px-60 items-center justify-center max-md:px-2 gap-y-4 overflow-y-scroll">
+            <div className="relative w-full flex flex-col pt-8 px-4 2xl:px-32 items-center justify-center max-md:px-2 gap-y-4">
                 <ParkingMap darkToggle={darkToggle} onToggleMenu={onToggleMenu} handleToggleMenu={handleToggleMenu} handleCurrentPage={handleCurrentPage} infoUser={user} vehicleActive={vehicleActive}/>
                 <div className="dark:bg-midnight-950 bg-white-50 shadow-3xl contrast-[95%] mb-8 rounded-md p-8 max-md:p-4 w-full flex flex-col gap-y-8 max-md:gap-y-4">
                     <h1 className="dark:text-white-50 text-black font-bold text-2xl flex flex-row gap-x-2 items-center"><FaBell className="text-4xl text-black dark:text-white-50"/>Avisos</h1>
