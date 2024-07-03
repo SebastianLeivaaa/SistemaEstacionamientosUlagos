@@ -197,6 +197,56 @@ app.post('/api/sesion', async (req, res) => {
   }
 });
 
+//inicio de sesión
+
+app.post('/api/refresh-sesion', async (req, res) => {
+  try {
+    const { email } = req.body;
+    // Buscar guardia primero
+    const guards = await sql`SELECT * FROM guardia WHERE guar_correo = ${email}`;
+    if (guards.length > 0) {
+      const guard = guards[0];
+
+      const expirationTime = new Date();
+      expirationTime.setSeconds(expirationTime.getSeconds() + 14000); 
+      const token = jwt.sign({ expire: expirationTime, userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, userRut: guard.guar_rut, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
+      const serialized = serialize('myTokenName', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        maxAge: 15, // 15 minutos
+        path: '/'
+      });
+      res.setHeader('Set-Cookie', serialized);
+      return res.json(expirationTime); // Retorna 'guardia' si el inicio de sesión es exitoso
+    
+    }
+
+    // Buscar usuario
+    const users = await sql`SELECT * FROM usuario WHERE usua_correo = ${email}`;
+    if (users.length > 0) {
+      const user = users[0];
+      const expirationTime = new Date();
+      expirationTime.setSeconds(expirationTime.getSeconds() + 14000); 
+      const token = jwt.sign({ expire: expirationTime, userEmail: user.usua_correo, userName: user.usua_nombre, userLastNamePat: user.usua_apellido_paterno, userLastNameMat: user.usua_apellido_materno, userRut: user.usua_rut, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
+      const serialized = serialize('myTokenName', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+        maxAge: 15, // 15 minutos
+        path: '/'
+      });
+      res.setHeader('Set-Cookie', serialized);
+      return res.json(expirationTime); // Retorna 'usuario' si el inicio de sesión es exitoso
+    }
+
+    res.status(401).json({ error: 'Correo electrónico o contraseña incorrectos' });
+  } catch (error) {
+    console.error('Error al iniciar sesión:', error);
+    res.status(500).json({ error: 'Error en el servidor' });
+  }
+});
+
 /*async function encryptAllPasswords() {
   try {
     // Obtener todos los usuarios

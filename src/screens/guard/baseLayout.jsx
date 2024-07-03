@@ -7,6 +7,10 @@ import { DashboardGuard } from "./dashboardGuard";
 import { ParkingManage } from "./parkingManage";
 import { History } from "./history";
 import { ConfirmmReservation } from "./confirmmReservation";
+import { TiWarning } from "react-icons/ti";
+import { FaCheck } from "react-icons/fa";
+import { FaX } from "react-icons/fa6";
+
 
 export const BaseLayout2 = () => {
   const [onToggleMenu, setOnToggleMenu] = useState(window.innerWidth >= 1024);
@@ -18,10 +22,18 @@ export const BaseLayout2 = () => {
     userLastNamePat: "",
     userLastNameMat: "",
   });
+
+  const [expirationTime, setExpirationTime] = useState(() => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 1);
+    return now;
+  });
+
   const [darkToggle, setDarkToggle] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     return savedTheme ? savedTheme === 'dark' : true;
   });
+  const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -52,9 +64,28 @@ export const BaseLayout2 = () => {
           userLastNamePat: response.data.userLastNamePat,
           userLastNameMat: response.data.userLastNameMat,
         });
+        setExpirationTime(response.data.expires);
       }
     } catch (error) {
-      navigate("/");
+      navigate('/');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const res = await axios.post(
+            '/api/refresh-sesion',
+            { email: user.email },
+            { withCredentials: true }
+        );
+        setShowModal(false)
+        setExpirationTime(res.data)
+        
+    } catch (error) {
+        
+    } finally {
+        
     }
   };
 
@@ -74,13 +105,18 @@ export const BaseLayout2 = () => {
   };
 
   useEffect(() => {
+
+    if(showModal){
+      return ;
+    }
+
     getProfile();
     const interval = setInterval(() => {
         getProfile();
     }, 10000);
 
     return () => clearInterval(interval);
-}, []);
+}, [showModal]);
 
   useEffect(() => {
     if (darkToggle) {
@@ -91,6 +127,21 @@ export const BaseLayout2 = () => {
         localStorage.setItem('theme', 'light');
     }
   }, [darkToggle]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+
+      const currentTime = new Date();
+      let newDateFromISO = new Date(expirationTime);
+  
+      if (newDateFromISO <= currentTime) {
+        setShowModal(true);
+      }
+      
+    }, 1000);
+  
+    return () => clearInterval(interval);
+  }, [expirationTime]);
 
   return (
     <>
@@ -109,8 +160,22 @@ export const BaseLayout2 = () => {
           onToggleMenu ? "2xl:pl-[256px]" : "pl-[0%]"
         }`}
       >
+        {(showModal)  && (<div className="fixed inset-0 bg-black opacity-50 z-30"></div>)}
         <TopBar handleToggleMenu={handleToggleMenu} handleDarkToggle={handleDarkToggle} darkToggle={darkToggle}/>
         {getCurrentPage(currentPage)}
+        {(showModal) && (
+          <div className="fixed z-50 flex flex-col items-center inset-0 m-auto w-fit max-2xl:w-fit max-md:p-4 h-fit max-xs:max-w-[95%] bg-white-50 dark:bg-midnight-950 border-[1px] border-black rounded-lg p-4 gap-y-6">
+            <p className='text-yellow-500 justify-center text-lg flex flex-row items-center gap-x-2'><TiWarning className='text-9xl'/></p>
+            <h1 className='text-center text-xl text-black dark:text-white-50 max-md:text-lg'>
+                Se ha expirado su sesión.
+                ¿Desea extender la sesión?
+            </h1>
+            <div className='flex flex-row justify-center items-center gap-x-4 mt-4 max-xs:mt-2'>
+                <button onClick={handleSubmit} className='bg-green-700 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'><FaCheck/> Si</button>
+                <button onClick={() => {navigate("/")}}  className='bg-red-500 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'><FaX/> No</button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

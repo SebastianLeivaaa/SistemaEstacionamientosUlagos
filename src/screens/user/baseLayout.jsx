@@ -7,6 +7,10 @@ import { DashboardUser } from "./dashboardUser";
 import { MyReservations } from "./myReservations";
 import { MyVehicles } from "./myVehicles";
 import { ReserveParking } from "./reserveParking";
+import { TiWarning } from "react-icons/ti";
+import { FaCheck } from "react-icons/fa";
+import { FaX } from "react-icons/fa6";
+
 
 export const BaseLayout = () => {
   const [onToggleMenu, setOnToggleMenu] = useState(window.innerWidth >= 1024);
@@ -64,10 +68,28 @@ export const BaseLayout = () => {
       
     } catch (error) {
       console.log(error);
+      navigate('/');
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const res = await axios.post(
+            '/api/refresh-sesion',
+            { email: user.email },
+            { withCredentials: true }
+        );
+        setShowModal(false)
+        setExpirationTime(res.data)
+    
+    } catch (error) {
+        
+    } finally {
+        
     }
   };
   
-
 
   const getCurrentPage = (currentPage) => {
     switch(currentPage){
@@ -85,13 +107,18 @@ export const BaseLayout = () => {
   };
 
   useEffect(() => {
+
+    if(showModal){
+      return ;
+    }
+
     getProfile();
     const interval = setInterval(() => {
         getProfile();
     }, 10000);
 
     return () => clearInterval(interval);
-}, []);
+}, [showModal]);
 
   useEffect(() => {
     if (darkToggle) {
@@ -140,17 +167,17 @@ export const BaseLayout = () => {
         {getCurrentPage(currentPage)}
         {(showModal) && (
           <div className="fixed z-50 flex flex-col items-center inset-0 m-auto w-fit max-2xl:w-fit max-md:p-4 h-fit max-xs:max-w-[95%] bg-white-50 dark:bg-midnight-950 border-[1px] border-black rounded-lg p-4 gap-y-6">
+            <p className='text-yellow-500 justify-center text-lg flex flex-row items-center gap-x-2'><TiWarning className='text-9xl'/></p>
             <h1 className='text-center text-xl text-black dark:text-white-50 max-md:text-lg'>
                 Se ha expirado su sesión.
                 ¿Desea extender la sesión?
             </h1>
             <div className='flex flex-row justify-center items-center gap-x-4 mt-4 max-xs:mt-2'>
-                <button  className='bg-midnight-700 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'> Si</button>
-                <button onClick={() => {navigate("/")}}  className='bg-midnight-700 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'> No</button>
+                <button onClick={handleSubmit} className='bg-green-700 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'><FaCheck/> Si</button>
+                <button onClick={() => {navigate("/")}}  className='bg-red-500 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'><FaX/> No</button>
             </div>
           </div>
         )}
-    
       </div>
     </>
   );
