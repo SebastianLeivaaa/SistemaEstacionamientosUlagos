@@ -155,17 +155,19 @@ app.post('/api/sesion', async (req, res) => {
       const isMatch = await bcrypt.compare(password, guard.guar_clave);
       if (isMatch) {
         const expirationTime = new Date();
-        expirationTime.setSeconds(expirationTime.getSeconds() + 15); 
-        const token = jwt.sign({ expire: expirationTime, userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, userRut: guard.guar_rut, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
+        expirationTime.setMinutes(expirationTime.getMinutes() + 30); 
+        const token = jwt.sign({ expire: expirationTime, userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, userRut: guard.guar_rut, IsGuard: true }, process.env.SECRET, { expiresIn: '30m' });
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-          maxAge: 15, // 15 minutos
+          maxAge: 1800, //30 minutos 
           path: '/'
         });
         res.setHeader('Set-Cookie', serialized);
         return res.json('guardia'); // Retorna 'guardia' si el inicio de sesión es exitoso
+      } else{
+        return res.status(401).json({ error: 'La contraseña es incorrecta' });
       }
     }
 
@@ -176,21 +178,23 @@ app.post('/api/sesion', async (req, res) => {
       const isMatch = await bcrypt.compare(password, user.usua_clave);
       if (isMatch) {
         const expirationTime = new Date();
-        expirationTime.setSeconds(expirationTime.getSeconds() + 15); 
+        expirationTime.setMinutes(expirationTime.getMinutes() + 15); 
         const token = jwt.sign({ expire: expirationTime, userEmail: user.usua_correo, userName: user.usua_nombre, userLastNamePat: user.usua_apellido_paterno, userLastNameMat: user.usua_apellido_materno, userRut: user.usua_rut, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-          maxAge: 15, // 15 minutos
+          maxAge: 900, // 15 minutos
           path: '/'
         });
         res.setHeader('Set-Cookie', serialized);
         return res.json('usuario'); // Retorna 'usuario' si el inicio de sesión es exitoso
+      } else {
+        return res.status(401).json({ error: 'La contraseña es incorrecta' });
       }
     }
 
-    res.status(401).json({ error: 'Correo electrónico o contraseña incorrectos' });
+    res.status(401).json({ error: 'Este usuario no existe en el sistema.' });
   } catch (error) {
     console.error('Error al iniciar sesión:', error);
     res.status(500).json({ error: 'Error en el servidor' });
@@ -208,13 +212,13 @@ app.post('/api/refresh-sesion', async (req, res) => {
       const guard = guards[0];
 
       const expirationTime = new Date();
-      expirationTime.setSeconds(expirationTime.getSeconds() + 14000); 
-      const token = jwt.sign({ expire: expirationTime, userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, userRut: guard.guar_rut, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
+      expirationTime.setMinutes(expirationTime.getMinutes() + 30); 
+      const token = jwt.sign({ expire: expirationTime, userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, userRut: guard.guar_rut, IsGuard: true }, process.env.SECRET, { expiresIn: '30m' });
       const serialized = serialize('myTokenName', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-        maxAge: 15, // 15 minutos
+        maxAge: 1800, // 30 minutos
         path: '/'
       });
       res.setHeader('Set-Cookie', serialized);
@@ -227,13 +231,13 @@ app.post('/api/refresh-sesion', async (req, res) => {
     if (users.length > 0) {
       const user = users[0];
       const expirationTime = new Date();
-      expirationTime.setSeconds(expirationTime.getSeconds() + 14000); 
+      expirationTime.setMinutes(expirationTime.getMinutes() + 15); 
       const token = jwt.sign({ expire: expirationTime, userEmail: user.usua_correo, userName: user.usua_nombre, userLastNamePat: user.usua_apellido_paterno, userLastNameMat: user.usua_apellido_materno, userRut: user.usua_rut, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
       const serialized = serialize('myTokenName', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-        maxAge: 15, // 15 minutos
+        maxAge: 900, // 15 minutos
         path: '/'
       });
       res.setHeader('Set-Cookie', serialized);

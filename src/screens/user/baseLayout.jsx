@@ -173,8 +173,8 @@ export const BaseLayout = () => {
                 ¿Desea extender la sesión?
             </h1>
             <div className='flex flex-row justify-center items-center gap-x-4 mt-4 max-xs:mt-2'>
-                <button onClick={handleSubmit} className='bg-green-700 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'><FaCheck/> Si</button>
-                <button onClick={() => {navigate("/")}}  className='bg-red-500 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'><FaX/> No</button>
+                <button onClick={handleSubmit} className='bg-green-700 hover:bg-green-800 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'><FaCheck/> Si</button>
+                <button onClick={() => {navigate("/")}}  className='bg-red-500 hover:bg-red-600 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'><FaX/> No</button>
             </div>
           </div>
         )}

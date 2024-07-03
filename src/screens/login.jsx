@@ -77,7 +77,9 @@ export const Login = ({ handleRecover }) => {
                 navigate('/base-layout2');
             }
         } catch (error) {
-            setError("Credenciales incorrectas");
+            if (error.response.status === 401) {
+                setError(error.response.data.error);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -109,7 +111,7 @@ export const Login = ({ handleRecover }) => {
                         <MdLock className="text-blue-ribbon-600 text-2xl" />
                     </div>
                 </div>
-                {error && <p className='text-red-600'>{error}</p>}
+                {error && <p className='text-red-600 dark:text-red-500'>{error}</p>}
                 <div className='flex flex-col w-full gap-y-4'>
                     <button type="submit" className={`w-full bg-midnight-700 font-bold text-white-50 px-3 py-3 rounded-md text-lg hover:bg-blue-ribbon-700 flex flex-row items-center justify-center gap-x-2 max-md:text-base ${isLoading ? 'cursor-wait' : ''}`} disabled={isLoading}>
                         {isLoading ? (<ClipLoader color="#FFFFFF" size={24} />) : (<MdLogin className="text-3xl max-md:text-2xl" />)} INGRESAR
