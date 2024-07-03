@@ -154,12 +154,14 @@ app.post('/api/sesion', async (req, res) => {
       const guard = guards[0];
       const isMatch = await bcrypt.compare(password, guard.guar_clave);
       if (isMatch) {
-        const token = jwt.sign({ userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, userRut: guard.guar_rut, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
+        const expirationTime = new Date();
+        expirationTime.setSeconds(expirationTime.getSeconds() + 15); 
+        const token = jwt.sign({ expire: expirationTime, userEmail: guard.guar_correo, userName: guard.guar_nombre, userLastNamePat: guard.guar_apellido_paterno, userLastNameMat: guard.guar_apellido_materno, userRut: guard.guar_rut, IsGuard: true }, process.env.SECRET, { expiresIn: '15m' });
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-          maxAge: 900, // 15 minutos
+          maxAge: 15, // 15 minutos
           path: '/'
         });
         res.setHeader('Set-Cookie', serialized);
@@ -173,12 +175,14 @@ app.post('/api/sesion', async (req, res) => {
       const user = users[0];
       const isMatch = await bcrypt.compare(password, user.usua_clave);
       if (isMatch) {
-        const token = jwt.sign({ userEmail: user.usua_correo, userName: user.usua_nombre, userLastNamePat: user.usua_apellido_paterno, userLastNameMat: user.usua_apellido_materno, userRut: user.usua_rut, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
+        const expirationTime = new Date();
+        expirationTime.setSeconds(expirationTime.getSeconds() + 15); 
+        const token = jwt.sign({ expire: expirationTime, userEmail: user.usua_correo, userName: user.usua_nombre, userLastNamePat: user.usua_apellido_paterno, userLastNameMat: user.usua_apellido_materno, userRut: user.usua_rut, IsGuard: false }, process.env.SECRET, { expiresIn: '15m' });
         const serialized = serialize('myTokenName', token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-          maxAge: 900, // 15 minutos
+          maxAge: 15, // 15 minutos
           path: '/'
         });
         res.setHeader('Set-Cookie', serialized);
@@ -963,6 +967,7 @@ app.get('/api/login', async (req, res) => {
       userLastNameMat: user.userLastNameMat,
       userRut: user.userRut,
       IsGuard: user.IsGuard,
+      expires: user.expire
     });
   }catch(error){
     console.error('Error al verificar el token:', error);

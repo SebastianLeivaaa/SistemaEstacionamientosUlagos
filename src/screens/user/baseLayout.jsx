@@ -18,10 +18,17 @@ export const BaseLayout = () => {
     userLastNamePat: "",
     userLastNameMat: "",
   });
+  const [expirationTime, setExpirationTime] = useState(() => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() + 1);
+    return now;
+  });
+  
   const [darkToggle, setDarkToggle] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     return savedTheme ? savedTheme === 'dark' : true;
   });
+  const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -52,12 +59,14 @@ export const BaseLayout = () => {
           userLastNamePat: response.data.userLastNamePat,
           userLastNameMat: response.data.userLastNameMat,
         });
+        setExpirationTime(response.data.expires);
       }
       
     } catch (error) {
-      navigate("/");
+      console.log(error);
     }
   };
+  
 
 
   const getCurrentPage = (currentPage) => {
@@ -94,6 +103,21 @@ export const BaseLayout = () => {
     }
   }, [darkToggle]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+
+      const currentTime = new Date();
+      const newDateFromISO = new Date(expirationTime);
+  
+      if (newDateFromISO <= currentTime) {
+        setShowModal(true);
+      }
+    }, 1000);
+  
+    return () => clearInterval(interval);
+  }, [expirationTime]);
+  
+
   return (
     <>
       <SideBar
@@ -111,8 +135,22 @@ export const BaseLayout = () => {
           onToggleMenu ? "2xl:pl-[256px]" : "pl-[0%]"
         }`}
       >
+        {(showModal)  && (<div className="fixed inset-0 bg-black opacity-50 z-30"></div>)}
         <TopBar handleToggleMenu={handleToggleMenu} handleDarkToggle={handleDarkToggle} darkToggle={darkToggle}/>
         {getCurrentPage(currentPage)}
+        {(showModal) && (
+          <div className="fixed z-50 flex flex-col items-center inset-0 m-auto w-fit max-2xl:w-fit max-md:p-4 h-fit max-xs:max-w-[95%] bg-white-50 dark:bg-midnight-950 border-[1px] border-black rounded-lg p-4 gap-y-6">
+            <h1 className='text-center text-xl text-black dark:text-white-50 max-md:text-lg'>
+                Se ha expirado su sesión.
+                ¿Desea extender la sesión?
+            </h1>
+            <div className='flex flex-row justify-center items-center gap-x-4 mt-4 max-xs:mt-2'>
+                <button  className='bg-midnight-700 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'> Si</button>
+                <button onClick={() => {navigate("/")}}  className='bg-midnight-700 text-white-50 font-bold p-1.5 px-3 rounded-lg items-center flex flex-row gap-x-1'> No</button>
+            </div>
+          </div>
+        )}
+    
       </div>
     </>
   );
