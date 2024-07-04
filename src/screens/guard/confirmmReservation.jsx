@@ -57,7 +57,7 @@ export const ConfirmmReservation = ({ user }) => {
     setErrors({});
     setMessage(null);
     const newErrors = {};
-    if(!validateRut(rutUser.data)){
+    if(!validateRut(rutUser)){
         newErrors.rut = 'Ingrese un rut válido';
     }
 
@@ -65,7 +65,7 @@ export const ConfirmmReservation = ({ user }) => {
         setErrors(newErrors);
     }else{
         try {
-            const response = await axios.post("/api/get-active-reservation-by-rut", { rut: rutUser.data}, { withCredentials: true });
+            const response = await axios.post("/api/get-active-reservation-by-rut", { rut: rutUser}, { withCredentials: true });
             setReservation(response.data);
             setScanActive(false);
         }catch(error){
