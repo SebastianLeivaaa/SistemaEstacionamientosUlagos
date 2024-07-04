@@ -63,10 +63,10 @@ export const Main = () => {
     }, [darkToggle]);
 
     return (
-        <div className="flex flex-col w-screen h-screen bg-white-50 dark:bg-midnight-950">
+        <div className="flex flex-col w-screen h-screen bg-white-50 dark:bg-midnight-950 overflow-hidden">
             <TopBarMain handleDarkToggle={handleDarkToggle} darkToggle={darkToggle} />
-            <div className="scrollbar-hide flex flex-col m-auto items-center justify-center h-[80%] max-xs:w-full max-h-[80%] md:px-4 bg-white-50 dark:bg-midnight-950">
-                <div className={`scrollbar-hide overflow-y-auto bg-white-50 dark:bg-midnight-950 h-full flex flex-col w-fit items-center p-10 gap-y-8 rounded-md max-md:w-[100%] max-md:h-full max-xs:w-[85%] max-md:px-4 max-md:py-8 max-h-full shadow-black-900 shadow-3xl transition-width duration-700 ease-in-out ${login ? 'w-login' : 'w-signin'}`}>
+            <div className="scrollbar-hide flex flex-col m-auto items-center justify-center h-[80%] max-xs:w-full xs:max-h-[80%] max-xs:mt-[20%] max-xs:h-full max-xs:pb-4 md:px-4 bg-white-50 dark:bg-midnight-950">
+                <div className={`scrollbar-hide overflow-y-auto bg-white-50 dark:bg-midnight-950 h-full flex flex-col w-fit items-center p-10 gap-y-8 max-xs:mb-12 rounded-md max-md:w-[100%] max-md:h-full max-xs:w-[85%] max-md:px-4 max-md:py-8 max-h-full shadow-black-900 shadow-3xl transition-width duration-700 ease-in-out ${login ? 'w-login' : 'w-signin'}`}>
                     <div className="flex flex-row gap-x-2 items-center justify-center">
                         <img src={Ulogo} className="w-[70px]" alt="Logo Ulagos" />
                     </div>
