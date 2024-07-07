@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 import { serialize } from 'cookie';
 import cookieParser from 'cookie-parser';
 import {generatorCode} from '../src/utils/generatorCode.js'
-import {sendCodeEmail} from '../src/utils/mailer.js'
+import {sendCodeEmail, sendRegisterNewVehicle} from '../src/utils/mailer.js'
 import bcrypt from 'bcrypt';
 
 
@@ -295,6 +295,7 @@ app.post("/api/register-user", async (req, res) => {
                                       values(${vehiclePatente.toUpperCase()}, ${vehicleMarca}, ${vehicleModelo}, ${vehicleYear}, ${vehicleType}, ${vehicleColor})`;
       const insertRegistroUsuarioVehiculo = await sql`insert into registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado)
                                                       values (${userRut.toUpperCase()}, ${vehiclePatente.toUpperCase()}, 'activo')`;
+      sendRegisterNewVehicle(vehiclePatente, SENDER_EMAIL_ID);
     }
     res.status(200).send('Registro insertado con éxito');
   } catch (err) {
@@ -428,6 +429,7 @@ app.post('/api/add-new-vehicle', async (req, res) => {
           INSERT INTO registrousuariovehiculo (regi_vehi_patente, regi_usua_rut, regi_estado) 
           VALUES (${patente.toUpperCase()}, ${userRut.toUpperCase()}, 'inactivo')
         `;
+      sendRegisterNewVehicle(vehiclePatente, SENDER_EMAIL_ID);
       res.status(200).json({ message: 'Registro pendiente de verificación' });
     }
   } catch (error) {
