@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import QrScanner from 'qr-scanner';
 
-export const QrReader = ({ onScan, timeoutInSeconds }) => {
+export const QrReader = ({ onScan, timeoutInSeconds, highlightScanRegion }) => {
   const videoRef = useRef(null);
 
   useEffect(() => {
     const qrScanner = new QrScanner(videoRef.current, result => {
       onScan(result);
-    }, { highlightScanRegion: true});
+    }, { highlightScanRegion });
 
     qrScanner.start();
 
@@ -19,7 +19,7 @@ export const QrReader = ({ onScan, timeoutInSeconds }) => {
       clearTimeout(timeoutId);
       qrScanner.stop();
     };
-  }, [onScan, timeoutInSeconds]);
+  }, [onScan, timeoutInSeconds, highlightScanRegion]);
 
   return (
     <div className='w-full h-full'>
