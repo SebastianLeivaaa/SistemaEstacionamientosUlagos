@@ -22,8 +22,8 @@ export const QrReader = ({ onScan, timeoutInSeconds }) => {
   }, [onScan, timeoutInSeconds]);
 
   return (
-    <div className='w-full h-full'>
-      <video ref={videoRef} className='w-full h-full'></video>
+    <div className='w-[300px] h-[300px]'>
+      <video ref={videoRef} className='w-full h-full min-w-full min-h-full'></video>
     </div>
   );
 };
