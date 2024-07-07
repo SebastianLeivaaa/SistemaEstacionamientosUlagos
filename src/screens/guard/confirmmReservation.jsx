@@ -208,7 +208,7 @@ const confirmReservation = async () => {
               <button onClick={handleScanActive} className="p-0 flex justify-end items-end"><RxCross2 className='text-2xl text-black dark:text-white-50'/></button>
             </div>
             <h2 className="text-black dark:text-white-50 text-xl font-semibold text-center max-md:text-lg">Escanee el código QR</h2>
-            <div className="flex flex-col w-[350px] h-[350px] max-xs:w-[250px] max-xs:h-[250px] justify-center items-center gap-y-4">
+            <div className="flex flex-col w-[350px] h-[350px] max-w-[350px] max-h-[350px] max-xs:w-[250px] max-xs:max-w-[250px] max-xs:h-[250px] max-xs:max-h-[250px] justify-center items-center gap-y-4">
               {isLoading ? (
                 <ClipLoader color="#FFFFFF" size={96}/>    
               ) : (

@@ -55,7 +55,7 @@ export const SideBar = ({ onToggleMenu, handleToggleMenu, userName, userLastName
     }, [isMaxLG, onToggleMenu]);
 
     return (
-        <div className={`w-[256px] h-full fixed z-20 overflow-y-scroll flex flex-col bg-white-50 dark:bg-midnight-950 border-r-[1px] border-white-400 dark:border-white-700 gap-y-6 p-3 transition-all duration-300 ease-in-out ${onToggleMenu ? "visible translate-x-0" : "invisible -translate-x-full"}`} ref={sidebarRef}>
+        <div className={`w-[256px] h-full fixed z-20 overflow-y-auto flex flex-col bg-white-50 dark:bg-midnight-950 border-r-[1px] border-white-400 dark:border-white-700 gap-y-6 p-3 transition-all duration-300 ease-in-out ${onToggleMenu ? "visible translate-x-0" : "invisible -translate-x-full"}`} ref={sidebarRef}>
             <nav className="flex flex-col w-full gap-y-4">
                 <div className="flex flex-row w-full justify-end items-center">
                     <button className="dark:text-white-50 text-black max-lg:text-3xl 2xl:invisible" onClick={handleToggleMenu}>
