@@ -64,7 +64,7 @@ export const SideBar = ({ onToggleMenu, handleToggleMenu, userName, userLastName
                 </div>
                 <ProfileInfo name={userName} lastNamePat={userLastNamePat} lastNameMat={userLastNameMat} email={userEmail}/>
                 <div className="flex flex-col gap-y-4 py-4">
-                    <h1 className="dark:text-white-50 text-black">Menú principal</h1>
+                    <h1 className="dark:text-white-50 text-black px-2">Menú principal</h1>
                     <button
                         onClick={() => {
                             handleCurrentPage('/dashboard-guard');
