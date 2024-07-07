@@ -10,7 +10,7 @@ export default {
       'xs': '490px',
       'sm': '640px',
       'md': '768px',
-      'l': '900px',
+      'l': '980px',
       'g': '1045px',
       'lg': '1024px',
       'xl': '1280px',
