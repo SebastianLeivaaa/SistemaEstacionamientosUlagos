@@ -56,13 +56,13 @@ export const Capacity = () => {
                 <div className="flex flex-row gap-x-8">
                     <div className={`flex flex-col p-2 py-4 max-md:py-2 ${bgColor} rounded-md w-full h-full items-center`}>
                         <h1 className="text-white-50 text-xl font-bold text-center max-md:text-base max-sm:text-xs">Capacidad</h1>
-                        <span className="text-white-50 font-bold text-4xl max-md:text-2xl max-sm:text-base">
+                        <span className="text-white-50 font-bold text-4xl max-g:text-2xl max-sm:text-base">
                             {porcentaje !== null && !isNaN(porcentaje) ? `${porcentaje}%` : 'Cargando...'}
                         </span>
                     </div>
                     <div className={`flex flex-col p-2 py-4 max-md:py-2 ${bgColor} rounded-md w-full h-full items-center`}>
                         <h1 className="text-white-50 text-xl font-bold text-center max-md:text-base max-sm:text-xs">Libres</h1>
-                        <span className="text-white-50 font-bold text-4xl max-md:text-2xl max-sm:text-base">
+                        <span className="text-white-50 font-bold text-4xl max-g:text-2xl max-sm:text-base">
                             {parkingSpaces !== null ? parkingSpaces : 'Cargando...'}
                         </span>
                     </div>
