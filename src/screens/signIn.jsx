@@ -304,7 +304,7 @@ export const SignIn = ({ handleLoginClick }) => {
                         </div>
                     </div>
                     <div className="flex w-[100%] rounded-md mt-10 items-center justify-center xl:justify-end lg:justify-end md:justify-end p-2">
-                        <button type="submit" className="text-white-50 rounded-md bg-blue-ribbon-600 hover:bg-blue-ribbon-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold mr-4">
+                        <button type="submit" className="text-white-50 rounded-md bg-blue-ribbon-600 hover:bg-blue-ribbon-700 p-1.5 px-3 flex flex-row items-center gap-x-1 font-bold mr-4" disabled={isLoading}>
                             {isLoading ? (<ClipLoader color="#FFFFFF" size={24} />) : (<MdKeyboardArrowRight className="text-2xl" />)} CREE SU CONTRASEÑA
                         </button>
                     </div>

@@ -150,9 +150,9 @@ export const SignInThree = ( { formData, passwordData, code, handleLoginClick } 
                             )}
                             <div className="flex w-[100%] items-center mt-2 justify-center">
                                 {counter > 0 ? (
-                                    <button onClick={handleSubmit} className="text-white-50 rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-1 w-auto font-bold">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<FaCheck/>)} CONFIRMAR REGISTRO</button>
+                                    <button onClick={handleSubmit} disabled={isLoading} className="text-white-50 rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-1 w-auto font-bold">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<FaCheck/>)} CONFIRMAR REGISTRO</button>
                                 ) : (
-                                    <button onClick={handleSubmitEmail} className="text-white-50 rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-1 w-auto font-bold">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<IoIosMail className="text-2xl"/>)} REENVIAR CODIGO</button>
+                                    <button onClick={handleSubmitEmail} disabled={isLoading} className="text-white-50 rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-1 w-auto font-bold">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<IoIosMail className="text-2xl"/>)} REENVIAR CODIGO</button>
                                 )}
                             </div>
                         </div>
