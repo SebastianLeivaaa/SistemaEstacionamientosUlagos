@@ -131,9 +131,9 @@ export const RecoverTwo = ( { emailData, code, handleRecover} ) =>{
                             )}
                             <div className="flex w-[100%] items-center mt-2 justify-center">
                                 {counter > 0 ? (
-                                    <button onClick={handleSubmit} className="text-white-50 text-lg rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-2 w-auto font-bold max-md:text-base">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<FaCheck/>)} Confirmar código</button>
+                                    <button onClick={handleSubmit} disabled={isLoading} className="text-white-50 text-lg rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-2 w-auto font-bold max-md:text-base">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<FaCheck/>)} Confirmar código</button>
                                 ) : (
-                                    <button onClick={handleSubmitEmail} className="text-white-50 text-lg rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-2 w-auto font-bold max-md:text-base">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<IoIosMail className="text-2xl"/>)} Reenviar código</button>
+                                    <button onClick={handleSubmitEmail} disabled={isLoading} className="text-white-50 text-lg rounded-md bg-blue-600 hover:bg-blue-700 p-1.5 px-4 flex flex-row items-center gap-x-2 w-auto font-bold max-md:text-base">{isLoading ? (<ClipLoader color="#FFFFFF" size={24}/>): (<IoIosMail className="text-2xl"/>)} Reenviar código</button>
                                 )}
                             </div>
                         </div>

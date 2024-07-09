@@ -145,6 +145,7 @@ export const Recover = ({ handleRecover }) => {
             <button
               onClick={handleSubmit}
               className="mt-2 w-full bg-blue-ribbon-600 font-bold text-white-50 px-2 py-2 rounded-md text-lg hover:bg-blue-ribbon-700 flex flex-row items-center justify-center gap-x-2 max-md:text-base"
+              disabled={isLoading}
             >
               {isLoading ? <ClipLoader color="#FFFFFF" size={24} /> : <BsSendFill />} Enviar código
             </button>
