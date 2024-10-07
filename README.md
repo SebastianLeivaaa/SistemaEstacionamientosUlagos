@@ -9,4 +9,4 @@ Currently, two official plugins are available:
 
 # Test
 
-![hola](/src/assets/images/inicio.png)
+![hola](/src/assets/img/Inicio.png)
